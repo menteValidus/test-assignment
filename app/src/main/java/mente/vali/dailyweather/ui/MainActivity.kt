@@ -8,17 +8,17 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.models.Forecast
-import mente.vali.dailyweather.requests.WeatherRequest
+import mente.vali.dailyweather.requests.ForecastViewModel
 
 class MainActivity : AppCompatActivity() {
 
     val url = "http://api.openweathermap.org/data/2.5/forecast?q=Taganrog,ru&" +
             "APPID=786e5cb5022e6e9b4274c82575c4aea4"
     /**
-     * Свойство для получения объекта класса [WeatherRequest].
+     * Свойство для получения объекта класса [ForecastViewModel].
      */
-    val weatherRequest: WeatherRequest
-        get() = WeatherRequest.getInstance(applicationContext)
+    val forecastViewModel: ForecastViewModel
+        get() = ForecastViewModel.getInstance(applicationContext)
 
     /**
      * Метод, вызываемый при запуске Activity.
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
-        weatherRequest.add(stringRequest)
+        forecastViewModel.add(stringRequest)
     }
 
 }

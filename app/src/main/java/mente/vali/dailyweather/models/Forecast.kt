@@ -8,35 +8,17 @@ import org.json.JSONArray
 /**
  * Класс, хранящий прогноз погоды.
  */
-class Forecast(weatherList: ArrayList<WeatherByTime>, sunriseTime: String, sunsetTime: String) {
+class Forecast(weatherList: List<WeatherByTime>) {
     /**
      * Список всех 3-часовых прогнозов.
      */
-    val weatherByTimeList: ArrayList<WeatherByTime>
-    /**
-     * Время рассвета в выбранном городе.
-     */
-    val sunriseTime: String
-    /**
-     * Время заката в выбранном городе.
-     */
-    val sunsetTime: String
-
-    /**
-     * Стандартный конструктор.
-     */
-    init {
-        weatherByTimeList = weatherList
-        this.sunriseTime = sunriseTime
-        this.sunsetTime = sunsetTime
-    }
+    val weatherByTimeList: List<WeatherByTime> = weatherList
 
     companion object {
         /**
          * Парсинг полученного [JsonObject] с получением объекта [Forecast].
          */
         fun parse(json: String) {
-            // TODO parse JSON
             val gson = GsonBuilder()
                 .registerTypeAdapter(Forecast::class.java, ForecastDeserializer()).create()
             gson.fromJson(json, Forecast::class.java)

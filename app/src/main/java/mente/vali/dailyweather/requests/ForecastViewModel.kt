@@ -5,10 +5,11 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 
+//TODO реализовать ViewModel
 /**
  * Класс-singleton для работы с запросами к погодному API.
  */
-class WeatherRequest constructor(context: Context) {
+class ForecastViewModel constructor(context: Context) {
     /**
      * Свойство, обрабатывающее все входящие запросы к API.
      */
@@ -43,7 +44,7 @@ class WeatherRequest constructor(context: Context) {
          * Объект класса.
          */
         @Volatile
-        private var INSTANCE: WeatherRequest? = null
+        private var INSTANCE: ForecastViewModel? = null
 
         /**
          * Константа, определяющая, какая система мер используется при вызове к API.
@@ -59,7 +60,7 @@ class WeatherRequest constructor(context: Context) {
          */
         fun getInstance(context: Context) =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: WeatherRequest(context).also {
+                INSTANCE ?: ForecastViewModel(context).also {
                     INSTANCE = it
                 }
             }
