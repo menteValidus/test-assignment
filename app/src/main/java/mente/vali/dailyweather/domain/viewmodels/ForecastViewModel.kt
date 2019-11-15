@@ -1,4 +1,4 @@
-package mente.vali.dailyweather.requests
+package mente.vali.dailyweather.domain.viewmodels
 
 import android.content.Context
 import com.android.volley.Request
@@ -60,7 +60,8 @@ class ForecastViewModel constructor(context: Context) {
          */
         fun getInstance(context: Context) =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: ForecastViewModel(context).also {
+                INSTANCE
+                    ?: ForecastViewModel(context).also {
                     INSTANCE = it
                 }
             }

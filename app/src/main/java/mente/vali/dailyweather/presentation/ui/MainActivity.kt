@@ -1,4 +1,4 @@
-package mente.vali.dailyweather.ui
+package mente.vali.dailyweather.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,8 +7,8 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import mente.vali.dailyweather.R
-import mente.vali.dailyweather.models.Forecast
-import mente.vali.dailyweather.requests.ForecastViewModel
+import mente.vali.dailyweather.data.models.Forecast
+import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         requestWeatherUpdate()
-//        val jsonObjectRequest = JsonObjectRequest()
     }
 
 

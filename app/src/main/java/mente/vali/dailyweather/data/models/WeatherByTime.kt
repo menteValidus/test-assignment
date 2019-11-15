@@ -1,6 +1,4 @@
-package mente.vali.dailyweather.models
-
-import android.os.storage.StorageVolume
+package mente.vali.dailyweather.data.models
 
 /**
  * Класс, предназначенный для хранения 3-часовых отчётов по погоде.
