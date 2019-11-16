@@ -3,22 +3,26 @@ package mente.vali.dailyweather.presentation.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.data.models.Forecast
+import mente.vali.dailyweather.data.models.WeatherByTime
+import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 
+/**
+ * Класс Activity, представляющий главный экран приложения.
+ */
 class MainActivity : AppCompatActivity() {
 
-    val url = "http://api.openweathermap.org/data/2.5/forecast?q=Taganrog,ru&" +
-            "APPID=786e5cb5022e6e9b4274c82575c4aea4"
     /**
-     * Свойство для получения объекта класса [ForecastViewModel].
+     * Поле [ForecastViewModel] для работы с данными, получаемыми от API.
      */
-    val forecastViewModel: ForecastViewModel
-        get() = ForecastViewModel.getInstance(applicationContext)
+    private lateinit var forecastViewModel: ForecastViewModel
 
     /**
      * Метод, вызываемый при запуске Activity.
@@ -27,7 +31,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        requestWeatherUpdate()
+        var forecasts: List<WeatherByTime>// = listOf()
+        forecastViewModel = ViewModelProviders.of(this).get(ForecastViewModel::class.java)
+        forecastViewModel.forecastsList.observe(this, Observer { forecastList ->
+            forecastList.let { forecasts = it.weatherByTimeList }
+        })
+
+        localClassName
     }
 
 
@@ -39,21 +49,5 @@ class MainActivity : AppCompatActivity() {
         // TODO принудительное завершение запросов.
     }
 
-    /**
-     * Метод запроса обновления показаний погоды.
-     */
-    private fun requestWeatherUpdate() {
-        // Запрос строкового запроса по предоставленному URL
-        val stringRequest = JsonObjectRequest(Request.Method.GET, url, null,
-            Response.Listener { response ->
-                Log.d("test", "Response is: ${Forecast.parse(response.toString())}.")
-            },
-            Response.ErrorListener {
-                Log.d("test", "Error! ${it.message}")
-            }
-        )
-
-        forecastViewModel.add(stringRequest)
-    }
 
 }

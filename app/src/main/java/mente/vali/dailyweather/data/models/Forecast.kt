@@ -17,13 +17,13 @@ class Forecast(weatherList: List<WeatherByTime>) {
         /**
          * Парсинг полученного [JsonObject] с получением объекта [Forecast].
          */
-        fun parse(json: String) {
+        fun parse(json: String): Forecast {
             val gson = GsonBuilder()
                 .registerTypeAdapter(
                     Forecast::class.java,
                     ForecastDeserializer()
                 ).create()
-            gson.fromJson(json, Forecast::class.java)
+            return gson.fromJson(json, Forecast::class.java)
         }
     }
 }
