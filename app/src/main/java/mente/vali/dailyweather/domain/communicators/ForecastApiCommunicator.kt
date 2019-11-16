@@ -24,17 +24,17 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
      */
     private var cityID = "484907"
 
-
+    /**
+     * Метод, производящий запрос информации с сервера.
+     */
     fun requestForecast(listener: Response.Listener<JSONObject>) {
-        // TODO сделать Toast уведомления для удобства.
         val request = JsonObjectRequest(
             Request.Method.GET,
             generateApiUrl(),
             null,
-            Response.Listener { response ->
-                Log.d("test", "Error! ${response}")
-            },
+            listener,
             Response.ErrorListener {
+                // TODO сделать Toast уведомления для удобства.
                 Log.d("test", "Error! ${it.message}")
             }
         )
@@ -43,7 +43,7 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     }
 
     /**
-     * Метод, добавляющий [request] к [requestQueue].
+     * Метод, ставящий [request] в очередь на обработку в [requestQueue].
      */
     private fun <T> add(request: Request<T>) {
         requestQueue.add(request)
@@ -54,7 +54,7 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
      */
     fun generateApiUrl() =
         "http://api.openweathermap.org/data/2.5/forecast?id=$cityID&units=${UNITS}" +
-                "&APPID=${API_KEY}\""
+                "&APPID=${API_KEY}"
 
     companion object {
 

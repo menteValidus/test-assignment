@@ -31,13 +31,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var forecasts: List<WeatherByTime>// = listOf()
+        var forecasts: List<WeatherByTime> = listOf()
         forecastViewModel = ViewModelProviders.of(this).get(ForecastViewModel::class.java)
         forecastViewModel.forecastsList.observe(this, Observer { forecastList ->
             forecastList.let { forecasts = it.weatherByTimeList }
         })
 
-        localClassName
     }
 
 
