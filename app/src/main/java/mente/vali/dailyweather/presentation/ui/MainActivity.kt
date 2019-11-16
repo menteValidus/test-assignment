@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     /**
      * Метод, вызываемый при завершении Activity.
      */
