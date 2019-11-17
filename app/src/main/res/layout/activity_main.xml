@@ -8,69 +8,30 @@
     android:orientation="vertical">
 
     <!--Список всех hardcoded городов.-->
-    <Spinner
-        android:id="@+id/sp_cities"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_size_normal_48"
-        android:layout_marginStart="@dimen/spacing_small_8"
-        android:layout_marginEnd="@dimen/spacing_small_8"
-        android:layout_marginTop="@dimen/spacing_small_8"
-        android:layout_marginBottom="@dimen/spacing_small_8"/>
+        android:layout_height="wrap_content"
+        android:elevation="9dp">
 
-    <RelativeLayout
+        <Spinner
+            android:id="@+id/sp_cities"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_size_normal_48"
+            android:layout_marginStart="@dimen/spacing_small_8"
+            android:layout_marginEnd="@dimen/spacing_small_8"
+            android:layout_marginTop="@dimen/spacing_small_8"
+            android:layout_marginBottom="@dimen/spacing_small_8"/>
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        <!--        Состояние погоды-->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/iv_weather"
-                android:layout_width="@dimen/item_size_huge_96"
-                android:layout_height="@dimen/item_size_huge_96"
-                android:layout_marginTop="@dimen/spacing_huge_32"
-                android:layout_marginBottom="@dimen/spacing_middle_16"
-                android:layout_marginStart="@dimen/spacing_huge_32"
-                android:layout_marginEnd="@dimen/spacing_huge_32"
-                android:layout_gravity="center"
-                android:src="@drawable/cloudy_day_1" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Condition"/>
-        </LinearLayout>
+        android:layout_height="match_parent"
 
-        <!--        Значение температуры, дата-->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="@dimen/spacing_middle_16">
-            <TextView
-                android:id="@+id/tv_datetime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small_8"
-                android:layout_marginBottom="@dimen/spacing_small_8"
-                android:text="Ноябрь 16, 18:23"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small_8"
-                android:text="8&#xb0;C"
-                android:textSize="@dimen/text_huge_64"/>
-            <TextView
-                android:id="@+id/tv_maxmin_temp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_middle_16"
-                android:text="Днём 11&#xb0;C, Ночью 4&#xb0;C"/>
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
+        />
 
-        </LinearLayout>
-
-    </RelativeLayout>
 
 </LinearLayout>

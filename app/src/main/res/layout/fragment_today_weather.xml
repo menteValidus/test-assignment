@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.ui.fragments.TodayWeatherFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="8dp">
+        <!--        Состояние погоды-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical"
+            >
+            <ImageView
+                android:id="@+id/iv_weather"
+                android:layout_width="@dimen/item_size_huge_96"
+                android:layout_height="@dimen/item_size_huge_96"
+                android:layout_marginTop="@dimen/spacing_huge_32"
+                android:layout_marginBottom="@dimen/spacing_middle_16"
+                android:layout_marginStart="@dimen/spacing_huge_32"
+                android:layout_marginEnd="@dimen/spacing_huge_32"
+                android:layout_gravity="center"
+                android:src="@drawable/cloudy_day_1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Condition"/>
+        </LinearLayout>
+
+        <!--        Значение температуры, дата-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/spacing_middle_16">
+            <TextView
+                android:id="@+id/tv_datetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small_8"
+                android:layout_marginBottom="@dimen/spacing_small_8"
+                android:text="Ноябрь 16, 18:23"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small_8"
+                android:text="8&#xb0;C"
+                android:textSize="@dimen/text_huge_64"/>
+            <TextView
+                android:id="@+id/tv_maxmin_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_middle_16"
+                android:text="Днём 11&#xb0;C, Ночью 4&#xb0;C"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_slide_tomorrow"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/item_size_normal_48"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
