@@ -23,6 +23,11 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
      * ID текущего города.
      */
     private var cityID = "484907"
+    /**
+     * Поле, определяющее, какая система мер используется при вызове к API.
+     */
+    var units = "metric"
+
 
     /**
      * Метод, производящий запрос информации с сервера.
@@ -52,8 +57,8 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     /**
      * Метод, генерирующий URL для запроса к API.
      */
-    fun generateApiUrl() =
-        "http://api.openweathermap.org/data/2.5/forecast?id=$cityID&units=${UNITS}" +
+    private fun generateApiUrl() =
+        "http://api.openweathermap.org/data/2.5/forecast?id=$cityID&units=${units}" +
                 "&APPID=${API_KEY}"
 
     companion object {
@@ -64,10 +69,6 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
         @Volatile
         private var INSTANCE: ForecastApiCommunicator? = null
 
-        /**
-         * Константа, определяющая, какая система мер используется при вызове к API.
-         */
-        private const val UNITS = "metric"
         /**
          * Константа, хранящая ключ доступа к API.
          */
@@ -84,4 +85,6 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
                     }
             }
     }
+
+
 }
