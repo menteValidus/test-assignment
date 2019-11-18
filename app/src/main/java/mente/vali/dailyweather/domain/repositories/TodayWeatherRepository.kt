@@ -3,20 +3,34 @@ package mente.vali.dailyweather.domain.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
-import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 
-class TodayWeatherRepository constructor(appRepository: Context){
+/**
+ * Репозиторий для хранения данных о текущей погоде.
+ */
+class TodayWeatherRepository constructor(appRepository: Context) {
+    /**
+     * Стандартный [SharedPreferences].
+     */
     private val prefs: SharedPreferences by lazy {
         val ctx = appRepository.applicationContext
         PreferenceManager.getDefaultSharedPreferences(ctx)
     }
 
+    /**
+     * Метод для сохранения текущей выбранной единицы измерения.
+     */
     fun saveSelectedUnit(units: String) {
         putValue(UNITS to units)
     }
 
-    fun getSelectedUnit()= prefs.getString(UNITS, "metric")!!
+    /**
+     * Метод для получения текущей выбранной единицы измерения.
+     */
+    fun getSelectedUnit() = prefs.getString(UNITS, "metric")!!
 
+    /**
+     * Универсальный метод для сохранения данных в [SharedPreferences].
+     */
     private fun putValue(pair: Pair<String, Any>) = with(prefs.edit()) {
         val key = pair.first
         val value = pair.second
@@ -34,6 +48,7 @@ class TodayWeatherRepository constructor(appRepository: Context){
     }
 
     companion object {
+        // Строковые константы для хранения данных и доступа к ним.
         private const val UNITS = "UNITS"
 
         /**

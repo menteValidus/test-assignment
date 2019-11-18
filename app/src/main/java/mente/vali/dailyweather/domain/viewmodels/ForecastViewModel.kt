@@ -9,15 +9,27 @@ import kotlinx.coroutines.launch
 import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.repositories.TodayWeatherRepository
+
 // TODO добавить комментарии.
 /**
  * Основная ViewModel приложения.
  */
 class ForecastViewModel(application: Application) : AndroidViewModel(application) {
     /**
-     *
+     * Текущие единицы измерения градуса.
      */
-    var unit: Units
+    private var _currentUnits: Units
+    /**
+     * Свойство, отвечающее за модификацию поля [_currentUnits].
+     */
+    var currentUnits: Units
+        get() = _currentUnits
+        set(value) {
+            _currentUnits = value
+            // Сообщить репозиториям об изменениях.
+            saveCurrentUnits()
+            acceptUnits()
+        }
     /**
      * Список всех 3-часовых прогнозов на 5 дней.
      */
@@ -32,11 +44,11 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * Свойство для получения объекта класса [TodayWeatherRepository].
      * Предназначено для хранения данных в локальном хранилище.
      */
-    private val todayWeatherRepository: TodayWeatherRepository =
+    private val weatherRepository: TodayWeatherRepository =
         TodayWeatherRepository.getInstance(application.applicationContext)
 
     init {
-        unit = Units.get(todayWeatherRepository.getSelectedUnit())
+        _currentUnits = Units.get(weatherRepository.getSelectedUnit())
         acceptUnits()
         requestUpdate()
     }
@@ -51,21 +63,12 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
             })
     }
 
-    fun saveUnits() {
-        todayWeatherRepository.saveSelectedUnit(unit.getUnitString())
-    }
-
-    /**
-     *
-     */
-    fun setUnits(units: Units) {
-        this.unit = units
-        saveUnits()
-        acceptUnits()
+    fun saveCurrentUnits() {
+        weatherRepository.saveSelectedUnit(currentUnits.getUnitString())
     }
 
     private fun acceptUnits() {
-        forecastApiCommunicator.units = unit.getUnitString()
+        forecastApiCommunicator.units = currentUnits.getUnitString()
     }
 
     /**
