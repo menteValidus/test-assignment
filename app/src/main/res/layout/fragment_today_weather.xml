@@ -27,6 +27,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/cloudy_day_1" />
             <TextView
+                android:id="@+id/tw_condition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -47,17 +48,18 @@
                 android:layout_marginBottom="@dimen/spacing_small_8"
                 android:text="Ноябрь 16, 18:23"/>
             <TextView
+                android:id="@+id/tw_current_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_small_8"
-                android:text="8&#xb0;C"
+                tools:text="@string/current_temp_placeholder"
                 android:textSize="@dimen/text_huge_64"/>
             <TextView
-                android:id="@+id/tv_maxmin_temp"
+                android:id="@+id/tw_maxmin_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_middle_16"
-                android:text="Днём 11&#xb0;C, Ночью 4&#xb0;C"/>
+                tools:text="@string/maxmin_temp_placeholder"/>
 
         </LinearLayout>
 

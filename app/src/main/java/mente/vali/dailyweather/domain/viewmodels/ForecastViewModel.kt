@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.android.volley.Response
 import kotlinx.coroutines.launch
 import mente.vali.dailyweather.data.models.Forecast
+import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.repositories.TodayWeatherRepository
+import mente.vali.dailyweather.utils.Utils
+import java.util.*
 
-// TODO добавить комментарии.
 /**
  * Основная ViewModel приложения.
  */
@@ -28,12 +30,35 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
             _currentUnits = value
             // Сообщить репозиториям об изменениях.
             saveCurrentUnits()
-            acceptUnits()
+            acceptCurrentUnits()
+        }
+    /**
+     * Погода текущих 3 часов.
+     */
+    private var _currentWeather: WeatherByTime? = null
+
+    /**
+     * Свойство для работы с текущей погодой.
+     */
+    var currentWeather: WeatherByTime?
+        get() {
+            if (_currentWeather == null) {
+                val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+                val index = currentHour / 3
+
+                return forecastsList.value?.weatherByTimeList?.get(index)
+            } else {
+                return _currentWeather!!
+            }
+        }
+        private set(value) {
+            _currentWeather = value
         }
     /**
      * Список всех 3-часовых прогнозов на 5 дней.
      */
     val forecastsList: MutableLiveData<Forecast> = MutableLiveData()
+
     /**
      * Свойство для получения объекта класса [ForecastApiCommunicator].
      * Предназначено для общения с сервером API.
@@ -49,40 +74,59 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
     init {
         _currentUnits = Units.get(weatherRepository.getSelectedUnit())
-        acceptUnits()
-        requestUpdate()
+        acceptCurrentUnits()
+        update()
     }
+
+
+    /**
+     * Метод, передающий текущие единицы исзмерения в репозиторий.
+     */
+    fun saveCurrentUnits() {
+        weatherRepository.saveSelectedUnit(currentUnits.getUnitString())
+    }
+
+    /**
+     * Метод для обновления UI из Activity.
+     */
+    fun requestUIUpdate(setUI: (MutableLiveData<Forecast>, currentHourIndex: Int) -> Unit) =
+        viewModelScope.launch {
+            forecastApiCommunicator.requestForecast(
+                Response.Listener { response ->
+                    forecastsList.value = Forecast.parse(response.toString())
+                    setUI(forecastsList, Utils.getCurrentHourID())
+                })
+        }
 
     /**
      * Wrapper для запроса данных с сервера API.
      */
-    fun requestUpdate() = viewModelScope.launch {
+    private fun update() = viewModelScope.launch {
         forecastApiCommunicator.requestForecast(
             Response.Listener { response ->
                 forecastsList.value = Forecast.parse(response.toString())
             })
     }
 
-    fun saveCurrentUnits() {
-        weatherRepository.saveSelectedUnit(currentUnits.getUnitString())
-    }
-
-    private fun acceptUnits() {
+    /**
+     * Метод, передающий текущие единицы исзмерения в коммуникатор для модификации http-запроса.
+     */
+    private fun acceptCurrentUnits() {
         forecastApiCommunicator.units = currentUnits.getUnitString()
     }
 
     /**
      * Единицы градуса.
      */
-    enum class Units(string: String) {
-        CELSIUS("metric") {
-            override fun getString() = "&#xb0;C"
+    enum class Units {
+        CELSIUS {
+            override fun getString() = "C"
 
             override fun getUnitString() = "metric"
 
         },
-        FAHRENHEIT("imperial") {
-            override fun getString() = "&#xb0;F"
+        FAHRENHEIT {
+            override fun getString() = "F"
 
             override fun getUnitString() = "imperial"
         };
@@ -106,8 +150,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
              */
             fun get(conditionString: String): Units {
                 return when (conditionString) {
-                    "metric" -> CELSIUS
-                    "imperial" -> FAHRENHEIT
+                    CELSIUS.getUnitString() -> CELSIUS
+                    FAHRENHEIT.getUnitString() -> FAHRENHEIT
                     else -> CELSIUS
                 }
             }

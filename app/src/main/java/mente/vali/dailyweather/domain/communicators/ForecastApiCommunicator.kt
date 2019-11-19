@@ -58,7 +58,7 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
      * Метод, генерирующий URL для запроса к API.
      */
     private fun generateApiUrl() =
-        "http://api.openweathermap.org/data/2.5/forecast?id=$cityID&currentUnits=${units}" +
+        "http://api.openweathermap.org/data/2.5/forecast?id=$cityID&units=${units}" +
                 "&APPID=${API_KEY}"
 
     companion object {

@@ -7,6 +7,7 @@ import android.widget.RadioButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_today_weather.*
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
@@ -19,7 +20,9 @@ class MainActivity : AppCompatActivity() {
     /**
      * Поле [ForecastViewModel] для работы с данными, получаемыми от API.
      */
-    private lateinit var forecastViewModel: ForecastViewModel
+    private val forecastViewModel: ForecastViewModel by lazy {
+        ViewModelProviders.of(this).get(ForecastViewModel::class.java)
+    }
 
     /**
      * Метод, вызываемый при запуске Activity.
@@ -28,21 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var forecasts: List<WeatherByTime> = listOf()
-        forecastViewModel = ViewModelProviders.of(this).get(ForecastViewModel::class.java)
-        forecastViewModel.forecastsList.observe(this, Observer { forecastList ->
-            forecastList.let { forecasts = it.weatherByTimeList }
-        })
-
-        val units = forecastViewModel.currentUnits
-
-        // Установить radiobutton в нужное положение.
-        if (units == ForecastViewModel.Units.FAHRENHEIT) {
-            rb_fahrenheit.isChecked = true
-        } else {
-            rb_celsius.isChecked = true
-        }
-
+        initUI()
     }
 
     /**
@@ -75,6 +64,24 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            // TODO как-то сообщить фрагментам о том, что единицы были изменены.
+        }
+    }
+
+
+
+    /**
+     * Метод, приводящий весь UI к начальномму положению.
+     */
+    private fun initUI() {
+        val units = forecastViewModel.currentUnits
+
+        // Установить radiobutton в нужное положение.
+        if (units == ForecastViewModel.Units.FAHRENHEIT) {
+            rb_fahrenheit.isChecked = true
+        } else {
+            rb_celsius.isChecked = true
         }
     }
 
