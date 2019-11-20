@@ -5,10 +5,11 @@
 
     <data>
         <variable
-            name="todayWeather"
-            type="mente.vali.dailyweather.data.models.ObservableWeather" />
+            name="viewmodel"
+            type="mente.vali.dailyweather.domain.viewmodels.ForecastViewModel" />
 
     </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,8 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
             <ImageView
                 android:id="@+id/iv_weather"
                 android:layout_width="@dimen/item_size_huge_96"
@@ -53,10 +53,11 @@
                 android:text="Ноябрь 16, 18:23"/>
             <TextView
                 android:id="@+id/tw_current_temp"
+                android:temperature="@{viewmodel.currentWeather.temperature}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_small_8"
-                tools:text="@{todayWeather.temperature}"
+                app:degreesUnit="@{viewmodel.currentUnits}"
                 android:textSize="@dimen/text_huge_64"/>
             <TextView
                 android:id="@+id/tw_maxmin_temp"
@@ -73,6 +74,19 @@
             android:layout_height="@dimen/item_size_normal_48"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"/>
+        <Button
+            android:id="@+id/btn_slide_tomorrowwww"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/item_size_normal_48"
+            android:layout_alignParentBottom="true"
+            android:onClick="@{() -> viewmodel.increase()}"/>
+        <Button
+            android:id="@+id/btn_slide_tomorrowwwwwww"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/item_size_normal_48"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="@{() -> viewmodel.update()}"/>
 
     </RelativeLayout>
 

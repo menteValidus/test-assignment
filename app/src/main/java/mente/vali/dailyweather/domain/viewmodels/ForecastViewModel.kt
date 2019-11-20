@@ -2,18 +2,15 @@ package mente.vali.dailyweather.domain.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Response
 import kotlinx.coroutines.launch
 import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.ObservableWeather
-import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.repositories.TodayWeatherRepository
-import mente.vali.dailyweather.presentation.ui.fragments.base.BaseFragment
-import mente.vali.dailyweather.utils.Utils
-import java.util.*
 
 /**
  * Основная ViewModel приложения.
@@ -33,26 +30,27 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
             // Сообщить репозиториям об изменениях.
             saveCurrentUnits()
             acceptCurrentUnits()
-            update()
+//            update()
             //currentFragment.updateUI(currentWeather)
         }
 
-    private lateinit var currentFragment: BaseFragment
     /**
-     * Погода текущих 3 часов.
+     *
      */
-    private var _currentWeather: ObservableWeather? = null
+    private var _currentWeather =
+        MutableLiveData<ObservableWeather>().apply {
+            value = ObservableWeather()
+        }
+
+    private val _temperature = MutableLiveData(16.toShort())
+    val temperature: LiveData<Short> = _temperature
+
 
     /**
-     * Свойство для работы с текущей погодой.
+     * Погода на текущее время.
      */
-    var currentWeather: ObservableWeather?
-        get() {
-            return forecastsList.value?.todayForecast
-        }
-        private set(value) {
-            _currentWeather = value
-        }
+    val currentWeather: LiveData<ObservableWeather> = _currentWeather
+
     /**
      * Список всех 3-часовых прогнозов на 5 дней.
      */
@@ -74,41 +72,34 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     init {
         _currentUnits = Units.get(weatherRepository.getSelectedUnit())
         acceptCurrentUnits()
-        update()
     }
 
 
     /**
-     * Метод, передающий текущие единицы исзмерения в репозиторий.
+     * Метод, передающий текущие единицы измерения в репозиторий.
      */
     fun saveCurrentUnits() {
         weatherRepository.saveSelectedUnit(currentUnits.getUnitString())
     }
 
     /**
-     * Метод для обновления UI из Activity.
-     */
-    fun requestUIUpdate(
-        setUI: (ForecastViewModel) -> Unit
-    ) {
-        viewModelScope.launch {
-            // Установить, какой фрагмент обратился, с целью дальнейшего обновления его UI.
-            forecastApiCommunicator.requestForecast(
-                Response.Listener { response ->
-                    forecastsList.value = Forecast.parse(response.toString())
-                    setUI(this@ForecastViewModel)
-                })
-        }
-    }
-
-    /**
      * Wrapper для запроса данных с сервера API.
      */
-    private fun update() = viewModelScope.launch {
+    fun update() = viewModelScope.launch {
+        forecastApiCommunicator.requestWeatherByNow(
+            Response.Listener { response ->
+                _currentWeather.value = ObservableWeather.parse(response.toString())
+                _temperature.value = ((_temperature.value ?: 0) + 1).toShort()
+            }
+        )
         forecastApiCommunicator.requestForecast(
             Response.Listener { response ->
                 forecastsList.value = Forecast.parse(response.toString())
             })
+    }
+
+    fun increase() {
+        _temperature.value = ((_temperature.value ?: 0) + 1).toShort()
     }
 
     /**

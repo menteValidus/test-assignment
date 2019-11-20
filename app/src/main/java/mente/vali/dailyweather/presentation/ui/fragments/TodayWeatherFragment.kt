@@ -21,7 +21,7 @@ import mente.vali.dailyweather.presentation.ui.fragments.base.BaseFragment
 /**
  * Подкласс [Fragment], представляющий информацию о погоде на сегодня.
  */
-class TodayWeatherFragment : Fragment(), BaseFragment {
+class TodayWeatherFragment : Fragment() {
 
     /**
      * Поле [ForecastViewModel] для работы с данными, получаемыми от API.
@@ -49,15 +49,10 @@ class TodayWeatherFragment : Fragment(), BaseFragment {
                 container, false
             )
 
-        requestAndBindUIData(binding)
+        binding.viewmodel = forecastViewModel
+        binding.lifecycleOwner = this
         // TODO пытается получить доступ к ещё неинициализированному списку.
         return binding.root
-    }
-
-    private fun bindUI(binding: FragmentTodayWeatherBinding,
-    viewModel: ForecastViewModel) {
-        binding.todayWeather = viewModel.currentWeather
-
     }
 
 
@@ -71,41 +66,10 @@ class TodayWeatherFragment : Fragment(), BaseFragment {
                 .navigate(R.id.action_todayWeatherFragment_to_tomorrowWeatherFragment)
         }
 
+        forecastViewModel.update()
+
 
     }
 
-    /**
-     * Метод, делегирующий обновления UI ViewModel.
-     */
-    private fun requestAndBindUIData(binding: FragmentTodayWeatherBinding) {
-        forecastViewModel.requestUIUpdate { viewModel ->
-            bindUI(binding, viewModel)
-//            forecastLiveData.observe(viewLifecycleOwner, Observer { forecastList ->
-//                //updateUI(forecastList.weatherByTimeList[index])
-//            })
-        }
-    }
-
-    /**
-     * Метод обновляющий весь UI фрагмента.
-     */
-    override fun updateUI(weatherByTime: WeatherByTime) {
-        with(weatherByTime) {
-            tw_condition.text = weatherCondition.name
-            // Строка с текущей температурой.
-            // %1$d°%2$s
-            tw_current_temp.text = String.format(
-                resources.getString(R.string.current_temp_placeholder),
-                temperature, forecastViewModel.currentUnits.getString()
-            )
-            // Строка с максимальной и минимальной температурами.
-            // Днём %1$d°%2$s, Ночью %3$d°%4$s
-            tw_maxmin_temp.text = String.format(
-                resources.getString(R.string.maxmin_temp_placeholder),
-                maxTemperature, forecastViewModel.currentUnits.getString(),
-                minTemperature, forecastViewModel.currentUnits.getString()
-            )
-        }
-    }
 
 }

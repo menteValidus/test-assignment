@@ -30,18 +30,37 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
 
 
     /**
-     * Метод, производящий запрос информации с сервера.
+     * Метод, производящий запрос прогноза на 5 дней с сервера.
      */
     fun requestForecast(listener: Response.Listener<JSONObject>) {
         val request = JsonObjectRequest(
             Request.Method.GET,
-            generateApiUrl(),
+            generateForecastApiUrl(),
             null,
             listener,
             Response.ErrorListener {
                 // TODO сделать Toast уведомления для удобства.
                 Log.d("test", "Error! ${it.message}")
             }
+        )
+
+        add(request)
+    }
+
+    /**
+     * Метод, производящий запрос текущей погоды с сервера.
+     */
+    fun requestWeatherByNow(listener: Response.Listener<JSONObject>) {
+        val request = JsonObjectRequest(
+            Request.Method.GET,
+            generateWeatherApiUrl(),
+            null,
+            listener,
+            Response.ErrorListener {
+                // TODO сделать Toast уведомления для удобства.
+                Log.d("test", "Error! ${it.message}")
+            }
+
         )
 
         add(request)
@@ -55,10 +74,16 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     }
 
     /**
-     * Метод, генерирующий URL для запроса к API.
+     * Метод, генерирующий URL для запроса прогноза на 5 дней.
      */
-    private fun generateApiUrl() =
+    private fun generateForecastApiUrl() =
         "http://api.openweathermap.org/data/2.5/forecast?id=$cityID&units=${units}" +
+                "&APPID=${API_KEY}"
+    /**
+     * Метод, генерирующий URL для запроса текущей погоды.
+     */
+    private fun generateWeatherApiUrl() =
+        "http://api.openweathermap.org/data/2.5/weather?id=$cityID&units=${units}" +
                 "&APPID=${API_KEY}"
 
     companion object {
