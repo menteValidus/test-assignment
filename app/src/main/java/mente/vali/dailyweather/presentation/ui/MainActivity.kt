@@ -1,15 +1,12 @@
 package mente.vali.dailyweather.presentation.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.RadioButton
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_today_weather.*
 import mente.vali.dailyweather.R
-import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 
 /**

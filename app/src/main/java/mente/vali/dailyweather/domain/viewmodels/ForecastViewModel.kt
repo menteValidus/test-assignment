@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.android.volley.Response
 import kotlinx.coroutines.launch
 import mente.vali.dailyweather.data.models.Forecast
+import mente.vali.dailyweather.data.models.ObservableWeather
 import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.repositories.TodayWeatherRepository
+import mente.vali.dailyweather.presentation.ui.fragments.base.BaseFragment
 import mente.vali.dailyweather.utils.Utils
 import java.util.*
 
@@ -31,25 +33,22 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
             // Сообщить репозиториям об изменениях.
             saveCurrentUnits()
             acceptCurrentUnits()
+            update()
+            //currentFragment.updateUI(currentWeather)
         }
+
+    private lateinit var currentFragment: BaseFragment
     /**
      * Погода текущих 3 часов.
      */
-    private var _currentWeather: WeatherByTime? = null
+    private var _currentWeather: ObservableWeather? = null
 
     /**
      * Свойство для работы с текущей погодой.
      */
-    var currentWeather: WeatherByTime?
+    var currentWeather: ObservableWeather?
         get() {
-            if (_currentWeather == null) {
-                val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-                val index = currentHour / 3
-
-                return forecastsList.value?.weatherByTimeList?.get(index)
-            } else {
-                return _currentWeather!!
-            }
+            return forecastsList.value?.todayForecast
         }
         private set(value) {
             _currentWeather = value
@@ -89,14 +88,18 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /**
      * Метод для обновления UI из Activity.
      */
-    fun requestUIUpdate(setUI: (MutableLiveData<Forecast>, currentHourIndex: Int) -> Unit) =
+    fun requestUIUpdate(
+        setUI: (ForecastViewModel) -> Unit
+    ) {
         viewModelScope.launch {
+            // Установить, какой фрагмент обратился, с целью дальнейшего обновления его UI.
             forecastApiCommunicator.requestForecast(
                 Response.Listener { response ->
                     forecastsList.value = Forecast.parse(response.toString())
-                    setUI(forecastsList, Utils.getCurrentHourID())
+                    setUI(this@ForecastViewModel)
                 })
         }
+    }
 
     /**
      * Wrapper для запроса данных с сервера API.

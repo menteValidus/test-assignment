@@ -3,6 +3,7 @@ package mente.vali.dailyweather.data.models
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import mente.vali.dailyweather.domain.deserializers.ForecastDeserializer
+import java.util.*
 
 /**
  * Класс, хранящий прогноз погоды.
@@ -13,7 +14,18 @@ class Forecast(weatherList: List<WeatherByTime>) {
      */
     val weatherByTimeList: List<WeatherByTime> = weatherList
 
+    //TODO comments
+    val todayForecast: ObservableWeather
+        get() {
+            return ObservableWeather(weatherByTimeList[getCurrentHourID()])
+        }
+
     companion object {
+        // TODO comments
+        private fun getCurrentHourID(): Int {
+            val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            return currentHour / 3
+        }
         /**
          * Парсинг полученного [JsonObject] с получением объекта [Forecast].
          */

@@ -7,19 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.Observer
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_today_weather.*
 
 import mente.vali.dailyweather.R
+import mente.vali.dailyweather.data.models.WeatherByTime
+import mente.vali.dailyweather.databinding.FragmentTodayWeatherBinding
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
+import mente.vali.dailyweather.presentation.ui.fragments.base.BaseFragment
 
 /**
  * Подкласс [Fragment], представляющий информацию о погоде на сегодня.
  */
-class TodayWeatherFragment : Fragment() {
+class TodayWeatherFragment : Fragment(), BaseFragment {
 
     /**
      * Поле [ForecastViewModel] для работы с данными, получаемыми от API.
@@ -41,17 +43,32 @@ class TodayWeatherFragment : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_today_weather, container, false)
+        val binding =
+            DataBindingUtil.inflate<FragmentTodayWeatherBinding>(
+                inflater, R.layout.fragment_today_weather,
+                container, false
+            )
+
+        requestAndBindUIData(binding)
+        // TODO пытается получить доступ к ещё неинициализированному списку.
+        return binding.root
+    }
+
+    private fun bindUI(binding: FragmentTodayWeatherBinding,
+    viewModel: ForecastViewModel) {
+        binding.todayWeather = viewModel.currentWeather
+
     }
 
 
     override fun onStart() {
         super.onStart()
 
-        updateUI()
+        //requestAndBindUIData()
         // Переход между фрагментами.
         btn_slide_tomorrow.setOnClickListener { view ->
-            view.findNavController().navigate(R.id.action_todayWeatherFragment_to_tomorrowWeatherFragment)
+            view.findNavController()
+                .navigate(R.id.action_todayWeatherFragment_to_tomorrowWeatherFragment)
         }
 
 
@@ -60,27 +77,34 @@ class TodayWeatherFragment : Fragment() {
     /**
      * Метод, делегирующий обновления UI ViewModel.
      */
-    private fun updateUI() {
-        forecastViewModel.requestUIUpdate { forecastLiveData, index ->
-            forecastLiveData.observe(this, Observer { forecastList ->
-                with(forecastList.weatherByTimeList[index]) {
-                    // Строка с названием погоды.
-                    tw_condition.text = weatherCondition.name
-                    // Строка с текущей температурой.
-                    // %1$d°%2$s
-                    tw_current_temp.text = String.format(
-                        resources.getString(R.string.current_temp_placeholder),
-                        temperature, forecastViewModel.currentUnits.getString()
-                    )
-                    // Строка с максимальной и минимальной температурами.
-                    // Днём %1$d°%2$s, Ночью %3$d°%4$s
-                    tw_maxmin_temp.text = String.format(
-                        resources.getString(R.string.maxmin_temp_placeholder),
-                        maxTemperature, forecastViewModel.currentUnits.getString(),
-                        minTemperature, forecastViewModel.currentUnits.getString()
-                    )
-                }
-            })
+    private fun requestAndBindUIData(binding: FragmentTodayWeatherBinding) {
+        forecastViewModel.requestUIUpdate { viewModel ->
+            bindUI(binding, viewModel)
+//            forecastLiveData.observe(viewLifecycleOwner, Observer { forecastList ->
+//                //updateUI(forecastList.weatherByTimeList[index])
+//            })
+        }
+    }
+
+    /**
+     * Метод обновляющий весь UI фрагмента.
+     */
+    override fun updateUI(weatherByTime: WeatherByTime) {
+        with(weatherByTime) {
+            tw_condition.text = weatherCondition.name
+            // Строка с текущей температурой.
+            // %1$d°%2$s
+            tw_current_temp.text = String.format(
+                resources.getString(R.string.current_temp_placeholder),
+                temperature, forecastViewModel.currentUnits.getString()
+            )
+            // Строка с максимальной и минимальной температурами.
+            // Днём %1$d°%2$s, Ночью %3$d°%4$s
+            tw_maxmin_temp.text = String.format(
+                resources.getString(R.string.maxmin_temp_placeholder),
+                maxTemperature, forecastViewModel.currentUnits.getString(),
+                minTemperature, forecastViewModel.currentUnits.getString()
+            )
         }
     }
 
