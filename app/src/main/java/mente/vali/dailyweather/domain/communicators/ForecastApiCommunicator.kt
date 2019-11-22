@@ -27,7 +27,9 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
      * Поле, определяющее, какая система мер используется при вызове к API.
      */
     var units = "metric"
-
+    fun setCityID(city: String) {
+        cityID = citiesIDMap[city] ?: "484907"
+    }
 
     /**
      * Метод, производящий запрос прогноза на 5 дней с сервера.
@@ -79,6 +81,7 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     private fun generateForecastApiUrl() =
         "http://api.openweathermap.org/data/2.5/forecast?id=$cityID&units=${units}" +
                 "&APPID=${API_KEY}"
+
     /**
      * Метод, генерирующий URL для запроса текущей погоды.
      */
@@ -87,6 +90,13 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
                 "&APPID=${API_KEY}"
 
     companion object {
+        private val citiesIDMap: Map<String, String> = mapOf(
+            "Таганрог" to "484907",
+            "Москва" to "524901",
+            "Варшава" to "4927854",
+            "Сидней" to "2147714",
+            "Нью-Йорк" to "5128638"
+        )
 
         /**
          * Объект класса.
@@ -109,6 +119,14 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
                         INSTANCE = it
                     }
             }
+
+        fun getCitiesList(): List<String> {
+            val list = mutableListOf<String>()
+            citiesIDMap.forEach {
+                list.add(it.key)
+            }
+            return list
+        }
     }
 
 

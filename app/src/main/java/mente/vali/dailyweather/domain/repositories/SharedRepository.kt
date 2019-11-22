@@ -7,7 +7,7 @@ import androidx.preference.PreferenceManager
 /**
  * Репозиторий для хранения данных о текущей погоде.
  */
-class TodayWeatherRepository constructor(appRepository: Context) {
+class SharedRepository constructor(appRepository: Context) {
     /**
      * Стандартный [SharedPreferences].
      */
@@ -27,6 +27,16 @@ class TodayWeatherRepository constructor(appRepository: Context) {
      * Метод для получения текущей выбранной единицы измерения.
      */
     fun getSelectedUnit() = prefs.getString(UNITS, "metric")!!
+    /**
+     * Метод для сохранения текущего выбранного города.
+     */
+    fun saveCity(city: String) {
+        putValue(CITY to city)
+    }
+    /**
+     * Метод для получения текущего выбранного города.
+     */
+    fun getCity() = prefs.getString(CITY, "Таганрог")!!
 
     /**
      * Универсальный метод для сохранения данных в [SharedPreferences].
@@ -50,12 +60,13 @@ class TodayWeatherRepository constructor(appRepository: Context) {
     companion object {
         // Строковые константы для хранения данных и доступа к ним.
         private const val UNITS = "UNITS"
+        private const val CITY = "CITY"
 
         /**
          * Объект класса.
          */
         @Volatile
-        private var INSTANCE: TodayWeatherRepository? = null
+        private var INSTANCE: SharedRepository? = null
 
         /**
          * Статический метод, возвращающий объект класса.
@@ -63,7 +74,7 @@ class TodayWeatherRepository constructor(appRepository: Context) {
         fun getInstance(context: Context) =
             INSTANCE ?: synchronized(this) {
                 INSTANCE
-                    ?: TodayWeatherRepository(context).also {
+                    ?: SharedRepository(context).also {
                         INSTANCE = it
                     }
             }

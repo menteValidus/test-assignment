@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_today_weather.*
@@ -49,7 +48,7 @@ class TodayWeatherFragment : Fragment() {
 //            )
 
 //        binding.viewmodel = forecastViewModel
-        binding.viewmodel = (activity as MainActivity).getVM()
+        binding.viewmodel = (activity as MainActivity).getSharedViewModel()
         binding.lifecycleOwner = viewLifecycleOwner
 
         // TODO пытается получить доступ к ещё неинициализированному списку.

@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.ObservableWeather
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
-import mente.vali.dailyweather.domain.repositories.TodayWeatherRepository
+import mente.vali.dailyweather.domain.repositories.SharedRepository
 
 /**
  * Основная ViewModel приложения.
@@ -23,11 +23,11 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     private val forecastApiCommunicator: ForecastApiCommunicator =
         ForecastApiCommunicator.getInstance(application.applicationContext)
     /**
-     * Свойство для получения объекта класса [TodayWeatherRepository].
+     * Свойство для получения объекта класса [SharedRepository].
      * Предназначено для хранения данных в локальном хранилище.
      */
-    private val weatherRepository: TodayWeatherRepository =
-        TodayWeatherRepository.getInstance(application.applicationContext)
+    private val sharedRepository: SharedRepository =
+        SharedRepository.getInstance(application.applicationContext)
     /**
      * Список всех 3-часовых прогнозов на 5 дней.
      */
@@ -36,7 +36,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * Текущие единицы измерения градуса.
      */
     private val _currentUnitsLiveData: MutableLiveData<Units> =
-        MutableLiveData(Units.get(weatherRepository.getSelectedUnit()))
+        MutableLiveData(Units.get(sharedRepository.getSelectedUnit()))
 
     /**
      * Свойство, отвечающее за модификацию поля [_currentUnitsLiveData].
@@ -55,6 +55,17 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      */
     val currentWeather: LiveData<ObservableWeather> = _currentWeather
 
+    private val _selectedCity: MutableLiveData<String> = MutableLiveData(sharedRepository.getCity())
+
+    val selectedCity: LiveData<String> = _selectedCity
+
+    fun setCity(city: String) {
+        _selectedCity.value = city
+        sharedRepository.saveCity(city)
+        forecastApiCommunicator.setCityID(city)
+        update()
+    }
+
     init {
         update()
         acceptCurrentUnits()
@@ -63,16 +74,17 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /**
      * TODO
      */
-    fun setCurrentUnits(units: Units) {
+    private fun setCurrentUnits(units: Units) {
         _currentUnitsLiveData.value = units
         acceptCurrentUnits()
         saveCurrentUnits()
     }
+
     /**
      * Метод, передающий текущие единицы измерения в репозиторий.
      */
-    fun saveCurrentUnits() {
-        weatherRepository.saveSelectedUnit(currentUnitsLiveData.value!!.getUnitString())
+    private fun saveCurrentUnits() {
+        sharedRepository.saveSelectedUnit(currentUnitsLiveData.value!!.getUnitString())
     }
 
     // region Binding Methods
@@ -81,6 +93,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         setCurrentUnits(Units.CELSIUS)
         update()
     }
+
     fun setFahrenheitUnits() {
         setCurrentUnits(Units.FAHRENHEIT)
         update()

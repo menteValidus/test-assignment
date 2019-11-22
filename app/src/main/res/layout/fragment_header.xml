@@ -10,27 +10,45 @@
 
     </data>
 
-    <RadioGroup
+    <!--Список всех hardcoded городов.-->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:currentDegreesUnit="@{viewmodel.currentUnitsLiveData}">
+        android:layout_height="wrap_content"
+        android:elevation="9dp"
+        android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/rb_celsius"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> viewmodel.setCelsiusUnits()}"
-            android:text="@string/celsius_degree_string" />
+        <Spinner
+            android:id="@+id/sp_cities"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_size_normal_48"
+            android:layout_marginStart="@dimen/spacing_small_8"
+            android:layout_marginTop="@dimen/spacing_small_8"
+            android:layout_marginEnd="@dimen/spacing_small_8"
+            android:layout_marginBottom="@dimen/spacing_small_8"/>
 
-        <RadioButton
-            android:id="@+id/rb_fahrenheit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> viewmodel.setFahrenheitUnits()}"
-            android:text="@string/fahrenheit_degree_string" />
+        <!--    TODO временное решение перенести в Drawer или Settings-->
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:currentDegreesUnit="@{viewmodel.currentUnitsLiveData}">
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/rb_celsius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewmodel.setCelsiusUnits()}"
+                android:text="@string/celsius_degree_string" />
+
+            <RadioButton
+                android:id="@+id/rb_fahrenheit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewmodel.setFahrenheitUnits()}"
+                android:text="@string/fahrenheit_degree_string" />
+
+        </RadioGroup>
+    </LinearLayout>
 
 
 </layout>

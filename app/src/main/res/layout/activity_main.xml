@@ -16,32 +16,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!--Список всех hardcoded городов.-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="9dp"
-            android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/sp_cities"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/item_size_normal_48"
-                android:layout_marginStart="@dimen/spacing_small_8"
-                android:layout_marginTop="@dimen/spacing_small_8"
-                android:layout_marginEnd="@dimen/spacing_small_8"
-                android:layout_marginBottom="@dimen/spacing_small_8" />
-            <!--    TODO временное решение перенести в Drawer или Settings-->
-
-
-
-        </LinearLayout>
 
         <fragment
             android:id="@+id/fr_city_selection"
             android:name="mente.vali.dailyweather.presentation.ui.fragments.HeaderFragment"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_header" />
 
         <fragment
             android:id="@+id/nav_host_fragment"
