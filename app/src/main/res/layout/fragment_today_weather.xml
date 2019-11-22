@@ -11,115 +11,165 @@
     </data>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="8dp">
-        <!--        Значение температуры, дата-->
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="@dimen/spacing_middle_16">
-            <TextView
-                android:id="@+id/tv_datetime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small_8"
-                android:layout_marginBottom="@dimen/spacing_small_8"
-                tools:text="Ноябрь 16, 18:23"/>
+            android:elevation="8dp">
+            <!--        Значение температуры, дата-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginStart="@dimen/spacing_middle_16">
                 <TextView
-                    android:id="@+id/tw_current_temp"
+                    android:id="@+id/tv_datetime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_small_8"
-                    android:textSize="@dimen/text_huge_64"
-                    app:temperature="@{viewmodel.currentWeather.temperature}"
-                    app:degreesUnit="@{viewmodel.currentUnitsLiveData}"
-                    tools:text="4°C"/>
-                <ImageView
-                    android:id="@+id/iv_temp"
-                    android:layout_width="@dimen/item_size_normal_48"
-                    android:layout_height="@dimen/item_size_normal_48"
-                    android:layout_gravity="center"
-                    app:temperature="@{viewmodel.currentWeather.temperature}"
-                    app:degreesUnit="@{viewmodel.currentUnitsLiveData}"
-                    tools:src="@drawable/ic_over_zero_temp" />
+                    android:layout_marginBottom="@dimen/spacing_small_8"
+                    tools:text="Ноябрь 16, 18:23"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tw_current_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small_8"
+                        android:textSize="@dimen/text_huge_64"
+                        app:temperature="@{viewmodel.currentWeather.temperature}"
+                        app:degreesUnit="@{viewmodel.currentUnitsLiveData}"
+                        tools:text="4°C"/>
+                    <ImageView
+                        android:id="@+id/iv_temp"
+                        android:layout_width="@dimen/item_size_normal_48"
+                        android:layout_height="@dimen/item_size_normal_48"
+                        android:layout_gravity="center"
+                        app:temperature="@{viewmodel.currentWeather.temperature}"
+                        app:degreesUnit="@{viewmodel.currentUnitsLiveData}"
+                        tools:src="@drawable/ic_over_zero_temp" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tw_maxmin_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_middle_16"
+                    tools:text="@string/maxmin_temp_placeholder"/>
+
             </LinearLayout>
-            <TextView
-                android:id="@+id/tw_maxmin_temp"
+            <!--        Состояние погоды-->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_middle_16"
-                tools:text="@string/maxmin_temp_placeholder"/>
+                android:layout_alignParentEnd="true"
+                android:orientation="vertical">
 
-        </LinearLayout>
-        <!--        Состояние погоды-->
+                <ImageView
+                    android:id="@+id/iv_weather"
+                    android:layout_width="@dimen/item_size_huge_96"
+                    android:layout_height="@dimen/item_size_huge_96"
+                    android:layout_marginTop="@dimen/spacing_huge_32"
+                    android:layout_marginBottom="@dimen/spacing_middle_16"
+                    android:layout_marginStart="@dimen/spacing_huge_32"
+                    android:layout_marginEnd="@dimen/spacing_huge_32"
+                    android:layout_gravity="center"
+                    app:weatherCondition="@{viewmodel.currentWeather.weatherCondition}"
+                    tools:src="@drawable/ic_cloudy" />
+                <TextView
+                    android:id="@+id/tw_condition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:weatherCondition="@{viewmodel.currentWeather.weatherCondition}"
+                    tools:text="Облачно"/>
+            </LinearLayout>
+
+
+
+
+
+        </RelativeLayout>
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:orientation="vertical">
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                app:currentDegreesUnit="@{viewmodel.currentUnitsLiveData}">
-
-                <RadioButton
-                    android:id="@+id/rb_celsius"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewmodel.setCelsiusUnits()}"
-                    android:text="@string/celsius_degree_string" />
-
-                <RadioButton
-                    android:id="@+id/rb_fahrenheit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewmodel.setFahrenheitUnits()}"
-                    android:text="@string/fahrenheit_degree_string" />
-
-            </RadioGroup>
-            <ImageView
-                android:id="@+id/iv_weather"
-                android:layout_width="@dimen/item_size_huge_96"
-                android:layout_height="@dimen/item_size_huge_96"
-                android:layout_marginTop="@dimen/spacing_huge_32"
-                android:layout_marginBottom="@dimen/spacing_middle_16"
-                android:layout_marginStart="@dimen/spacing_huge_32"
-                android:layout_marginEnd="@dimen/spacing_huge_32"
-                android:layout_gravity="center"
-                app:weatherCondition="@{viewmodel.currentWeather.weatherCondition}"
-                tools:src="@drawable/ic_cloudy" />
-            <TextView
-                android:id="@+id/tw_condition"
+            android:orientation="horizontal">
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:weatherCondition="@{viewmodel.currentWeather.weatherCondition}"
-                tools:text="Облачно"/>
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginStart="@dimen/spacing_small_8"
+                    android:text="@string/humidity_header"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginStart="@dimen/spacing_small_8"
+                    android:text="@string/pressure_header"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginStart="@dimen/spacing_small_8"
+                    android:text="@string/wind_direction_header"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginStart="@dimen/spacing_small_8"
+                    android:text="@string/wind_speed_header"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginStart="@dimen/spacing_huge_32"
+                    tools:text="48%"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginStart="@dimen/spacing_huge_32"
+                    tools:text="1.039 мБар"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginStart="@dimen/spacing_huge_32"
+                    tools:text="Северное"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginStart="@dimen/spacing_huge_32"
+                    tools:text="12.5 км/ч"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
         </LinearLayout>
-
-
-
         <Button
             android:id="@+id/btn_slide_tomorrow"
             android:layout_width="100dp"
             android:layout_height="@dimen/item_size_normal_48"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"/>
-        <Button
-            android:id="@+id/btn_slide_tomorrowww"
-            android:layout_width="100dp"
-            android:layout_height="@dimen/item_size_normal_48"
-            android:layout_alignParentBottom="true"
-            android:onClick="@{() -> viewmodel.update()}"/>
-
-    </RelativeLayout>
+            />
+    </LinearLayout>
 
 </layout>

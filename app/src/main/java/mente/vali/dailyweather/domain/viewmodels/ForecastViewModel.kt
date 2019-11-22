@@ -56,6 +56,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     val currentWeather: LiveData<ObservableWeather> = _currentWeather
 
     init {
+        update()
         acceptCurrentUnits()
     }
 
@@ -65,6 +66,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     fun setCurrentUnits(units: Units) {
         _currentUnitsLiveData.value = units
         acceptCurrentUnits()
+        saveCurrentUnits()
     }
     /**
      * Метод, передающий текущие единицы измерения в репозиторий.

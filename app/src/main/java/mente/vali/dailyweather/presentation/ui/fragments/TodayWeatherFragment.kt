@@ -13,10 +13,9 @@ import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_today_weather.*
 
 import mente.vali.dailyweather.R
-import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.databinding.FragmentTodayWeatherBinding
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
-import mente.vali.dailyweather.presentation.ui.fragments.base.BaseFragment
+import mente.vali.dailyweather.presentation.ui.MainActivity
 
 /**
  * Подкласс [Fragment], представляющий информацию о погоде на сегодня.
@@ -43,14 +42,16 @@ class TodayWeatherFragment : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
         // Inflate the layout for this fragment
-        val binding =
-            DataBindingUtil.inflate<FragmentTodayWeatherBinding>(
-                inflater, R.layout.fragment_today_weather,
-                container, false
-            )
+        val binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
+//            DataBindingUtil.inflate<FragmentTodayWeatherBinding>(
+//                inflater, R.layout.fragment_today_weather,
+//                container, false
+//            )
 
-        binding.viewmodel = forecastViewModel
-        binding.lifecycleOwner = this
+//        binding.viewmodel = forecastViewModel
+        binding.viewmodel = (activity as MainActivity).getVM()
+        binding.lifecycleOwner = viewLifecycleOwner
+
         // TODO пытается получить доступ к ещё неинициализированному списку.
         return binding.root
     }

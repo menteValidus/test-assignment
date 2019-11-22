@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.databinding.ActivityMainBinding
+import mente.vali.dailyweather.domain.repositories.TodayWeatherRepository
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
+import mente.vali.dailyweather.presentation.ui.fragments.TodayWeatherFragment
 
 /**
  * Класс Activity, представляющий главный экран приложения.
@@ -19,16 +21,22 @@ class MainActivity : AppCompatActivity() {
     /**
      * Поле [ForecastViewModel] для работы с данными, получаемыми от API.
      */
-    private val forecastViewModel: ForecastViewModel by lazy {
+    private lateinit var forecastViewModel: ForecastViewModel /*=
         ViewModelProviders.of(this).get(ForecastViewModel::class.java)
-    }
+    */
 
     /**
      * Метод, вызываемый при запуске Activity.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        forecastViewModel =
+            ViewModelProviders.of(this).get(ForecastViewModel::class.java)
+
 //        setContentView(R.layout.activity_main)
+//        if (nav_host_fragment is TodayWeatherFragment) {
+//            print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+//        }
 
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -36,19 +44,11 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         binding.viewmodel = forecastViewModel
-//        initUI()
+        //initUI()
     }
 
-    /**
-     * Метод, вызываемый при завершении Activity.
-     */
-    override fun onStop() {
-        super.onStop()
-        forecastViewModel.saveCurrentUnits()
-        // TODO принудительное завершение запросов.
-    }
-
-//    /**
+    fun getVM() = forecastViewModel
+    //    /**
 //     * Метод, обрабатывающий смену единиц градуса.
 //     */
 //    fun onRadioButtonClicked(view: View) {

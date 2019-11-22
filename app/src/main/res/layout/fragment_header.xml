@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="mente.vali.dailyweather.domain.viewmodels.ForecastViewModel" />
+
+    </data>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:currentDegreesUnit="@{viewmodel.currentUnitsLiveData}">
+
+        <RadioButton
+            android:id="@+id/rb_celsius"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewmodel.setCelsiusUnits()}"
+            android:text="@string/celsius_degree_string" />
+
+        <RadioButton
+            android:id="@+id/rb_fahrenheit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewmodel.setFahrenheitUnits()}"
+            android:text="@string/fahrenheit_degree_string" />
+
+    </RadioGroup>
+
+
+</layout>
