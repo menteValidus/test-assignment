@@ -16,7 +16,7 @@ class WeatherDeserializer : JsonDeserializer<WeatherByTime> {
         json as JsonObject
 
         // Уровень вложенности JSON - list.dt
-        val date = json.get("dt").asLong
+        val date = json.get("dt").asLong * 1000
         // Уровень вложенности JSON - list.main
         val main = json.getAsJsonObject("main")
 

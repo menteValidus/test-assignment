@@ -31,6 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_small_8"
                     android:layout_marginBottom="@dimen/spacing_small_8"
+                    android:text="@{viewmodel.currentWeather.dateTime}"
                     tools:text="Ноябрь 16, 18:23"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -54,12 +55,6 @@
                         app:degreesUnit="@{viewmodel.currentUnitsLiveData}"
                         tools:src="@drawable/ic_over_zero_temp" />
                 </LinearLayout>
-                <TextView
-                    android:id="@+id/tw_maxmin_temp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_middle_16"
-                    tools:text="@string/maxmin_temp_placeholder"/>
 
             </LinearLayout>
             <!--        Состояние погоды-->
@@ -138,24 +133,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_small_8"
                     android:layout_marginStart="@dimen/spacing_huge_32"
+                    app:percentage="@{viewmodel.currentWeather.humidity}"
                     tools:text="48%"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_small_8"
                     android:layout_marginStart="@dimen/spacing_huge_32"
-                    tools:text="1.039 мБар"/>
+                    app:pressure="@{viewmodel.currentWeather.pressure}"
+                    tools:text="1.039 мм. рт. ст."/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_small_8"
                     android:layout_marginStart="@dimen/spacing_huge_32"
+                    android:text="@{viewmodel.currentWeather.windDirection}"
                     tools:text="Северное"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_small_8"
                     android:layout_marginStart="@dimen/spacing_huge_32"
+                    app:speed="@{viewmodel.currentWeather.windSpeed}"
                     tools:text="12.5 км/ч"/>
             </LinearLayout>
             <LinearLayout

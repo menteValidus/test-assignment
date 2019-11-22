@@ -1,17 +1,13 @@
 package mente.vali.dailyweather.util
 
-import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.data.models.WeatherCondition
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
-import androidx.appcompat.widget.AppCompatSpinner
-import androidx.databinding.InverseBindingAdapter
-import android.widget.ArrayAdapter
-import android.widget.AdapterView
-import androidx.databinding.InverseBindingListener
-
 
 
 /**
@@ -88,42 +84,19 @@ fun setWeatherCondtitionText(textView: TextView, weatherCondition: WeatherCondit
     textView.text = weatherCondition.getConditionName()
 }
 
-
-//////////////////////////////////////////////////////////////////////
-object SpinnerBindingUtils {
-    @BindingAdapter(
-        value = ["selectedValue", "selectedValueAttrChanged"],
-        requireAll = false
-    )
-    fun bindSpinnerData(
-        pAppCompatSpinner: AppCompatSpinner,
-        newSelectedValue: String?,
-        newTextAttrChanged: InverseBindingListener
-    ) {
-        pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                newTextAttrChanged.onChange()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-        if (newSelectedValue != null) {
-            val pos =
-                (pAppCompatSpinner.adapter as ArrayAdapter<String>).getPosition(newSelectedValue)
-            pAppCompatSpinner.setSelection(pos, true)
-        }
-    }
-
-    @InverseBindingAdapter(
-        attribute = "selectedValue",
-        event = "selectedValueAttrChanged"
-    )
-    fun captureSelectedValue(pAppCompatSpinner: AppCompatSpinner): String {
-        return pAppCompatSpinner.selectedItem as String
-    }
+@BindingAdapter("app:percentage")
+fun setPercentageText(textView: TextView, percents: Short) {
+    textView.text = textView.context.resources.getString(R.string.percentage_placeholder, percents)
 }
+
+@BindingAdapter("app:pressure")
+fun setPressureText(textView: TextView, pressure: Int) {
+    textView.text = textView.context.resources.getString(R.string.hg_placeholder, pressure)
+}
+
+@BindingAdapter("app:speed")
+fun setSpeedText(textView: TextView, speed: Int) {
+    textView.text = textView.context.resources.getString(R.string.speed_placeholder, speed)
+}
+
+

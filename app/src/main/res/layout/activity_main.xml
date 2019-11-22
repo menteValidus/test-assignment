@@ -21,7 +21,7 @@
         <fragment
             android:id="@+id/fr_city_selection"
             android:name="mente.vali.dailyweather.presentation.ui.fragments.HeaderFragment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:layout="@layout/fragment_header" />
 

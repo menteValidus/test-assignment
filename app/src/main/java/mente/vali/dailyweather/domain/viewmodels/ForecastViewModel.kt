@@ -107,13 +107,13 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     fun update() = viewModelScope.launch {
         forecastApiCommunicator.requestWeatherByNow(
             Response.Listener { response ->
-                _currentWeather.value?.setValues(ObservableWeather.parse(response.toString()))
+                _currentWeather.value = ObservableWeather.parse(response.toString())
             }
         )
-        forecastApiCommunicator.requestForecast(
-            Response.Listener { response ->
-                forecastsList.value = Forecast.parse(response.toString())
-            })
+//        forecastApiCommunicator.requestForecast(
+//            Response.Listener { response ->
+//                forecastsList.value = Forecast.parse(response.toString())
+//            })
     }
 
 

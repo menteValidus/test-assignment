@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_header.*
 
-import mente.vali.dailyweather.R
 import mente.vali.dailyweather.databinding.FragmentHeaderBinding
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
