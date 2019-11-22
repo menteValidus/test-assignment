@@ -17,46 +17,6 @@ import mente.vali.dailyweather.domain.repositories.TodayWeatherRepository
  */
 class ForecastViewModel(application: Application) : AndroidViewModel(application) {
     /**
-     * Текущие единицы измерения градуса.
-     */
-    private var _currentUnits: Units
-    /**
-     * Свойство, отвечающее за модификацию поля [_currentUnits].
-     */
-    var currentUnits: Units
-        get() = _currentUnits
-        set(value) {
-            _currentUnits = value
-            // Сообщить репозиториям об изменениях.
-            saveCurrentUnits()
-            acceptCurrentUnits()
-//            update()
-            //currentFragment.updateUI(currentWeather)
-        }
-
-    /**
-     *
-     */
-    private var _currentWeather =
-        MutableLiveData<ObservableWeather>().apply {
-            value = ObservableWeather()
-        }
-
-    private val _temperature = MutableLiveData(16.toShort())
-    val temperature: LiveData<Short> = _temperature
-
-
-    /**
-     * Погода на текущее время.
-     */
-    val currentWeather: LiveData<ObservableWeather> = _currentWeather
-
-    /**
-     * Список всех 3-часовых прогнозов на 5 дней.
-     */
-    val forecastsList: MutableLiveData<Forecast> = MutableLiveData()
-
-    /**
      * Свойство для получения объекта класса [ForecastApiCommunicator].
      * Предназначено для общения с сервером API.
      */
@@ -68,19 +28,63 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      */
     private val weatherRepository: TodayWeatherRepository =
         TodayWeatherRepository.getInstance(application.applicationContext)
+    /**
+     * Список всех 3-часовых прогнозов на 5 дней.
+     */
+    val forecastsList: MutableLiveData<Forecast> = MutableLiveData()
+    /**
+     * Текущие единицы измерения градуса.
+     */
+    private val _currentUnitsLiveData: MutableLiveData<Units> =
+        MutableLiveData(Units.get(weatherRepository.getSelectedUnit()))
+
+    /**
+     * Свойство, отвечающее за модификацию поля [_currentUnitsLiveData].
+     */
+    val currentUnitsLiveData: LiveData<Units> = _currentUnitsLiveData
+    /**
+     * TODO
+     */
+    private val _currentWeather =
+        MutableLiveData<ObservableWeather>().apply {
+            value = ObservableWeather()
+        }
+
+    /**
+     * Погода на текущее время.
+     */
+    val currentWeather: LiveData<ObservableWeather> = _currentWeather
 
     init {
-        _currentUnits = Units.get(weatherRepository.getSelectedUnit())
         acceptCurrentUnits()
     }
 
-
+    /**
+     * TODO
+     */
+    fun setCurrentUnits(units: Units) {
+        _currentUnitsLiveData.value = units
+        acceptCurrentUnits()
+    }
     /**
      * Метод, передающий текущие единицы измерения в репозиторий.
      */
     fun saveCurrentUnits() {
-        weatherRepository.saveSelectedUnit(currentUnits.getUnitString())
+        weatherRepository.saveSelectedUnit(currentUnitsLiveData.value!!.getUnitString())
     }
+
+    // region Binding Methods
+
+    fun setCelsiusUnits() {
+        setCurrentUnits(Units.CELSIUS)
+        update()
+    }
+    fun setFahrenheitUnits() {
+        setCurrentUnits(Units.FAHRENHEIT)
+        update()
+    }
+
+    // endregion
 
     /**
      * Wrapper для запроса данных с сервера API.
@@ -88,8 +92,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     fun update() = viewModelScope.launch {
         forecastApiCommunicator.requestWeatherByNow(
             Response.Listener { response ->
-                _currentWeather.value = ObservableWeather.parse(response.toString())
-                _temperature.value = ((_temperature.value ?: 0) + 1).toShort()
+                _currentWeather.value?.setValues(ObservableWeather.parse(response.toString()))
             }
         )
         forecastApiCommunicator.requestForecast(
@@ -98,15 +101,12 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
             })
     }
 
-    fun increase() {
-        _temperature.value = ((_temperature.value ?: 0) + 1).toShort()
-    }
 
     /**
      * Метод, передающий текущие единицы исзмерения в коммуникатор для модификации http-запроса.
      */
     private fun acceptCurrentUnits() {
-        forecastApiCommunicator.units = currentUnits.getUnitString()
+        forecastApiCommunicator.units = currentUnitsLiveData.value!!.getUnitString()
     }
 
     /**

@@ -22,13 +22,29 @@ data class WeatherByTime(
  * Состояния погоды.
  */
 enum class WeatherCondition {
-    CLEAR,
-    CLOUDS,
-    RAIN,
-    THUNDERSTORM,
-    SNOW,
-    MIST,
-    NONE;
+    CLEAR {
+        override fun getConditionName() = "Ясно"
+    },
+    CLOUDS {
+        override fun getConditionName() = "Облачно"
+    },
+    RAIN {
+        override fun getConditionName() = "Дождь"
+    },
+    THUNDERSTORM {
+        override fun getConditionName() = "Гроза"
+    },
+    SNOW {
+        override fun getConditionName() = "Снег"
+    },
+    MIST {
+        override fun getConditionName() = "Туманно"
+    },
+    NONE {
+        override fun getConditionName() = "N/A"
+    };
+
+    abstract fun getConditionName(): String
 
     companion object {
         /**
