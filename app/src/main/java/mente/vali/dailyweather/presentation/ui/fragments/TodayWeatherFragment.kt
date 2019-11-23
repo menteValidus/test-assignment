@@ -24,9 +24,7 @@ class TodayWeatherFragment : Fragment() {
     /**
      * Поле [ForecastViewModel] для работы с данными, получаемыми от API.
      */
-    private val forecastViewModel: ForecastViewModel by lazy {
-        ViewModelProviders.of(this).get(ForecastViewModel::class.java)
-    }
+    private lateinit var forecastViewModel: ForecastViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,15 +38,10 @@ class TodayWeatherFragment : Fragment() {
 
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        // Inflate the layout for this fragment
-        val binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
-//            DataBindingUtil.inflate<FragmentTodayWeatherBinding>(
-//                inflater, R.layout.fragment_today_weather,
-//                container, false
-//            )
 
-//        binding.viewmodel = forecastViewModel
-        binding.viewmodel = (activity as MainActivity).getSharedViewModel()
+        val binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
+        forecastViewModel = (activity as MainActivity).getSharedViewModel()
+        binding.viewmodel = forecastViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         // TODO пытается получить доступ к ещё неинициализированному списку.
@@ -59,16 +52,17 @@ class TodayWeatherFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        //requestAndBindUIData()
         // Переход между фрагментами.
         btn_slide_tomorrow.setOnClickListener { view ->
             view.findNavController()
                 .navigate(R.id.action_todayWeatherFragment_to_tomorrowWeatherFragment)
         }
 
-        forecastViewModel.update()
+    }
 
-
+    override fun onPause() {
+        super.onPause()
+        forecastViewModel.saveCurrentWeather()
     }
 
 

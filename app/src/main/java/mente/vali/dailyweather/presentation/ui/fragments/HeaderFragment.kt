@@ -44,6 +44,8 @@ class HeaderFragment : Fragment() {
         )
 
         sp_cities.adapter = adapter
+        sp_cities.setSelection(adapter.getPosition(forecastViewModel.selectedCity.value))
+
         sp_cities.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -61,8 +63,5 @@ class HeaderFragment : Fragment() {
             }
 
         }
-        sp_cities.setSelection(adapter.getPosition(forecastViewModel.selectedCity.value))
     }
-
-
 }

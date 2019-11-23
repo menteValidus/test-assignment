@@ -46,23 +46,20 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /**
      * TODO
      */
-    private val _currentWeather =
-        MutableLiveData<ObservableWeather>().apply {
-            value = ObservableWeather()
-        }
+    private val _currentWeather: MutableLiveData<ObservableWeather>
 
     /**
      * Погода на текущее время.
      */
-    val currentWeather: LiveData<ObservableWeather> = _currentWeather
+    val currentWeather: LiveData<ObservableWeather>
 
     private val _selectedCity: MutableLiveData<String> = MutableLiveData(sharedRepository.getCity())
 
     val selectedCity: LiveData<String> = _selectedCity
 
-    private val _dateTimeOfLastUpdate: MutableLiveData<String> = MutableLiveData(getCurrentDateTime())
+    private val _dateTimeOfLastUpdate: MutableLiveData<String>
 
-    val dateTimeOfLastUpdate: LiveData<String> = _dateTimeOfLastUpdate
+    val dateTimeOfLastUpdate: LiveData<String>
 
     fun setCity(city: String) {
         _selectedCity.value = city
@@ -71,8 +68,23 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         update()
     }
 
+    fun setCityWhenLaunching(city: String) {
+        _selectedCity.value = city
+        forecastApiCommunicator.setCityID(city)
+    }
+
     init {
-        update()
+        val (date, lastWeather) =
+            sharedRepository.getWeatherDate() ?: "" to ObservableWeather()
+
+        if (date == "") {
+            // TODO hide UI via LiveData bool value binded to isActive property in XML-layout.
+        }
+
+        _currentWeather = MutableLiveData(lastWeather)
+        currentWeather = _currentWeather
+        _dateTimeOfLastUpdate = MutableLiveData(date)
+        dateTimeOfLastUpdate = _dateTimeOfLastUpdate
         acceptCurrentUnits()
     }
 
@@ -90,6 +102,13 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      */
     private fun saveCurrentUnits() {
         sharedRepository.saveSelectedUnit(currentUnitsLiveData.value!!.getUnitString())
+    }
+
+    /**
+     * Метод, передающий данные текущей погоды в репозиторий.
+     */
+    fun saveCurrentWeather() {
+        sharedRepository.saveWeatherData(_dateTimeOfLastUpdate.value!!, currentWeather.value!!)
     }
 
     // region Binding Methods
@@ -116,8 +135,9 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     fun update() = viewModelScope.launch {
         forecastApiCommunicator.requestWeatherByNow(
             Response.Listener { response ->
+                val weather = ObservableWeather.parse(response.toString())
+                _currentWeather.value!!.setValues(weather)
                 rememberDateTimeOfUpdate()
-                _currentWeather.value = ObservableWeather.parse(response.toString())
             }
         )
 //        forecastApiCommunicator.requestForecast(

@@ -75,10 +75,10 @@ enum class WeatherCondition {
 
     companion object {
         /**
-         * Статический метод для конвертации строки в [WeatherCondition].
+         * Статический метод для конвертации строки в [WeatherCondition] при получении строки из API.
          * Стандартное значение [WeatherCondition.NONE].
          */
-        fun get(conditionString: String): WeatherCondition {
+        fun getByNameFromApi(conditionString: String): WeatherCondition {
             when (conditionString) {
                 "Clear" -> return CLEAR
                 "Clouds" -> return CLOUDS
@@ -95,6 +95,31 @@ enum class WeatherCondition {
                 "Ash" -> return ASH
                 "Squall" -> return SQUALL
                 "Tornado" -> return TORNADO
+                else -> return NONE
+            }
+        }
+
+        /**
+         * Статический метод для конвертации строки в [WeatherCondition] при получении строки из API.
+         * Стандартное значение [WeatherCondition.NONE].
+         */
+        fun getByName(conditionString: String): WeatherCondition {
+            when (conditionString) {
+                "Ясно" -> return CLEAR
+                "Облачно" -> return CLOUDS
+                "Дождь" -> return RAIN
+                "Мелкий дождь" -> return DRIZZLE
+                "Гроза" -> return THUNDERSTORM
+                "Снег" -> return SNOW
+                "Дымка" -> return MIST
+                "Дымно" -> return SMOKE
+                "Мгла" -> return HAZE
+                "Пыль" -> return DUST
+                "Туман" -> return FOG
+                "Песочно" -> return SAND
+                "Пепельно" -> return ASH
+                "Шквал" -> return SQUALL
+                "Торнадо" -> return TORNADO
                 else -> return NONE
             }
         }

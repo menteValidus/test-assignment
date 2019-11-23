@@ -1,7 +1,6 @@
 package mente.vali.dailyweather.domain.deserializers
 
 import com.google.gson.*
-import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.data.models.WeatherCondition
 import java.lang.reflect.Type
@@ -36,11 +35,11 @@ class WeatherDeserializer : JsonDeserializer<WeatherByTime> {
         if (weather.toString()[0] == '[') {
             weather as JsonArray
 
-            condition = WeatherCondition.get(weather[0].asJsonObject.get("main").asString)
+            condition = WeatherCondition.getByNameFromApi(weather[0].asJsonObject.get("main").asString)
         } else {    // Иначе представляем информацию в виде JsonObject.
             weather as JsonObject
 
-            condition = WeatherCondition.get(weather.get("main").asString)
+            condition = WeatherCondition.getByNameFromApi(weather.get("main").asString)
         }
 
         // Уровень вложенности JSON - list.clouds

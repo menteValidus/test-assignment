@@ -29,7 +29,7 @@ class ObservableWeather (
         this.windSpeed.value = windSpeed
     }
 
-    constructor() : this(0, WeatherCondition.NONE, 0, 0, "NONE", 0)
+    constructor() : this(0, WeatherCondition.NONE, 0, 0, "", 0)
     constructor(weather: WeatherByTime) : this
         (weather.temperature,
         weather.weatherCondition,
@@ -37,6 +37,15 @@ class ObservableWeather (
         weather.pressure,
         windDegreeToWindDirection(weather.windDegrees.toFloat()),
         weather.windSpeed)
+
+    fun setValues(weather: ObservableWeather) {
+        temperature.value = weather.temperature.value
+        weatherCondition.value = weather.weatherCondition.value
+        humidity.value = weather.humidity.value
+        pressure.value = weather.pressure.value
+        windDirection.value = weather.windDirection.value
+        windSpeed.value = weather.windSpeed.value
+    }
 
     companion object {
         /**
