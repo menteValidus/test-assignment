@@ -11,6 +11,7 @@ import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.ObservableWeather
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.repositories.SharedRepository
+import mente.vali.dailyweather.util.getCurrentDateTime
 
 /**
  * Основная ViewModel приложения.
@@ -59,6 +60,10 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
     val selectedCity: LiveData<String> = _selectedCity
 
+    private val _dateTimeOfLastUpdate: MutableLiveData<String> = MutableLiveData(getCurrentDateTime())
+
+    val dateTimeOfLastUpdate: LiveData<String> = _dateTimeOfLastUpdate
+
     fun setCity(city: String) {
         _selectedCity.value = city
         sharedRepository.saveCity(city)
@@ -99,6 +104,10 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         update()
     }
 
+    private fun rememberDateTimeOfUpdate() {
+        _dateTimeOfLastUpdate.value = getCurrentDateTime()
+    }
+
     // endregion
 
     /**
@@ -107,6 +116,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     fun update() = viewModelScope.launch {
         forecastApiCommunicator.requestWeatherByNow(
             Response.Listener { response ->
+                rememberDateTimeOfUpdate()
                 _currentWeather.value = ObservableWeather.parse(response.toString())
             }
         )

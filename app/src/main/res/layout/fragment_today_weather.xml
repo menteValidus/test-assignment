@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_small_8"
                     android:layout_marginBottom="@dimen/spacing_small_8"
-                    android:text="@{viewmodel.currentWeather.dateTime}"
+                    android:text="@{viewmodel.dateTimeOfLastUpdate}"
                     tools:text="Ноябрь 16, 18:23"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -141,7 +141,7 @@
                     android:layout_marginTop="@dimen/spacing_small_8"
                     android:layout_marginStart="@dimen/spacing_huge_32"
                     app:pressure="@{viewmodel.currentWeather.pressure}"
-                    tools:text="1.039 мм. рт. ст."/>
+                    tools:text="1039 мм. рт. ст."/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

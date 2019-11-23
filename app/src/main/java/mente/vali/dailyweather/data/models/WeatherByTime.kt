@@ -31,6 +31,9 @@ enum class WeatherCondition {
     RAIN {
         override fun getConditionName() = "Дождь"
     },
+    DRIZZLE {
+        override fun getConditionName() = "Мелкий дождь"
+    },
     THUNDERSTORM {
         override fun getConditionName() = "Гроза"
     },
@@ -38,7 +41,31 @@ enum class WeatherCondition {
         override fun getConditionName() = "Снег"
     },
     MIST {
-        override fun getConditionName() = "Туманно"
+        override fun getConditionName() = "Дымка"
+    },
+    SMOKE {
+        override fun getConditionName() = "Дымно"
+    },
+    HAZE {
+        override fun getConditionName() = "Мгла"
+    },
+    DUST {
+        override fun getConditionName() = "Пыль"
+    },
+    FOG {
+        override fun getConditionName() = "Туман"
+    },
+    SAND {
+        override fun getConditionName() = "Песочно"
+    },
+    ASH {
+        override fun getConditionName() = "Пепельно"
+    },
+    SQUALL {
+        override fun getConditionName() = "Шквал"
+    },
+    TORNADO {
+        override fun getConditionName() = "Торнадо"
     },
     NONE {
         override fun getConditionName() = "N/A"
@@ -59,6 +86,15 @@ enum class WeatherCondition {
                 "Thunderstorm" -> return THUNDERSTORM
                 "Snow" -> return SNOW
                 "Mist" -> return MIST
+                "Drizzle" -> return DRIZZLE
+                "Smoke" -> return SMOKE
+                "Haze" -> return HAZE
+                "Dust" -> return DUST
+                "Fog" -> return FOG
+                "Sand" -> return SAND
+                "Ash" -> return ASH
+                "Squall" -> return SQUALL
+                "Tornado" -> return TORNADO
                 else -> return NONE
             }
         }

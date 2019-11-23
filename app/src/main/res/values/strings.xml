@@ -7,7 +7,7 @@
     <string name="fahrenheit_degree_string">°F</string>
     <string name="current_temp_placeholder">%1$d°%2$s</string>
     <string name="percentage_placeholder">%1$d%%</string>
-    <string name="hg_placeholder">%1$d мм рт. ст.</string>
+    <string name="hg_placeholder">%1$s мм рт. ст.</string>
     <string name="speed_placeholder">%1$d км/ч</string>
     <string name="humidity_header">Влажность</string>
     <string name="pressure_header">Давление</string>

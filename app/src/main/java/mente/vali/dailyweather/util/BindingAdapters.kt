@@ -14,12 +14,24 @@ import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
  * TODO
  */
 @BindingAdapter(value = ["app:degreesUnit", "app:temperature"], requireAll = true)
-fun setTemperatureString(textView: TextView, degreesUnit: ForecastViewModel.Units, temperature: Short) {
-    textView.text = textView.context.resources.getString(R.string.current_temp_placeholder, temperature.toInt(), degreesUnit.getString())
+fun setTemperatureString(
+    textView: TextView,
+    degreesUnit: ForecastViewModel.Units,
+    temperature: Short
+) {
+    textView.text = textView.context.resources.getString(
+        R.string.current_temp_placeholder,
+        temperature.toInt(),
+        degreesUnit.getString()
+    )
 }
 
 @BindingAdapter(value = ["app:degreesUnit", "app:temperature"], requireAll = true)
-fun setTemperatureDrawable(imageView: ImageView, degreesUnit: ForecastViewModel.Units, temperature: Short) {
+fun setTemperatureDrawable(
+    imageView: ImageView,
+    degreesUnit: ForecastViewModel.Units,
+    temperature: Short
+) {
     when (degreesUnit) {
         ForecastViewModel.Units.CELSIUS -> {
             if (temperature > 0) {
@@ -51,15 +63,15 @@ fun setActiveRadioButton(radioGroup: RadioGroup, currentDegreesUnit: ForecastVie
 
         if (view !is RadioButton) return
         // Проверяем дочерние RadioButton. Устанавливаем тот, который соответствует текущей единице.
-        when(view.text) {
+        when (view.text) {
             ctx.getString(R.string.celsius_degree_string) -> {
                 // TODO изменить на условие.
-                when(currentDegreesUnit) {
+                when (currentDegreesUnit) {
                     ForecastViewModel.Units.CELSIUS -> view.isChecked = true
                 }
             }
             ctx.getString(R.string.fahrenheit_degree_string) -> {
-                when(currentDegreesUnit) {
+                when (currentDegreesUnit) {
                     ForecastViewModel.Units.FAHRENHEIT -> view.isChecked = true
                 }
             }
@@ -79,6 +91,7 @@ fun setWeatherCondtitionDrawable(imageView: ImageView, weatherCondition: Weather
         WeatherCondition.NONE -> imageView.setImageResource(R.drawable.ic_clear)
     }
 }
+
 @BindingAdapter("app:weatherCondition")
 fun setWeatherCondtitionText(textView: TextView, weatherCondition: WeatherCondition) {
     textView.text = weatherCondition.getConditionName()
@@ -91,7 +104,10 @@ fun setPercentageText(textView: TextView, percents: Short) {
 
 @BindingAdapter("app:pressure")
 fun setPressureText(textView: TextView, pressure: Int) {
-    textView.text = textView.context.resources.getString(R.string.hg_placeholder, pressure)
+    textView.text = textView.context.resources.getString(
+        R.string.hg_placeholder,
+        barToHg(pressure).toString()
+    )
 }
 
 @BindingAdapter("app:speed")
