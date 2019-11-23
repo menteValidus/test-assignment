@@ -7,8 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Response
 import kotlinx.coroutines.launch
+import mente.vali.dailyweather.data.models.DayWeather
 import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.ObservableWeather
+import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.repositories.SharedRepository
 import mente.vali.dailyweather.util.getCurrentDateTime
@@ -32,7 +34,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /**
      * Список всех 3-часовых прогнозов на 5 дней.
      */
-    val forecastsList: MutableLiveData<Forecast> = MutableLiveData()
+    val dayWeatherList: MutableLiveData<List<DayWeather>> = MutableLiveData()
     /**
      * Текущие единицы измерения градуса.
      */
@@ -140,10 +142,20 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                 rememberDateTimeOfUpdate()
             }
         )
-//        forecastApiCommunicator.requestForecast(
-//            Response.Listener { response ->
-//                forecastsList.value = Forecast.parse(response.toString())
-//            })
+        forecastApiCommunicator.requestForecast(
+            Response.Listener { response ->
+                val list = Forecast.parse(response.toString())
+                val dayWeatherMutableList = mutableListOf<DayWeather>()
+                for (i in 0..4) {
+                    val weatherList = mutableListOf<WeatherByTime>()
+                    for (j in 0..7) {
+                        weatherList.add(list.weatherByTimeList[i * 8 + j])
+                    }
+                    dayWeatherMutableList.add(DayWeather(weatherList))
+                }
+
+                dayWeatherList.value = dayWeatherMutableList
+            })
     }
 
 

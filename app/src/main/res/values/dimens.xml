@@ -8,4 +8,5 @@
     <dimen name="item_size_normal_48">48dp</dimen>
     <dimen name="item_size_huge_96">96dp</dimen>
     <dimen name="text_huge_64">64sp</dimen>
+    <dimen name="divider_small_1" >1dp</dimen>
 </resources>
