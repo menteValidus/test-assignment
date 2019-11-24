@@ -154,6 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_small_8"
                     android:layout_marginStart="@dimen/spacing_huge_32"
+                    app:degreesUnit="@{viewmodel.currentUnitsLiveData}"
                     app:speed="@{viewmodel.currentWeather.windSpeed}"
                     tools:text="12.5 км/ч"/>
             </LinearLayout>

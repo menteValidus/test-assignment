@@ -3,6 +3,7 @@ package mente.vali.dailyweather.data.models
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import mente.vali.dailyweather.domain.deserializers.ForecastDeserializer
+import mente.vali.dailyweather.util.mphToMps
 import java.util.*
 
 /**

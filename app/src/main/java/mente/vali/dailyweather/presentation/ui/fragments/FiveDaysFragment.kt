@@ -7,9 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import kotlinx.android.synthetic.main.fragment_five_days.*
 
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.databinding.FragmentFiveDaysBinding
@@ -37,6 +36,7 @@ class FiveDaysFragment : Fragment() {
 
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
         // Inflate the layout for this fragment
         binding = FragmentFiveDaysBinding.inflate(inflater, container, false)
@@ -48,21 +48,14 @@ class FiveDaysFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         adapter = DaysWeatherAdapter(viewModel = forecastViewModel)
+
         binding.rvDaysWeather.adapter = adapter
-        binding.rvDaysWeather.apply {
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        }
-
         val list = forecastViewModel.daysWeatherList.value!!
-        adapter.submitList(list)
+        adapter.replaceItems(list)
+
+        forecastViewModel.daysWeatherList.observe(viewLifecycleOwner, Observer {
+            adapter.replaceItems(it)
+        })
     }
-
-    override fun onStart() {
-        super.onStart()
-
-//        val daysWeatherAdapter = DaysWeatherAdapter(context!!, forecastViewModel.daysWeatherList.value!!)
-//        rv_days_weather.adapter = daysWeatherAdapter
-    }
-
 
 }

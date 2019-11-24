@@ -1,5 +1,6 @@
 package mente.vali.dailyweather
 
+import mente.vali.dailyweather.data.extensions.presentationFormat
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -42,5 +43,9 @@ class ExampleUnitTest {
             .withLocale(Locale("ru"))
             .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(1574454314), ZoneId.systemDefault()))
         println(date)
+    }
+    @Test
+    fun time_pattern_test() {
+        println(Date().presentationFormat())
     }
 }

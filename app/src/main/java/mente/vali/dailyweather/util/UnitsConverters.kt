@@ -11,6 +11,7 @@ import java.util.*
 import kotlin.math.round
 
 private const val barToHgConvertingValue = 1.33322f
+private const val mphToMpsConvertingValue = 2.23694f
 // TODO comments
 fun windDegreeToWindDirection(degrees: Float): String {
     when (degrees) {
@@ -37,4 +38,8 @@ fun windDegreeToWindDirection(degrees: Float): String {
 
 fun barToHg(mbar: Int): Int {
     return round(mbar.toFloat() / barToHgConvertingValue).toInt()
+}
+
+fun mphToMps(mph: Int): Int {
+    return round(mph / mphToMpsConvertingValue).toInt()
 }

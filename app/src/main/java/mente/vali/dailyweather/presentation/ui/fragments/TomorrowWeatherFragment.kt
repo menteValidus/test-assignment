@@ -13,11 +13,20 @@ import kotlinx.android.synthetic.main.fragment_today_weather.*
 import kotlinx.android.synthetic.main.fragment_tomorrow_weather.*
 
 import mente.vali.dailyweather.R
+import mente.vali.dailyweather.databinding.FragmentTodayWeatherBinding
+import mente.vali.dailyweather.databinding.FragmentTomorrowWeatherBinding
+import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
+import mente.vali.dailyweather.presentation.ui.MainActivity
 
 /**
  * A simple [Fragment] subclass.
  */
 class TomorrowWeatherFragment : Fragment() {
+
+    /**
+     * Поле [ForecastViewModel] для работы с данными, получаемыми от API.
+     */
+    private lateinit var forecastViewModel: ForecastViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,12 +40,20 @@ class TomorrowWeatherFragment : Fragment() {
 
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tomorrow_weather, container, false)
+        val binding = FragmentTomorrowWeatherBinding.inflate(inflater, container, false)
+        forecastViewModel = (activity as MainActivity).getSharedViewModel()
+        binding.weather = forecastViewModel.tomorrowWeather
+        binding.currentUnits = forecastViewModel.currentUnitsLiveData
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        return binding.root
     }
 
     override fun onStart() {
         super.onStart()
+
         btn_slide_to_days.setOnClickListener { view ->
             view.findNavController().navigate(R.id.action_tomorrowWeatherFragment_to_fiveDaysFragment)
         }

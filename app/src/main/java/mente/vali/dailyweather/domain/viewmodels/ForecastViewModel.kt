@@ -7,13 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Response
 import kotlinx.coroutines.launch
+import mente.vali.dailyweather.data.extensions.presentationFormat
 import mente.vali.dailyweather.data.models.DayWeather
 import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.ObservableWeather
 import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.repositories.SharedRepository
-import mente.vali.dailyweather.util.getCurrentDateTime
+import java.util.*
 
 /**
  * Основная ViewModel приложения.
@@ -32,28 +33,36 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     private val sharedRepository: SharedRepository =
         SharedRepository.getInstance(application.applicationContext)
     /**
-     * Список всех 3-часовых прогнозов на 5 дней.
-     */
-    val daysWeatherList: MutableLiveData<List<DayWeather>> = MutableLiveData()
-    /**
      * Текущие единицы измерения градуса.
      */
     private val _currentUnitsLiveData: MutableLiveData<Units> =
         MutableLiveData(Units.get(sharedRepository.getSelectedUnit()))
-
     /**
      * Свойство, отвечающее за модификацию поля [_currentUnitsLiveData].
      */
     val currentUnitsLiveData: LiveData<Units> = _currentUnitsLiveData
+
     /**
      * TODO
      */
     private val _currentWeather: MutableLiveData<ObservableWeather>
-
     /**
      * Погода на текущее время.
      */
     val currentWeather: LiveData<ObservableWeather>
+
+    private val _tomorrowWeather: MutableLiveData<DayWeather> = MutableLiveData(DayWeather())
+
+    val tomorrowWeather: LiveData<DayWeather> = _tomorrowWeather
+
+    /**
+     * Список всех 3-часовых прогнозов на 5 дней.
+     */
+    private val _daysWeatherList: MutableLiveData<List<DayWeather>> = MutableLiveData(listOf())
+    /**
+     *
+     */
+    val daysWeatherList: MutableLiveData<List<DayWeather>> = _daysWeatherList
 
     private val _selectedCity: MutableLiveData<String> = MutableLiveData(sharedRepository.getCity())
 
@@ -68,11 +77,6 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         sharedRepository.saveCity(city)
         forecastApiCommunicator.setCityID(city)
         update()
-    }
-
-    fun setCityWhenLaunching(city: String) {
-        _selectedCity.value = city
-        forecastApiCommunicator.setCityID(city)
     }
 
     init {
@@ -126,7 +130,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun rememberDateTimeOfUpdate() {
-        _dateTimeOfLastUpdate.value = getCurrentDateTime()
+        _dateTimeOfLastUpdate.value = Date().presentationFormat()
     }
 
     // endregion
@@ -145,7 +149,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         forecastApiCommunicator.requestForecast(
             Response.Listener { response ->
                 val list = Forecast.parse(response.toString())
-                val dayWeatherMutableList = mutableListOf<DayWeather>()
+                val daysWeatherMutableList = mutableListOf<DayWeather>()
                 // Проходим по полученному списку, собираем средние данные по дням.
                 for (i in 0..4) {
                     val weatherList = mutableListOf<WeatherByTime>()
@@ -154,10 +158,12 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                         // j - номер 3-часового отчёта.
                         weatherList.add(list.weatherByTimeList[i * 8 + j])
                     }
-                    dayWeatherMutableList.add(DayWeather(weatherList))
+                    daysWeatherMutableList.add(DayWeather(weatherList))
                 }
-
-                daysWeatherList.value = dayWeatherMutableList
+                // Погода на завтра.
+                _tomorrowWeather.value = daysWeatherMutableList[1]
+                // Погода на 5 дней.
+                daysWeatherList.value = daysWeatherMutableList
             })
     }
 

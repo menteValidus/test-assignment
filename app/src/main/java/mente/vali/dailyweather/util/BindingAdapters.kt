@@ -80,7 +80,7 @@ fun setActiveRadioButton(radioGroup: RadioGroup, currentDegreesUnit: ForecastVie
 }
 
 @BindingAdapter("app:weatherCondition")
-fun setWeatherCondtitionDrawable(imageView: ImageView, weatherCondition: WeatherCondition) {
+fun setWeatherConditionDrawable(imageView: ImageView, weatherCondition: WeatherCondition) {
     when (weatherCondition) {
         WeatherCondition.CLEAR -> imageView.setImageResource(R.drawable.ic_clear)
         WeatherCondition.CLOUDS -> imageView.setImageResource(R.drawable.ic_cloudy)
@@ -110,9 +110,14 @@ fun setPressureText(textView: TextView, pressure: Int) {
     )
 }
 
-@BindingAdapter("app:speed")
-fun setSpeedText(textView: TextView, speed: Int) {
-    textView.text = textView.context.resources.getString(R.string.speed_placeholder, speed)
+@BindingAdapter(value = ["app:degreesUnit", "app:speed"], requireAll = true)
+fun setSpeedText(textView: TextView, degreesUnit: ForecastViewModel.Units, speed: Int) {
+    if (degreesUnit == ForecastViewModel.Units.FAHRENHEIT) {
+        textView.text =
+            textView.context.resources.getString(R.string.speed_placeholder, mphToMps(speed))
+    } else {
+        textView.text = textView.context.resources.getString(R.string.speed_placeholder, speed)
+    }
 }
 
 

@@ -44,7 +44,6 @@ class TodayWeatherFragment : Fragment() {
         binding.viewmodel = forecastViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        // TODO пытается получить доступ к ещё неинициализированному списку.
         return binding.root
     }
 
