@@ -1,11 +1,14 @@
 package mente.vali.dailyweather.data.models
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+
 /**
  * TODO
  */
 class DayWeather(dayWeatherByTimeList: List<WeatherByTime>) {
 
-    val averageTemperature: Short
+    val averageTemperature: MutableLiveData<Short>
 
     init {
         var tempSum = 0
@@ -14,7 +17,8 @@ class DayWeather(dayWeatherByTimeList: List<WeatherByTime>) {
                 tempSum += it.temperature
             }
         }
-        averageTemperature = (tempSum / DAY_CHUNKS).toShort()
+        val avgTemperature = (tempSum / DAY_CHUNKS).toShort()
+        averageTemperature = MutableLiveData(avgTemperature)
     }
 
     companion object {

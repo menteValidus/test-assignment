@@ -34,7 +34,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /**
      * Список всех 3-часовых прогнозов на 5 дней.
      */
-    val dayWeatherList: MutableLiveData<List<DayWeather>> = MutableLiveData()
+    val daysWeatherList: MutableLiveData<List<DayWeather>> = MutableLiveData()
     /**
      * Текущие единицы измерения градуса.
      */
@@ -146,15 +146,18 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
             Response.Listener { response ->
                 val list = Forecast.parse(response.toString())
                 val dayWeatherMutableList = mutableListOf<DayWeather>()
+                // Проходим по полученному списку, собираем средние данные по дням.
                 for (i in 0..4) {
                     val weatherList = mutableListOf<WeatherByTime>()
                     for (j in 0..7) {
+                        // i - номер дня.
+                        // j - номер 3-часового отчёта.
                         weatherList.add(list.weatherByTimeList[i * 8 + j])
                     }
                     dayWeatherMutableList.add(DayWeather(weatherList))
                 }
 
-                dayWeatherList.value = dayWeatherMutableList
+                daysWeatherList.value = dayWeatherMutableList
             })
     }
 

@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+        <variable
+            name="degreesUnits"
+            type="mente.vali.dailyweather.domain.viewmodels.ForecastViewModel.Units" />
+        <variable
+            name="weather"
+            type="mente.vali.dailyweather.data.models.DayWeather" />
+    </data>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Сегодня"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="45"/>
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Сегодня"/>
+        <TextView
+            android:id="@+id/tv_avg_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@{Short.toString(weather.averageTemperature)}"/>
+    </LinearLayout>
 
-</LinearLayout>
+</layout>
