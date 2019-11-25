@@ -17,4 +17,7 @@
     <!-- Sync Preferences -->
     <string name="sync_units">UNITS</string>
     <string name="pref_syncUnitsType_default_value">Цельсия (°C)</string>
+    <string name="navigation_today">Сегодня</string>
+    <string name="navigation_tomorrow">Завтра</string>
+    <string name="navigation_five_days">На 5 дней</string>
 </resources>

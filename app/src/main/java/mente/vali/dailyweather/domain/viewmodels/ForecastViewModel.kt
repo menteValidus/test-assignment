@@ -1,13 +1,14 @@
 package mente.vali.dailyweather.domain.viewmodels
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Response
 import kotlinx.coroutines.launch
-import mente.vali.dailyweather.data.extensions.presentationFormat
+import mente.vali.dailyweather.data.extensions.presentationDateTimeFormat
 import mente.vali.dailyweather.data.models.DayWeather
 import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.ObservableWeather
@@ -32,6 +33,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      */
     private val sharedRepository: SharedRepository =
         SharedRepository.getInstance(application.applicationContext)
+
+    private val preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
     /**
      * Текущие единицы измерения градуса.
      */
@@ -58,11 +61,12 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /**
      * Список всех 3-часовых прогнозов на 5 дней.
      */
-    private val _daysWeatherList: MutableLiveData<List<DayWeather>> = MutableLiveData(listOf())
+    private val _daysWeatherList: MutableLiveData<List<Pair<Int, DayWeather>>> =
+        MutableLiveData(listOf())
     /**
      *
      */
-    val daysWeatherList: MutableLiveData<List<DayWeather>> = _daysWeatherList
+    val daysWeatherList: MutableLiveData<List<Pair<Int, DayWeather>>> = _daysWeatherList
 
     private val _selectedCity: MutableLiveData<String> = MutableLiveData(sharedRepository.getCity())
 
@@ -72,14 +76,18 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
     val dateTimeOfLastUpdate: LiveData<String>
 
-    fun setCity(city: String) {
-        _selectedCity.value = city
-        sharedRepository.saveCity(city)
-        forecastApiCommunicator.setCityID(city)
-        update()
-    }
-
     init {
+        // TODO move to SharedRepository
+        preferenceChangeListener =
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+                if (key.equals("UNITS")) {
+                    val unitsPref = sharedPreferences.getString(key, "metric")!!
+                    _currentUnitsLiveData.value = Units.get(unitsPref)
+                }
+            }
+
+        sharedRepository.registerListener(preferenceChangeListener)
+
         val (date, lastWeather) =
             sharedRepository.getWeatherDate() ?: "" to ObservableWeather()
 
@@ -94,20 +102,11 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         acceptCurrentUnits()
     }
 
-    /**
-     * TODO
-     */
-    private fun setCurrentUnits(units: Units) {
-        _currentUnitsLiveData.value = units
-        acceptCurrentUnits()
-        saveCurrentUnits()
-    }
-
-    /**
-     * Метод, передающий текущие единицы измерения в репозиторий.
-     */
-    private fun saveCurrentUnits() {
-        sharedRepository.saveSelectedUnit(currentUnitsLiveData.value!!.getUnitString())
+    fun setCity(city: String) {
+        _selectedCity.value = city
+        sharedRepository.saveCity(city)
+        forecastApiCommunicator.setCityID(city)
+        update()
     }
 
     /**
@@ -119,18 +118,10 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
     // region Binding Methods
 
-    fun setCelsiusUnits() {
-        setCurrentUnits(Units.CELSIUS)
-        update()
-    }
-
-    fun setFahrenheitUnits() {
-        setCurrentUnits(Units.FAHRENHEIT)
-        update()
-    }
-
     private fun rememberDateTimeOfUpdate() {
-        _dateTimeOfLastUpdate.value = Date().presentationFormat()
+        val date = Date().presentationDateTimeFormat()
+        _dateTimeOfLastUpdate.value = date
+
     }
 
     // endregion
@@ -149,21 +140,27 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         forecastApiCommunicator.requestForecast(
             Response.Listener { response ->
                 val list = Forecast.parse(response.toString())
-                val daysWeatherMutableList = mutableListOf<DayWeather>()
-                // Проходим по полученному списку, собираем средние данные по дням.
-                for (i in 0..4) {
-                    val weatherList = mutableListOf<WeatherByTime>()
-                    for (j in 0..7) {
-                        // i - номер дня.
-                        // j - номер 3-часового отчёта.
-                        weatherList.add(list.weatherByTimeList[i * 8 + j])
+                val daysWeatherMutableList =
+                    mutableListOf<Pair<Int, DayWeather>>()
+                // Выполнить только если были получены все данные.
+                if (list.weatherByTimeList.size == 40) {
+                    // Проходим по полученному списку, собираем средние данные по дням.
+                    for (i in 0..4) {
+                        val weatherList = mutableListOf<WeatherByTime>()
+                        for (j in 0..7) {
+                            // i - номер дня.
+                            // j - номер 3-часового отчёта.
+                            weatherList.add(list.weatherByTimeList[i * 8 + j])
+                        }
+                        daysWeatherMutableList.add(i to DayWeather(weatherList))
                     }
-                    daysWeatherMutableList.add(DayWeather(weatherList))
+                    // Погода на завтра.
+                    _tomorrowWeather.value = daysWeatherMutableList[1].second
+                    // Погода на 5 дней.
+                    daysWeatherList.value = daysWeatherMutableList
+                } else {
+                    // TODO Toast error
                 }
-                // Погода на завтра.
-                _tomorrowWeather.value = daysWeatherMutableList[1]
-                // Погода на 5 дней.
-                daysWeatherList.value = daysWeatherMutableList
             })
     }
 

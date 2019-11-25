@@ -165,11 +165,6 @@
 
             </LinearLayout>
         </LinearLayout>
-        <Button
-            android:id="@+id/btn_slide_tomorrow"
-            android:layout_width="100dp"
-            android:layout_height="@dimen/item_size_normal_48"
-            />
     </LinearLayout>
 
 </layout>

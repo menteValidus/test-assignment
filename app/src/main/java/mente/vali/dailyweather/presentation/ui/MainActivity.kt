@@ -6,6 +6,10 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 
@@ -30,7 +34,26 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        supportActionBar?.title = "Погода"
+        val navigationListener = BottomNavigationView.OnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.navigation_today -> {
+                    goToToday()
+                    true
+                }
+
+                R.id.navigation_tomorrow -> {
+                    goToTomorrow()
+                    true
+                }
+                R.id.navigation_five_days -> {
+                    goToFiveDays()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        bnv_navigation.setOnNavigationItemSelectedListener(navigationListener)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -49,6 +72,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun goToToday() {
+        nav_host_fragment.findNavController()
+            .navigate(R.id.todayWeatherFragment)
+    }
+
+    fun goToTomorrow() {
+        nav_host_fragment.findNavController()
+            .navigate(R.id.tomorrowWeatherFragment)
+    }
+
+    fun goToFiveDays() {
+        nav_host_fragment.findNavController()
+            .navigate(R.id.fiveDaysFragment)
+    }
 
     fun getSharedViewModel() = forecastViewModel
 

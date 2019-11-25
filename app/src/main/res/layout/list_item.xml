@@ -10,6 +10,9 @@
         <variable
             name="item"
             type="mente.vali.dailyweather.data.models.DayWeather" />
+        <variable
+            name="dayOffset"
+            type="Integer" />
     </data>
 
     <LinearLayout
@@ -24,13 +27,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_marginTop="@dimen/spacing_huge_32"
                 android:layout_marginStart="@dimen/spacing_middle_16">
+                <TextView
+                    android:id="@+id/tv_datetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginBottom="@dimen/spacing_small_8"
+                    app:dayOffset="@{dayOffset}"
+                    tools:text="Сегодня"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_huge_32"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

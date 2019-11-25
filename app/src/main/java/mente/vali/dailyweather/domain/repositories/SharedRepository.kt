@@ -59,6 +59,7 @@ class SharedRepository constructor(appRepository: Context) {
         putValue(WIND_DIRECTION to (weather.windDirection.value ?: ""))
         putValue(WIND_SPEED to (weather.windSpeed.value ?: 0))
     }
+
     /**
      * Метод для получения последних сохранённых показаний погоды.
      * Возвращаемое значение Пара <Дата, Показания погоды>.
@@ -78,8 +79,19 @@ class SharedRepository constructor(appRepository: Context) {
             val windDirection = getString(WIND_DIRECTION, "")!!
             val windSpeed = getInt(WIND_SPEED, 0)
 
-            return date to ObservableWeather(temperature, weatherCondition, humidity, pressure, windDirection, windSpeed)
+            return date to ObservableWeather(
+                temperature,
+                weatherCondition,
+                humidity,
+                pressure,
+                windDirection,
+                windSpeed
+            )
         }
+    }
+
+    fun registerListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        prefs.registerOnSharedPreferenceChangeListener(listener)
     }
 
     /**

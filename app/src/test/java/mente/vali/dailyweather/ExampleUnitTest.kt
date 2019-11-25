@@ -1,15 +1,12 @@
 package mente.vali.dailyweather
 
-import mente.vali.dailyweather.data.extensions.presentationFormat
 import org.junit.Test
 
 import org.junit.Assert.*
-import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 import java.time.format.DateTimeFormatter.ofLocalizedDate
 import java.time.format.FormatStyle
@@ -46,6 +43,25 @@ class ExampleUnitTest {
     }
     @Test
     fun time_pattern_test() {
-        println(Date().presentationFormat())
+        val date = Date()
+        var pattern = "d M HH:mm"
+        var dateFormat = SimpleDateFormat(pattern, Locale("ru"))
+
+        println(dateFormat.format(date))
+
+        pattern = "d MM HH:mm"
+        dateFormat = SimpleDateFormat(pattern, Locale("ru"))
+
+        println(dateFormat.format(date))
+
+        pattern = "d MMM HH:mm"
+        dateFormat = SimpleDateFormat(pattern, Locale("ru"))
+
+        println(dateFormat.format(date))
+
+        pattern = "d MMMM HH:mm"
+        dateFormat = SimpleDateFormat(pattern, Locale("ru"))
+
+        println(dateFormat.format(date))
     }
 }

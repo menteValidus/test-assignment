@@ -6,8 +6,10 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import mente.vali.dailyweather.R
+import mente.vali.dailyweather.data.extensions.presentationDateWithDayOffsetFormat
 import mente.vali.dailyweather.data.models.WeatherCondition
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
+import java.util.*
 
 
 /**
@@ -85,10 +87,19 @@ fun setWeatherConditionDrawable(imageView: ImageView, weatherCondition: WeatherC
         WeatherCondition.CLEAR -> imageView.setImageResource(R.drawable.ic_clear)
         WeatherCondition.CLOUDS -> imageView.setImageResource(R.drawable.ic_cloudy)
         WeatherCondition.RAIN -> imageView.setImageResource(R.drawable.ic_rain)
+        WeatherCondition.DRIZZLE -> imageView.setImageResource(R.drawable.ic_rain)
         WeatherCondition.THUNDERSTORM -> imageView.setImageResource(R.drawable.ic_storm)
         WeatherCondition.SNOW -> imageView.setImageResource(R.drawable.ic_snowing)
         WeatherCondition.MIST -> imageView.setImageResource(R.drawable.ic_fog)
         WeatherCondition.NONE -> imageView.setImageResource(R.drawable.ic_clear)
+        WeatherCondition.SMOKE -> imageView.setImageResource(R.drawable.ic_fog)
+        WeatherCondition.HAZE -> imageView.setImageResource(R.drawable.ic_fog)
+        WeatherCondition.DUST -> imageView.setImageResource(R.drawable.ic_fog)
+        WeatherCondition.FOG -> imageView.setImageResource(R.drawable.ic_fog)
+        WeatherCondition.SAND -> imageView.setImageResource(R.drawable.ic_fog)
+        WeatherCondition.ASH -> imageView.setImageResource(R.drawable.ic_fog)
+        WeatherCondition.SQUALL -> imageView.setImageResource(R.drawable.ic_storm)
+        WeatherCondition.TORNADO -> imageView.setImageResource(R.drawable.ic_storm)
     }
 }
 
@@ -108,6 +119,14 @@ fun setPressureText(textView: TextView, pressure: Int) {
         R.string.hg_placeholder,
         barToHg(pressure).toString()
     )
+}
+@BindingAdapter("app:dayOffset")
+fun setDayOffsetText(textView: TextView, dayOffset: Int) {
+    if (dayOffset > 0) {
+        textView.text = Date().presentationDateWithDayOffsetFormat(dayOffset)
+    } else {
+        textView.text = "Сегодня"
+    }
 }
 
 @BindingAdapter(value = ["app:degreesUnit", "app:speed"], requireAll = true)

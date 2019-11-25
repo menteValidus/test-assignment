@@ -28,15 +28,6 @@ class FiveDaysFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Обработка нажатию системной кнопки "Back".
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.action_fiveDaysFragment_pop)
-            }
-
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
         // Inflate the layout for this fragment
         binding = FragmentFiveDaysBinding.inflate(inflater, container, false)

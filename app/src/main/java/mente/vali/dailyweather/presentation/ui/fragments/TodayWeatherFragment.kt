@@ -30,14 +30,6 @@ class TodayWeatherFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Обработка нажатию системной кнопки "Back".
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                activity?.finish()
-            }
-
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
         val binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
@@ -47,17 +39,6 @@ class TodayWeatherFragment : Fragment() {
         return binding.root
     }
 
-
-    override fun onStart() {
-        super.onStart()
-
-        // Переход между фрагментами.
-        btn_slide_tomorrow.setOnClickListener { view ->
-            view.findNavController()
-                .navigate(R.id.action_todayWeatherFragment_to_tomorrowWeatherFragment)
-        }
-
-    }
 
     override fun onPause() {
         super.onPause()

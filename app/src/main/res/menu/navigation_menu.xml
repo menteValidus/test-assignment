@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_today"
+        android:title="@string/navigation_today" />
+
+    <item
+        android:id="@+id/navigation_tomorrow"
+        android:title="@string/navigation_tomorrow" />
+
+    <item
+        android:id="@+id/navigation_five_days"
+        android:title="@string/navigation_five_days" />
+
+</menu>

@@ -26,28 +26,7 @@
             android:layout_marginEnd="@dimen/spacing_small_8"
             android:layout_marginBottom="@dimen/spacing_small_8"/>
 
-        <!--    TODO временное решение перенести в Drawer или Settings-->
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            app:currentDegreesUnit="@{viewmodel.currentUnitsLiveData}">
 
-            <RadioButton
-                android:id="@+id/rb_celsius"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewmodel.setCelsiusUnits()}"
-                android:text="@string/celsius_degree_string" />
-
-            <RadioButton
-                android:id="@+id/rb_fahrenheit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewmodel.setFahrenheitUnits()}"
-                android:text="@string/fahrenheit_degree_string" />
-
-        </RadioGroup>
     </LinearLayout>
 
 

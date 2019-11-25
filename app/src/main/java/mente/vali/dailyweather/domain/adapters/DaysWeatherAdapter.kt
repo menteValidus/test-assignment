@@ -17,7 +17,7 @@ import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
  */
 class DaysWeatherAdapter(private val viewModel: ForecastViewModel) :
     RecyclerView.Adapter<DaysWeatherAdapter.ViewHolder>() {
-    private var items: List<DayWeather> = viewModel.daysWeatherList.value ?: listOf()
+    private var items: List<Pair<Int, DayWeather>> = viewModel.daysWeatherList.value ?: listOf()
 
     override fun getItemCount(): Int {
         return items.size
@@ -37,7 +37,8 @@ class DaysWeatherAdapter(private val viewModel: ForecastViewModel) :
 
         if (holder is BindingViewHolder) {
             holder.apply {
-                binding.item = item
+                binding.dayOffset = item.first
+                binding.item = item.second
                 binding.degreesUnits = viewModel.currentUnitsLiveData.value
             }
         }
@@ -57,7 +58,7 @@ class DaysWeatherAdapter(private val viewModel: ForecastViewModel) :
         }
     }
 
-    fun replaceItems(items: List<DayWeather>) {
+    fun replaceItems(items: List<Pair<Int,DayWeather>>) {
         this.items = items
         notifyDataSetChanged()
     }
