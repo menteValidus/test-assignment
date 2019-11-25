@@ -129,7 +129,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /**
      * Wrapper для запроса данных с сервера API.
      */
-    private fun update() = viewModelScope.launch {
+    fun update() = viewModelScope.launch {
         forecastApiCommunicator.requestWeatherByNow(
             Response.Listener { response ->
                 val weather = ObservableWeather.parse(response.toString())

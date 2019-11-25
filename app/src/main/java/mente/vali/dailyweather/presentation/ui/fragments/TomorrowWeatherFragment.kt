@@ -41,4 +41,12 @@ class TomorrowWeatherFragment : Fragment() {
 
         return binding.root
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        srl_update_tomorrow.setOnRefreshListener {
+            forecastViewModel.update()
+        }
+    }
 }

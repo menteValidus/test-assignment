@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import kotlinx.android.synthetic.main.fragment_five_days.*
 
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.databinding.FragmentFiveDaysBinding
@@ -35,10 +38,21 @@ class FiveDaysFragment : Fragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        srl_update_five_days.setOnRefreshListener {
+            // TODO change to 5 days update instead
+            forecastViewModel.update()
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         adapter = DaysWeatherAdapter(viewModel = forecastViewModel)
+        val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        binding.rvDaysWeather.addItemDecoration(divider)
 
         binding.rvDaysWeather.adapter = adapter
         val list = forecastViewModel.daysWeatherList.value!!

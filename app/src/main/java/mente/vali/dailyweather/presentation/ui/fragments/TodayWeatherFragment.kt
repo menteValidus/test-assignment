@@ -2,16 +2,12 @@ package mente.vali.dailyweather.presentation.ui.fragments
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
+import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.fragment_today_weather.*
-
-import mente.vali.dailyweather.R
 import mente.vali.dailyweather.databinding.FragmentTodayWeatherBinding
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 import mente.vali.dailyweather.presentation.ui.MainActivity
@@ -37,6 +33,17 @@ class TodayWeatherFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        srl_update_today.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener  {
+            override fun onRefresh() {
+                forecastViewModel.update()
+                srl_update_today.isRefreshing = false
+            }
+        })
     }
 
 

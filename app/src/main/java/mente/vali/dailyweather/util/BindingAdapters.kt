@@ -52,35 +52,6 @@ fun setTemperatureDrawable(
     }
 }
 
-@BindingAdapter("app:currentDegreesUnit")
-fun setActiveRadioButton(radioGroup: RadioGroup, currentDegreesUnit: ForecastViewModel.Units) {
-    // Получить context для доступа к ресурсам.
-    val ctx = radioGroup.context
-    val childCount = radioGroup.childCount
-
-    if (childCount == 0) return
-
-    for (i in 0..radioGroup.childCount) {
-        val view = radioGroup.getChildAt(i)
-
-        if (view !is RadioButton) return
-        // Проверяем дочерние RadioButton. Устанавливаем тот, который соответствует текущей единице.
-        when (view.text) {
-            ctx.getString(R.string.celsius_degree_string) -> {
-                // TODO изменить на условие.
-                when (currentDegreesUnit) {
-                    ForecastViewModel.Units.CELSIUS -> view.isChecked = true
-                }
-            }
-            ctx.getString(R.string.fahrenheit_degree_string) -> {
-                when (currentDegreesUnit) {
-                    ForecastViewModel.Units.FAHRENHEIT -> view.isChecked = true
-                }
-            }
-        }
-    }
-}
-
 @BindingAdapter("app:weatherCondition")
 fun setWeatherConditionDrawable(imageView: ImageView, weatherCondition: WeatherCondition) {
     when (weatherCondition) {
@@ -104,7 +75,7 @@ fun setWeatherConditionDrawable(imageView: ImageView, weatherCondition: WeatherC
 }
 
 @BindingAdapter("app:weatherCondition")
-fun setWeatherCondtitionText(textView: TextView, weatherCondition: WeatherCondition) {
+fun setWeatherConditionText(textView: TextView, weatherCondition: WeatherCondition) {
     textView.text = weatherCondition.getConditionName()
 }
 
