@@ -11,6 +11,7 @@
 
     </data>
 
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srl_update_today"
         android:layout_width="match_parent"
@@ -97,7 +98,6 @@
 
             </RelativeLayout>
 
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -183,6 +183,7 @@
 
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

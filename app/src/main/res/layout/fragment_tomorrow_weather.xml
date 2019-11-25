@@ -65,15 +65,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginStart="@dimen/spacing_huge_32"
-                    android:layout_marginTop="@dimen/spacing_huge_32"
-                    android:layout_marginEnd="@dimen/spacing_huge_32"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="@dimen/item_size_huge_96"
                         android:layout_height="@dimen/item_size_huge_96"
                         android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/spacing_huge_32"
+                        android:layout_marginEnd="@dimen/spacing_huge_32"
+                        android:layout_marginStart="@dimen/spacing_huge_32"
                         android:layout_marginBottom="@dimen/spacing_middle_16"
                         app:weatherCondition="@{weather.weatherCondition}"
                         tools:src="@drawable/ic_cloudy" />
