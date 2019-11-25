@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">DailyWeather</string>
+    <string name="app_name">Погода</string>
+    <string name="title_activity_settings">Настройки</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -13,4 +14,7 @@
     <string name="pressure_header">Давление</string>
     <string name="wind_direction_header">Направление ветра</string>
     <string name="wind_speed_header">Скорость ветра</string>
+    <!-- Sync Preferences -->
+    <string name="sync_units">UNITS</string>
+    <string name="pref_syncUnitsType_default_value">Цельсия (°C)</string>
 </resources>
