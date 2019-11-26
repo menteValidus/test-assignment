@@ -72,19 +72,23 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun goToToday() {
+    private fun goToToday() {
         nav_host_fragment.findNavController()
             .navigate(R.id.todayWeatherFragment)
     }
 
-    fun goToTomorrow() {
+    private fun goToTomorrow() {
         nav_host_fragment.findNavController()
             .navigate(R.id.tomorrowWeatherFragment)
     }
 
-    fun goToFiveDays() {
+    private fun goToFiveDays() {
         nav_host_fragment.findNavController()
             .navigate(R.id.fiveDaysFragment)
+    }
+
+    fun navigateToTomorrow() {
+        bnv_navigation.selectedItemId = R.id.navigation_tomorrow
     }
 
     fun getSharedViewModel() = forecastViewModel
