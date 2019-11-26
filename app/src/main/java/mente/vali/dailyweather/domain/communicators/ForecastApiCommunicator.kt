@@ -7,6 +7,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 import org.json.JSONObject
 
 /**
@@ -34,7 +35,8 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     /**
      * Метод, производящий запрос прогноза на 5 дней с сервера.
      */
-    fun requestForecast(listener: Response.Listener<JSONObject>) {
+    fun requestForecast(units: String,listener: Response.Listener<JSONObject>) {
+        this.units = units
         val request = JsonObjectRequest(
             Request.Method.GET,
             generateForecastApiUrl(),
@@ -52,7 +54,8 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     /**
      * Метод, производящий запрос текущей погоды с сервера.
      */
-    fun requestWeatherByNow(listener: Response.Listener<JSONObject>) {
+    fun requestWeatherByNow(units: String,listener: Response.Listener<JSONObject>) {
+        this.units = units
         val request = JsonObjectRequest(
             Request.Method.GET,
             generateWeatherApiUrl(),

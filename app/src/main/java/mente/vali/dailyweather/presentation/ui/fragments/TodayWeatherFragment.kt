@@ -30,6 +30,7 @@ class TodayWeatherFragment : Fragment() {
 
         val binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
+        forecastViewModel.currentScreenType = ForecastViewModel.ScreenType.TODAY
         binding.viewmodel = forecastViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -44,13 +45,29 @@ class TodayWeatherFragment : Fragment() {
             srl_update_today.isRefreshing = false
         }
 
-        nav_host_fragment.view?.setOnTouchListener(object : OnSwipeTouchListener(context!!) {
+        srl_update_today.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
-                (activity as MainActivity).navigateToTomorrow()
+                with(activity as MainActivity) {
+                    when (forecastViewModel.currentScreenType) {
+                        ForecastViewModel.ScreenType.TODAY -> navigateToTomorrow()
+                        ForecastViewModel.ScreenType.TOMORROW -> navigateToFiveDays()
+                        ForecastViewModel.ScreenType.FIVE_DAYS -> return
+                    }
+                }
+            }
+
+            override fun onSwipeRight() {
+                with(activity as MainActivity) {
+                    when (forecastViewModel.currentScreenType) {
+                        ForecastViewModel.ScreenType.TODAY -> return
+                        ForecastViewModel.ScreenType.TOMORROW -> navigateToToday()
+                        ForecastViewModel.ScreenType.FIVE_DAYS -> navigateToTomorrow()
+                    }
+                }
             }
         })
 
-        }
+    }
 
 
     override fun onPause() {

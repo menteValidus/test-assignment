@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_today_weather.*
 import kotlinx.android.synthetic.main.fragment_tomorrow_weather.*
 
@@ -17,6 +18,7 @@ import mente.vali.dailyweather.databinding.FragmentTodayWeatherBinding
 import mente.vali.dailyweather.databinding.FragmentTomorrowWeatherBinding
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 import mente.vali.dailyweather.presentation.ui.MainActivity
+import mente.vali.dailyweather.util.OnSwipeTouchListener
 
 /**
  * A simple [Fragment] subclass.
@@ -35,6 +37,7 @@ class TomorrowWeatherFragment : Fragment() {
         // Inflate the layout for this fragment
         val binding = FragmentTomorrowWeatherBinding.inflate(inflater, container, false)
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
+        forecastViewModel.currentScreenType = ForecastViewModel.ScreenType.TOMORROW
         binding.weather = forecastViewModel.tomorrowWeather
         binding.currentUnits = forecastViewModel.currentUnitsLiveData
         binding.lifecycleOwner = viewLifecycleOwner
@@ -48,5 +51,6 @@ class TomorrowWeatherFragment : Fragment() {
         srl_update_tomorrow.setOnRefreshListener {
             forecastViewModel.update()
         }
+
     }
 }

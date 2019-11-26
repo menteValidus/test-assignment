@@ -13,10 +13,13 @@
         <action
             android:id="@+id/action_todayWeatherFragment_to_tomorrowWeatherFragment"
             app:destination="@id/tomorrowWeatherFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_todayWeatherFragment_to_fiveDaysFragment"
+            app:destination="@+id/fiveDaysFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/tomorrowWeatherFragment"
@@ -25,12 +28,14 @@
         tools:layout="@layout/fragment_tomorrow_weather" >
         <action
             android:id="@+id/action_tomorrowWeatherFragment_to_fiveDaysFragment"
-            app:destination="@id/fiveDaysFragment" />
+            app:destination="@id/fiveDaysFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
-            android:id="@+id/action_tomorrowWeatherFragment_pop"
-            app:destination="@+id/todayWeatherFragment"
-            app:popUpTo="@id/tomorrowWeatherFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_tomorrowWeatherFragment_to_todayWeatherFragment"
+            app:destination="@id/todayWeatherFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/fiveDaysFragment"
@@ -38,9 +43,14 @@
         android:label="fragment_five_days"
         tools:layout="@layout/fragment_five_days" >
         <action
-            android:id="@+id/action_fiveDaysFragment_pop"
-            app:destination="@+id/tomorrowWeatherFragment"
-            app:popUpTo="@id/fiveDaysFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_fiveDaysFragment_to_todayWeatherFragment"
+            app:destination="@id/todayWeatherFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_fiveDaysFragment_to_tomorrowWeatherFragment"
+            app:destination="@id/tomorrowWeatherFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
     </fragment>
 </navigation>

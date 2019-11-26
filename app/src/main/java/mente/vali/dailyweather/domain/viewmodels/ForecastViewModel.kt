@@ -76,6 +76,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
     val dateTimeOfLastUpdate: LiveData<String>
 
+    var currentScreenType: ScreenType = ScreenType.TODAY
+
     init {
         // TODO move to SharedRepository
         preferenceChangeListener =
@@ -131,6 +133,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      */
     fun update() = viewModelScope.launch {
         forecastApiCommunicator.requestWeatherByNow(
+            currentUnitsLiveData.value?.getUnitString() ?: "metric", // TODO access def val
             Response.Listener { response ->
                 val weather = ObservableWeather.parse(response.toString())
                 _currentWeather.value!!.setValues(weather)
@@ -138,6 +141,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
             }
         )
         forecastApiCommunicator.requestForecast(
+            currentUnitsLiveData.value?.getUnitString() ?: "metric",
             Response.Listener { response ->
                 val list = Forecast.parse(response.toString())
                 val daysWeatherMutableList =
@@ -213,5 +217,11 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                 }
             }
         }
+    }
+
+    enum class ScreenType {
+        TODAY,
+        TOMORROW,
+        FIVE_DAYS
     }
 }
