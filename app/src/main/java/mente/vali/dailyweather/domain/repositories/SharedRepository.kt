@@ -83,21 +83,8 @@ class SharedRepository constructor(appRepository: Context) {
     }
 
     /**
-     * Метод для прослушивания изменений единиц измерения.
-     * Параметры - лямбда, в параметры которой передаётся новое значение единиц измерений градуса.
+     * Метод для регистрация слушателя изменений единиц измерения.
      */
-    fun listenForUnitsChange(updater: (units: String) -> Unit) {
-        val preferenceChangeListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                if (key == "UNITS") {
-                    val unitsPref = sharedPreferences.getString(key, "metric")!!
-                    updater(unitsPref)
-                }
-            }
-
-        prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
-    }
-
     fun registerListener(preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener) {
         prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
     }

@@ -63,13 +63,13 @@ class MainActivity : AppCompatActivity() {
         // Прослушивание для определения, когда происходит запрос данных.
         forecastViewModel.isFetching.observe(this, Observer { isFetching ->
             if (isFetching) {
-                if (forecastViewModel.isDataUnappropriated) {
+                if (forecastViewModel.isDataUnappropriated.value!!) {
                     showProgressView()
+                } else {
+                    showProgressView(false)
                 }
             } else {
-                if (forecastViewModel.isDataUnappropriated) {
-                    hideProgressView()
-                }
+                hideProgressView()
             }
         })
 
@@ -78,9 +78,11 @@ class MainActivity : AppCompatActivity() {
     /**
      * Отобразить показатель прогресса загрузки данных.
      */
-    private fun showProgressView() {
+    private fun showProgressView(isHiding: Boolean = true) {
         rl_progress.visibility = VISIBLE
-        nav_host_fragment.view?.visibility = GONE
+        if (isHiding) {
+            nav_host_fragment.view?.visibility = GONE
+        }
 //        bnv_navigation.visibility = GONE
 //        window.setFlags(
 //            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,

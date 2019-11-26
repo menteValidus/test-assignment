@@ -107,11 +107,11 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * Флаг, устанавливаемый при неподходящих данных.
      * Например, при смене города данные старого города будут отображаться пока не придут новые.
      */
-    private var _isDataUnappropriated = false
+    private val _isDataUnappropriated = MutableLiveData(false)
     /**
      * Свойство, представляющее поле [_isFetching].
      */
-    val isDataUnappropriated = _isDataUnappropriated
+    val isDataUnappropriated: LiveData<Boolean> = _isDataUnappropriated
 
     /**
      * Поле, хранящее данные о текущем активном экране.
@@ -142,7 +142,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         // Если полученный из SharedPreferences прогноз не на сегодня, то скрывакм UI, пока не
         // приду новые данные с сервера.
         if (date == "" || !Date().isSameDay(parseDate(date))) {
-            _isDataUnappropriated = true
+            _isDataUnappropriated.value = true
         }
 
         _currentWeather = MutableLiveData(lastWeather)
@@ -199,8 +199,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                     _isFetching.value = false
                     // Если данные были неподходящими, то после получения данных необходимо сбросить
                     // флаг.
-                    if (_isDataUnappropriated) {
-                        _isDataUnappropriated = false
+                    if (_isDataUnappropriated.value!!) {
+                        _isDataUnappropriated.value = false
                     }
                 }
             )
@@ -231,8 +231,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                     _isFetching.value = false
                     // Если данные были неподходящими, то после получения данных необходимо сбросить
                     // флаг.
-                    if (_isDataUnappropriated) {
-                        _isDataUnappropriated = false
+                    if (_isDataUnappropriated.value!!) {
+                        _isDataUnappropriated.value = false
                     }
                 })
         }
