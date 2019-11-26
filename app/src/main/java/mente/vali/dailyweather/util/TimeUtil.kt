@@ -1,7 +1,6 @@
 package mente.vali.dailyweather.util
 
 import mente.vali.dailyweather.domain.extensions.isSameDay
-import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*

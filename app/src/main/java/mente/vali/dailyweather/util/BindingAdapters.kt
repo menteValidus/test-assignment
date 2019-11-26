@@ -1,15 +1,12 @@
 package mente.vali.dailyweather.util
 
 import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.domain.extensions.presentationDateWithDayOffsetFormat
 import mente.vali.dailyweather.data.models.WeatherCondition
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
-import java.util.*
 
 
 /**
@@ -94,7 +91,7 @@ fun setPressureText(textView: TextView, pressure: Int) {
 @BindingAdapter("app:dayOffset")
 fun setDayOffsetText(textView: TextView, dayOffset: Int) {
     if (dayOffset > 0) {
-        textView.text = Date().presentationDateWithDayOffsetFormat(dayOffset)
+        textView.text = presentationDateWithDayOffsetFormat(dayOffset)
     } else {
         textView.text = "Сегодня"
     }
