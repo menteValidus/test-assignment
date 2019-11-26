@@ -1,4 +1,4 @@
-package mente.vali.dailyweather.data.extensions
+package mente.vali.dailyweather.domain.extensions
 
 import java.text.SimpleDateFormat
 import java.util.*

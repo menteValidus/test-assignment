@@ -6,7 +6,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import mente.vali.dailyweather.R
-import mente.vali.dailyweather.data.extensions.presentationDateWithDayOffsetFormat
+import mente.vali.dailyweather.domain.extensions.presentationDateWithDayOffsetFormat
 import mente.vali.dailyweather.data.models.WeatherCondition
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 import java.util.*

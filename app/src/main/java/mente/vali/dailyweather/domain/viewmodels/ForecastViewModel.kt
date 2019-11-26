@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Response
 import kotlinx.coroutines.launch
-import mente.vali.dailyweather.data.extensions.presentationDateTimeFormat
+import mente.vali.dailyweather.domain.extensions.presentationDateTimeFormat
 import mente.vali.dailyweather.data.models.DayWeather
 import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.ObservableWeather

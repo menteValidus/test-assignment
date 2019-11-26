@@ -34,12 +34,18 @@ class TomorrowWeatherFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val binding = FragmentTomorrowWeatherBinding.inflate(inflater, container, false)
+        val binding =
+            FragmentTomorrowWeatherBinding.inflate(inflater, container, false)
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
+        // Сообщаем ViewModel, какой сейчас экран.
         forecastViewModel.currentScreenType = ForecastViewModel.ScreenType.TOMORROW
+
+        forecastViewModel.update()
+
+        // Binding значений.
         binding.weather = forecastViewModel.tomorrowWeather
         binding.currentUnits = forecastViewModel.currentUnitsLiveData
+
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
@@ -48,6 +54,7 @@ class TomorrowWeatherFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        // При совершении действия Drag to update - происходит обновление.
         srl_update_tomorrow.setOnRefreshListener {
             forecastViewModel.update()
             srl_update_tomorrow.isRefreshing = false
