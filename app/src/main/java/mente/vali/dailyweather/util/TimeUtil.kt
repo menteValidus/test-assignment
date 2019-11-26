@@ -1,6 +1,7 @@
 package mente.vali.dailyweather.util
 
 import mente.vali.dailyweather.domain.extensions.isSameDay
+import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -11,8 +12,11 @@ import java.util.*
 fun parseDate(dateString: String): Date {
     val parsed: Date
     try {
-        val format = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy")
-        parsed = format.parse(dateString) ?: Date(0)
+//        val format = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy") 26 ноября 16:14
+        val year = Calendar.getInstance().get(Calendar.YEAR)
+        val format = SimpleDateFormat("yyyy d MMMM HH:mm", Locale("ru"))
+        parsed = format.parse("$year $dateString")
+            ?: Date(0)
     } catch (pe: ParseException) {
         throw IllegalArgumentException(pe)
     }

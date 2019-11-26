@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import mente.vali.dailyweather.data.models.ObservableWeather
 import mente.vali.dailyweather.data.models.WeatherCondition
+import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 
 /**
  * Репозиторий для хранения данных о текущей погоде.
@@ -16,13 +17,6 @@ class SharedRepository constructor(appRepository: Context) {
     private val prefs: SharedPreferences by lazy {
         val ctx = appRepository.applicationContext
         PreferenceManager.getDefaultSharedPreferences(ctx)
-    }
-
-    /**
-     * Метод для сохранения текущей выбранной единицы измерения.
-     */
-    fun saveSelectedUnit(units: String) {
-        putValue(UNITS to units)
     }
 
     /**
@@ -69,8 +63,6 @@ class SharedRepository constructor(appRepository: Context) {
         with(prefs) {
             val date = getString(DATETIME_OF_UPDATE, "")!!
 
-            // TODO Check current date with update date. In case they both are not the same day return null.
-
             val temperature = getInt(TEMPERATURE, 0).toShort()
             val weatherCondition =
                 WeatherCondition.getByName(getString(WEATHER_CONDITION, "")!!)
@@ -90,8 +82,24 @@ class SharedRepository constructor(appRepository: Context) {
         }
     }
 
-    fun registerListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
-        prefs.registerOnSharedPreferenceChangeListener(listener)
+    /**
+     * Метод для прослушивания изменений единиц измерения.
+     * Параметры - лямбда, в параметры которой передаётся новое значение единиц измерений градуса.
+     */
+    fun listenForUnitsChange(updater: (units: String) -> Unit) {
+        val preferenceChangeListener =
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+                if (key == "UNITS") {
+                    val unitsPref = sharedPreferences.getString(key, "metric")!!
+                    updater(unitsPref)
+                }
+            }
+
+        prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
+    }
+
+    fun registerListener(preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
     }
 
     /**

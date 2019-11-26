@@ -36,8 +36,6 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     private val sharedRepository: SharedRepository =
         SharedRepository.getInstance(application.applicationContext)
 
-    // TODO move to sharedpreference
-    private val preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
     /**
      * Текущие единицы измерения градуса.
      */
@@ -96,20 +94,45 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     val dateTimeOfLastUpdate: LiveData<String>
 
     /**
+     * Поле, показывающее являются ли данные для текущего экрана неподходящими.
+     * В случае, если при первом запуске
+     */
+    private val _isFetching: MutableLiveData<Boolean> = MutableLiveData(false)
+    /**
+     * Свойство, представляющее поле [_isFetching].
+     */
+    val isFetching: LiveData<Boolean> = _isFetching
+
+    /**
+     * Флаг, устанавливаемый при неподходящих данных.
+     * Например, при смене города данные старого города будут отображаться пока не придут новые.
+     */
+    private var _isDataUnappropriated = false
+    /**
+     * Свойство, представляющее поле [_isFetching].
+     */
+    val isDataUnappropriated = _isDataUnappropriated
+
+    /**
      * Поле, хранящее данные о текущем активном экране.
      */
     var currentScreenType: ScreenType = ScreenType.TODAY
 
+    /**
+     * Поле для прослушивания изменений в репозитории.
+     */
+    private val preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
+
     init {
-        // TODO move to SharedRepository
+        // Прослушивание изменений текущих единиц измерения - C/F.
         preferenceChangeListener =
             SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                if (key.equals("UNITS")) {
+                if (key == "UNITS") {
                     val unitsPref = sharedPreferences.getString(key, "metric")!!
                     _currentUnitsLiveData.value = Units.get(unitsPref)
+                    update()
                 }
             }
-
         sharedRepository.registerListener(preferenceChangeListener)
 
         // Получение последних данных о текущей погоде.
@@ -118,8 +141,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
         // Если полученный из SharedPreferences прогноз не на сегодня, то скрывакм UI, пока не
         // приду новые данные с сервера.
-        if (Date().isSameDay(parseDate(date))) {
-            // TODO hide UI via LiveData bool value binded to isActive property in XML-layout.
+        if (date == "" || !Date().isSameDay(parseDate(date))) {
+            _isDataUnappropriated = true
         }
 
         _currentWeather = MutableLiveData(lastWeather)
@@ -127,6 +150,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         _dateTimeOfLastUpdate = MutableLiveData(date)
         dateTimeOfLastUpdate = _dateTimeOfLastUpdate
         acceptCurrentUnits()
+
+        update()
     }
 
     /**
@@ -160,7 +185,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * Wrapper для запроса данных с сервера API.
      */
     fun update() = viewModelScope.launch {
-
+        // Сообщаем, что идёт загрузка данных
+        _isFetching.value = true
         // Если отерыт экран погоды на сегодня, то будет запрос погоды только на сегодня.
         if (currentScreenType == ScreenType.TODAY) {
             forecastApiCommunicator.requestWeatherByNow(
@@ -169,6 +195,13 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                     val weather = ObservableWeather.parse(response.toString())
                     _currentWeather.value!!.setValues(weather)
                     rememberDateTimeOfUpdate()
+
+                    _isFetching.value = false
+                    // Если данные были неподходящими, то после получения данных необходимо сбросить
+                    // флаг.
+                    if (_isDataUnappropriated) {
+                        _isDataUnappropriated = false
+                    }
                 }
             )
         } else {
@@ -194,6 +227,13 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                     _tomorrowWeather.value = daysWeatherMutableList[1].second
                     // Погода на 5 дней.
                     daysWeatherList.value = daysWeatherMutableList
+
+                    _isFetching.value = false
+                    // Если данные были неподходящими, то после получения данных необходимо сбросить
+                    // флаг.
+                    if (_isDataUnappropriated) {
+                        _isDataUnappropriated = false
+                    }
                 })
         }
     }

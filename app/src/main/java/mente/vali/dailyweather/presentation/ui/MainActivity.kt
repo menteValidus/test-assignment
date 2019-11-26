@@ -4,17 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_today_weather.*
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
-import mente.vali.dailyweather.util.OnSwipeTouchListener
 
 /**
  * Класс Activity, представляющий главный экран приложения.
@@ -60,6 +60,42 @@ class MainActivity : AppCompatActivity() {
         bnv_navigation.setOnNavigationItemSelectedListener(navigationListener)
         navController = nav_host_fragment.findNavController()
 
+        // Прослушивание для определения, когда происходит запрос данных.
+        forecastViewModel.isFetching.observe(this, Observer { isFetching ->
+            if (isFetching) {
+                if (forecastViewModel.isDataUnappropriated) {
+                    showProgressView()
+                }
+            } else {
+                if (forecastViewModel.isDataUnappropriated) {
+                    hideProgressView()
+                }
+            }
+        })
+
+    }
+
+    /**
+     * Отобразить показатель прогресса загрузки данных.
+     */
+    private fun showProgressView() {
+        rl_progress.visibility = VISIBLE
+        nav_host_fragment.view?.visibility = GONE
+//        bnv_navigation.visibility = GONE
+//        window.setFlags(
+//            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+//        )
+    }
+
+    /**
+     * Скрыть показатель прогресса загрузки данных.
+     */
+    private fun hideProgressView() {
+        rl_progress.visibility = GONE
+        nav_host_fragment.view?.visibility = VISIBLE
+//        bnv_navigation.visibility = VISIBLE
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

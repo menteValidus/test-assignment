@@ -5,7 +5,9 @@ import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.data.models.WeatherCondition
 import java.lang.reflect.Type
 
-// TODO прокоментировать
+/**
+ * Класс для конвертации JSON в объект класса [WeatherByTime].
+ */
 class WeatherDeserializer : JsonDeserializer<WeatherByTime> {
     override fun deserialize(
         json: JsonElement?,
