@@ -17,11 +17,12 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     /**
      * Свойство, обрабатывающее все входящие запросы к API.
      */
-    val requestQueue: RequestQueue by lazy {
+    private val requestQueue: RequestQueue by lazy {
         Volley.newRequestQueue(applicationContext)
     }
     /**
      * ID текущего города.
+     * Стандартное значение - ID Таганрога.
      */
     private var cityID = "484907"
     /**
@@ -35,37 +36,31 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     /**
      * Метод, производящий запрос прогноза на 5 дней с сервера.
      */
-    fun requestForecast(units: String,listener: Response.Listener<JSONObject>) {
-        this.units = units
-        val request = JsonObjectRequest(
-            Request.Method.GET,
-            generateForecastApiUrl(),
-            null,
-            listener,
-            Response.ErrorListener {
-                // TODO сделать Toast уведомления для удобства.
-                Log.d("test", "Error! ${it.message}")
-            }
-        )
-
-        add(request)
+    fun requestForecast(units: String?,listener: Response.Listener<JSONObject>) {
+        request(units, listener, generateForecastApiUrl())
     }
 
     /**
      * Метод, производящий запрос текущей погоды с сервера.
      */
-    fun requestWeatherByNow(units: String,listener: Response.Listener<JSONObject>) {
-        this.units = units
+    fun requestWeatherByNow(units: String?,listener: Response.Listener<JSONObject>) {
+        request(units, listener, generateWeatherApiUrl())
+    }
+
+    /**
+     * Общий метод запроса данных с сервера.
+     */
+    private fun request(units: String?, listener: Response.Listener<JSONObject>, url: String) {
+        this.units = units ?: "metric"
+
         val request = JsonObjectRequest(
             Request.Method.GET,
-            generateWeatherApiUrl(),
+            url,
             null,
             listener,
             Response.ErrorListener {
-                // TODO сделать Toast уведомления для удобства.
                 Log.d("test", "Error! ${it.message}")
             }
-
         )
 
         add(request)
@@ -93,6 +88,9 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
                 "&APPID=${API_KEY}"
 
     companion object {
+        /**
+         * Словарь ID городов.
+         */
         private val citiesIDMap: Map<String, String> = mapOf(
             "Таганрог" to "484907",
             "Москва" to "524901",
@@ -123,6 +121,9 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
                     }
             }
 
+        /**
+         * Метод, преобразовывающий Map [citiesIDMap] в List.
+         */
         fun getCitiesList(): List<String> {
             val list = mutableListOf<String>()
             citiesIDMap.forEach {

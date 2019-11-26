@@ -132,22 +132,26 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * Wrapper для запроса данных с сервера API.
      */
     fun update() = viewModelScope.launch {
-        forecastApiCommunicator.requestWeatherByNow(
-            currentUnitsLiveData.value?.getUnitString() ?: "metric", // TODO access def val
-            Response.Listener { response ->
-                val weather = ObservableWeather.parse(response.toString())
-                _currentWeather.value!!.setValues(weather)
-                rememberDateTimeOfUpdate()
-            }
-        )
-        forecastApiCommunicator.requestForecast(
-            currentUnitsLiveData.value?.getUnitString() ?: "metric",
-            Response.Listener { response ->
-                val list = Forecast.parse(response.toString())
-                val daysWeatherMutableList =
-                    mutableListOf<Pair<Int, DayWeather>>()
-                // Выполнить только если были получены все данные.
-                if (list.weatherByTimeList.size == 40) {
+
+        // Если отерыт экран погоды на сегодня, то будет запрос погоды только на сегодня.
+        if (currentScreenType == ScreenType.TODAY) {
+            forecastApiCommunicator.requestWeatherByNow(
+                currentUnitsLiveData.value?.getUnitString(),
+                Response.Listener { response ->
+                    val weather = ObservableWeather.parse(response.toString())
+                    _currentWeather.value!!.setValues(weather)
+                    rememberDateTimeOfUpdate()
+                }
+            )
+        } else {
+            forecastApiCommunicator.requestForecast(
+                currentUnitsLiveData.value?.getUnitString(),
+                Response.Listener { response ->
+                    // Получаем список всех прогнозов.
+                    val list = Forecast.parse(response.toString())
+                    val daysWeatherMutableList =
+                        mutableListOf<Pair<Int, DayWeather>>()
+
                     // Проходим по полученному списку, собираем средние данные по дням.
                     for (i in 0..4) {
                         val weatherList = mutableListOf<WeatherByTime>()
@@ -162,10 +166,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                     _tomorrowWeather.value = daysWeatherMutableList[1].second
                     // Погода на 5 дней.
                     daysWeatherList.value = daysWeatherMutableList
-                } else {
-                    // TODO Toast error
-                }
-            })
+                })
+        }
     }
 
 
@@ -219,6 +221,9 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    /**
+     * Перечисление для определения текущего экрана приложения.
+     */
     enum class ScreenType {
         TODAY,
         TOMORROW,
