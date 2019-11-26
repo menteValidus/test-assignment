@@ -13,6 +13,11 @@
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_header" />
 
+    <View android:layout_width="match_parent"
+    android:layout_height="@dimen/divider_small_1"
+    android:background="@android:color/darker_gray"
+        android:layout_below="@id/fr_city_selection"/>
+
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"

@@ -50,6 +50,7 @@ class TomorrowWeatherFragment : Fragment() {
 
         srl_update_tomorrow.setOnRefreshListener {
             forecastViewModel.update()
+            srl_update_tomorrow.isRefreshing = false
         }
 
     }

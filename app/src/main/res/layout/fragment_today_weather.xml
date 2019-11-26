@@ -6,8 +6,14 @@
     <data>
 
         <variable
-            name="viewmodel"
-            type="mente.vali.dailyweather.domain.viewmodels.ForecastViewModel" />
+            name="lastUpdateTime"
+            type="androidx.lifecycle.LiveData&lt;String&gt;" />
+        <variable
+            name="units"
+            type="androidx.lifecycle.LiveData&lt;mente.vali.dailyweather.domain.viewmodels.ForecastViewModel.Units&gt;" />
+        <variable
+            name="weather"
+            type="androidx.lifecycle.LiveData&lt;mente.vali.dailyweather.data.models.ObservableWeather&gt;" />
 
     </data>
 
@@ -38,7 +44,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_small_8"
                         android:layout_marginBottom="@dimen/spacing_small_8"
-                        android:text="@{viewmodel.dateTimeOfLastUpdate}"
+                        android:text="@{lastUpdateTime}"
                         tools:text="Ноябрь 16, 18:23" />
 
                     <LinearLayout
@@ -52,8 +58,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/spacing_small_8"
                             android:textSize="@dimen/text_huge_64"
-                            app:degreesUnit="@{viewmodel.currentUnitsLiveData}"
-                            app:temperature="@{viewmodel.currentWeather.temperature}"
+                            app:degreesUnit="@{units}"
+                            app:temperature="@{weather.temperature}"
                             tools:text="4°C" />
 
                         <ImageView
@@ -61,8 +67,8 @@
                             android:layout_width="@dimen/item_size_normal_48"
                             android:layout_height="@dimen/item_size_normal_48"
                             android:layout_gravity="center"
-                            app:degreesUnit="@{viewmodel.currentUnitsLiveData}"
-                            app:temperature="@{viewmodel.currentWeather.temperature}"
+                            app:degreesUnit="@{units}"
+                            app:temperature="@{weather.temperature}"
                             tools:src="@drawable/ic_over_zero_temp" />
                     </LinearLayout>
 
@@ -83,7 +89,7 @@
                         android:layout_marginTop="@dimen/spacing_huge_32"
                         android:layout_marginEnd="@dimen/spacing_huge_32"
                         android:layout_marginBottom="@dimen/spacing_middle_16"
-                        app:weatherCondition="@{viewmodel.currentWeather.weatherCondition}"
+                        app:weatherCondition="@{weather.weatherCondition}"
                         tools:src="@drawable/ic_cloudy" />
 
                     <TextView
@@ -91,7 +97,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        app:weatherCondition="@{viewmodel.currentWeather.weatherCondition}"
+                        app:weatherCondition="@{weather.weatherCondition}"
                         tools:text="Облачно" />
                 </LinearLayout>
 
@@ -147,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge_32"
                         android:layout_marginTop="@dimen/spacing_small_8"
-                        app:percentage="@{viewmodel.currentWeather.humidity}"
+                        app:percentage="@{weather.humidity}"
                         tools:text="48%" />
 
                     <TextView
@@ -155,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge_32"
                         android:layout_marginTop="@dimen/spacing_small_8"
-                        app:pressure="@{viewmodel.currentWeather.pressure}"
+                        app:pressure="@{weather.pressure}"
                         tools:text="1039 мм. рт. ст." />
 
                     <TextView
@@ -163,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge_32"
                         android:layout_marginTop="@dimen/spacing_small_8"
-                        android:text="@{viewmodel.currentWeather.windDirection}"
+                        android:text="@{weather.windDirection}"
                         tools:text="Северное" />
 
                     <TextView
@@ -171,8 +177,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge_32"
                         android:layout_marginTop="@dimen/spacing_small_8"
-                        app:degreesUnit="@{viewmodel.currentUnitsLiveData}"
-                        app:speed="@{viewmodel.currentWeather.windSpeed}"
+                        app:degreesUnit="@{units}"
+                        app:speed="@{weather.windSpeed}"
                         tools:text="12.5 км/ч" />
                 </LinearLayout>
 

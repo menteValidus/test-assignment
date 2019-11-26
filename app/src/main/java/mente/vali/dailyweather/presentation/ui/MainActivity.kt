@@ -62,27 +62,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        /*nav_host_fragment.view?.setOnTouchListener(object : OnSwipeTouchListener(this) {
-            override fun onSwipeLeft() {
-                when (forecastViewModel.currentScreenType) {
-                    ForecastViewModel.ScreenType.TODAY -> goToTomorrow()
-                    ForecastViewModel.ScreenType.TOMORROW -> goToFiveDays()
-                    ForecastViewModel.ScreenType.FIVE_DAYS -> return
-                }
-            }
-
-            override fun onSwipeRight() {
-                when (forecastViewModel.currentScreenType) {
-                    ForecastViewModel.ScreenType.TODAY -> return
-                    ForecastViewModel.ScreenType.TOMORROW -> goToToday()
-                    ForecastViewModel.ScreenType.FIVE_DAYS -> goToTomorrow()
-                }
-            }
-        })*/
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.app_menu, menu)
         return true

@@ -47,6 +47,7 @@ class FiveDaysFragment : Fragment() {
         srl_update_five_days.setOnRefreshListener {
             // TODO change to 5 days update instead
             forecastViewModel.update()
+            srl_update_five_days.isRefreshing = false
         }
 
     }

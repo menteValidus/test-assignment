@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--    Spacing-->
     <dimen name="spacing_small_8">8dp</dimen>
     <dimen name="spacing_middle_16">16dp</dimen>
     <dimen name="spacing_large_24">24dp</dimen>
     <dimen name="spacing_huge_32">32dp</dimen>
+<!--    Item Size-->
     <dimen name="item_size_small_32">32dp</dimen>
     <dimen name="item_size_normal_48">48dp</dimen>
     <dimen name="item_size_huge_96">96dp</dimen>
+<!--    Text Size-->
+    <dimen name="text_small_16">16sp</dimen>
+    <dimen name="text_normal_32">32sp</dimen>
     <dimen name="text_huge_64">64sp</dimen>
+<!--    Misc-->
     <dimen name="divider_small_1" >1dp</dimen>
 </resources>

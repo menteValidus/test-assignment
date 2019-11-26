@@ -31,7 +31,11 @@ class TodayWeatherFragment : Fragment() {
         val binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
         forecastViewModel.currentScreenType = ForecastViewModel.ScreenType.TODAY
-        binding.viewmodel = forecastViewModel
+
+        binding.lastUpdateTime = forecastViewModel.dateTimeOfLastUpdate
+        binding.units = forecastViewModel.currentUnitsLiveData
+        binding.weather = forecastViewModel.currentWeather
+//        binding.viewmodel = forecastViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
