@@ -1,18 +1,13 @@
 package mente.vali.dailyweather.util
 
-import android.os.Build
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import java.util.*
 import kotlin.math.round
 
 private const val barToHgConvertingValue = 1.33322f
 private const val mphToMpsConvertingValue = 2.23694f
-// TODO comments
+
+/**
+ * Преобразование направления ветра в градусах в формат [String].
+ */
 fun windDegreeToWindDirection(degrees: Float): String {
     when (degrees) {
         in 0.0..11.25 -> return "Северное"
@@ -36,10 +31,16 @@ fun windDegreeToWindDirection(degrees: Float): String {
     }
 }
 
+/**
+ * Преобразование мБар в мм. рт. ст.
+ */
 fun barToHg(mbar: Int): Int {
     return round(mbar.toFloat() / barToHgConvertingValue).toInt()
 }
 
+/**
+ * Преобразование милей/ч в км/с.
+ */
 fun mphToMps(mph: Int): Int {
     return round(mph / mphToMpsConvertingValue).toInt()
 }

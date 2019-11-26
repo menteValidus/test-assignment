@@ -14,7 +14,9 @@ import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.ObservableWeather
 import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
+import mente.vali.dailyweather.domain.extensions.isSameDay
 import mente.vali.dailyweather.domain.repositories.SharedRepository
+import mente.vali.dailyweather.util.parseDate
 import java.util.*
 
 /**
@@ -34,6 +36,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     private val sharedRepository: SharedRepository =
         SharedRepository.getInstance(application.applicationContext)
 
+    // TODO move to sharedpreference
     private val preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
     /**
      * Текущие единицы измерения градуса.
@@ -41,41 +44,60 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     private val _currentUnitsLiveData: MutableLiveData<Units> =
         MutableLiveData(Units.get(sharedRepository.getSelectedUnit()))
     /**
-     * Свойство, отвечающее за модификацию поля [_currentUnitsLiveData].
+     * Свойство, представляющее поле [_currentUnitsLiveData].
      */
     val currentUnitsLiveData: LiveData<Units> = _currentUnitsLiveData
 
     /**
-     * TODO
+     * Погода на текущее время.
      */
     private val _currentWeather: MutableLiveData<ObservableWeather>
     /**
-     * Погода на текущее время.
+     * Свойство, представляющее поле [_currentWeather].
      */
     val currentWeather: LiveData<ObservableWeather>
 
+    /**
+     * Погода на завтра.
+     */
     private val _tomorrowWeather: MutableLiveData<DayWeather> = MutableLiveData(DayWeather())
-
+    /**
+     * Свойство, представляющее поле [_tomorrowWeather].
+     */
     val tomorrowWeather: LiveData<DayWeather> = _tomorrowWeather
 
     /**
      * Список всех 3-часовых прогнозов на 5 дней.
+     * Формат хранимых данных = Список<Пар<Дневного сдвига И Средней погоды на день>>
      */
     private val _daysWeatherList: MutableLiveData<List<Pair<Int, DayWeather>>> =
         MutableLiveData(listOf())
     /**
-     *
+     * Свойство, представляющее поле [_daysWeatherList].
      */
     val daysWeatherList: MutableLiveData<List<Pair<Int, DayWeather>>> = _daysWeatherList
 
+    /**
+     * Текущий город, по которому собираются все данные.
+     */
     private val _selectedCity: MutableLiveData<String> = MutableLiveData(sharedRepository.getCity())
-
+    /**
+     * Свойство, представляющее поле [_selectedCity].
+     */
     val selectedCity: LiveData<String> = _selectedCity
 
+    /**
+     * Время последнего обновления текущей погоды.
+     */
     private val _dateTimeOfLastUpdate: MutableLiveData<String>
-
+    /**
+     * Свойство, представляющее поле [_dateTimeOfLastUpdate].
+     */
     val dateTimeOfLastUpdate: LiveData<String>
 
+    /**
+     * Поле, хранящее данные о текущем активном экране.
+     */
     var currentScreenType: ScreenType = ScreenType.TODAY
 
     init {
@@ -90,10 +112,13 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
         sharedRepository.registerListener(preferenceChangeListener)
 
+        // Получение последних данных о текущей погоде.
         val (date, lastWeather) =
             sharedRepository.getWeatherDate() ?: "" to ObservableWeather()
 
-        if (date == "") {
+        // Если полученный из SharedPreferences прогноз не на сегодня, то скрывакм UI, пока не
+        // приду новые данные с сервера.
+        if (Date().isSameDay(parseDate(date))) {
             // TODO hide UI via LiveData bool value binded to isActive property in XML-layout.
         }
 
@@ -104,6 +129,9 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         acceptCurrentUnits()
     }
 
+    /**
+     * Метод, устанавливающий в системе текущий город.
+     */
     fun setCity(city: String) {
         _selectedCity.value = city
         sharedRepository.saveCity(city)
@@ -118,15 +146,15 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         sharedRepository.saveWeatherData(_dateTimeOfLastUpdate.value!!, currentWeather.value!!)
     }
 
-    // region Binding Methods
-
+    /**
+     * Метод, сохраняющий текущее время в поле [_dateTimeOfLastUpdate].
+     * Сохраняется время последнего сохранения.
+     */
     private fun rememberDateTimeOfUpdate() {
         val date = Date().presentationDateTimeFormat()
         _dateTimeOfLastUpdate.value = date
 
     }
-
-    // endregion
 
     /**
      * Wrapper для запроса данных с сервера API.
