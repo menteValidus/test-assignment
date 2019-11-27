@@ -38,5 +38,11 @@ class TodayWeatherFragment : Fragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        forecastViewModel.checkDateOfLastUpdate()
+    }
+
 
 }

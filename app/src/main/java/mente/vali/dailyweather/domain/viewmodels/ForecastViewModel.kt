@@ -239,6 +239,15 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    /** Проверка данных на актуальность **/
+    fun checkDateOfLastUpdate() = viewModelScope.launch {
+        val lastUpdate = _dateTimeOfLastUpdate.value ?: ""
+        if (lastUpdate == "" || !Date().isSameDay(parseDate(lastUpdate))) {
+            _isDataUnprepared.value = true
+            update()
+        }
+    }
+
     // endregion
 
     //region Private Methods

@@ -52,6 +52,12 @@ class MainActivity : AppCompatActivity() {
         initCallbacks()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.app_menu, menu)
         return true
