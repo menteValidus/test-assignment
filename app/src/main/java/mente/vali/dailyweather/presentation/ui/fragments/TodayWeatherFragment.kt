@@ -27,7 +27,6 @@ class TodayWeatherFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
         forecastViewModel.currentScreenType = ForecastViewModel.ScreenType.TODAY
@@ -35,28 +34,9 @@ class TodayWeatherFragment : Fragment() {
         binding.lastUpdateTime = forecastViewModel.dateTimeOfLastUpdate
         binding.units = forecastViewModel.currentUnitsLiveData
         binding.weather = forecastViewModel.currentWeather
-//        binding.viewmodel = forecastViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-//        srl_update_today.setOnRefreshListener {
-//            forecastViewModel.update()
-//            srl_update_today.isRefreshing = false
-//        }
-
-
-
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-        forecastViewModel.saveCurrentWeather()
     }
 
 

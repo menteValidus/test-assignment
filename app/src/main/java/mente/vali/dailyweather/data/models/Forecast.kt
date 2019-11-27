@@ -7,29 +7,19 @@ import mente.vali.dailyweather.util.mphToMps
 import java.util.*
 
 /**
- * Класс, хранящий прогноз погоды.
+ * Класс для работы со средними значениями целого дня.
+ *
+ * Стандартный конструктор принимает [List]<[WeatherByTime]> и присваивает его значение
+ * [weatherByTimeList].
+ *
+ * При вызове пустого конструктора все поля будут проинициализрованы стандартными значениями.
  */
 class Forecast(weatherList: List<WeatherByTime>) {
-    /**
-     * Список всех 3-часовых прогнозов.
-     */
+    /** Список всех 3-часовых прогнозов. */
     val weatherByTimeList: List<WeatherByTime> = weatherList
 
-    //TODO comments
-    val todayForecast: ObservableWeather
-        get() {
-            return ObservableWeather(weatherByTimeList[getCurrentHourID()])
-        }
-
     companion object {
-        // TODO comments
-        private fun getCurrentHourID(): Int {
-            val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-            return currentHour / 3
-        }
-        /**
-         * Парсинг полученного [JsonObject] с получением объекта [Forecast].
-         */
+        /** Парсинг полученного [JsonObject] с получением объекта [Forecast]. */
         fun parse(json: String): Forecast {
             val gson = GsonBuilder()
                 .registerTypeAdapter(

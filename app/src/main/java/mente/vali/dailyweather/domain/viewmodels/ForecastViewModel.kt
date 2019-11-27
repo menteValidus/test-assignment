@@ -157,42 +157,16 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
             _isDataUnprepared.value = true
         }
 
+        // Инициализация текущей погоды полученными из репозитория значениями.
         _currentWeather = MutableLiveData(lastWeather)
         currentWeather = _currentWeather
+        // Инициализация даты последнего обновления полученным из репозитория значением.
         _dateTimeOfLastUpdate = MutableLiveData(date)
         dateTimeOfLastUpdate = _dateTimeOfLastUpdate
-        acceptCurrentUnits()
+        // Сообщить API коммуникатору, какие единицы измерения будут использоваться в приложении.
+        submitUnitsToApiCommunicator()
 
         update()
-    }
-
-    /**
-     * Метод, устанавливающий в системе текущий город.
-     */
-    fun setCity(city: String) {
-        _selectedCity.value = city
-        sharedRepository.saveCity(city)
-        forecastApiCommunicator.setCityID(city)
-        // При смене города данные становятся неактуальны.
-        _isDataUnprepared.value = true
-        update()
-    }
-
-    /**
-     * Метод, передающий данные текущей погоды в репозиторий.
-     */
-    fun saveCurrentWeather() {
-        sharedRepository.saveWeatherData(_dateTimeOfLastUpdate.value!!, currentWeather.value!!)
-    }
-
-    /**
-     * Метод, сохраняющий текущее время в поле [_dateTimeOfLastUpdate].
-     * Сохраняется время последнего сохранения.
-     */
-    private fun rememberDateTimeOfUpdate() {
-        val date = Date().presentationDateTimeFormat()
-        _dateTimeOfLastUpdate.value = date
-
     }
 
     /**
@@ -201,8 +175,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     fun update() = viewModelScope.launch {
         // Сообщаем, что идёт загрузка данных
         _isFetching.value = true
-        // Если отерыт экран погоды на сегодня, то будет запрос погоды только на сегодня.
-//        if (currentScreenType == ScreenType.TODAY) {
+        // Запрос погоды только на сегодня.
         forecastApiCommunicator.requestWeatherByNow(
             currentUnitsLiveData.value?.getUnitString(),
             Response.Listener { response ->
@@ -211,18 +184,21 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                 rememberDateTimeOfUpdate()
 
                 _isFetching.value = false
-                // Если данные были неподходящими, то после получения данных необходимо сбросить
-                // флаг.
+                // Если данные были неинициализированными, то после получения данных необходимо
+                // сбросить флаг.
                 if (_isDataUnprepared.value!!) {
                     _isDataUnprepared.value = false
                 }
+                // Сохранить полученную текущую погоду.
+                saveCurrentWeather()
             },
             Response.ErrorListener {
                 displayMessage(appContext, "Проблемы соединения с сервером.")
                 _isFetching.value = false
             }
         )
-//        } else {
+
+        // Запрос погоды на 5 дней.
         forecastApiCommunicator.requestForecast(
             currentUnitsLiveData.value?.getUnitString(),
             Response.Listener { response ->
@@ -257,14 +233,41 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                 displayMessage(appContext, "Проблемы соединения с сервером.")
                 _isFetching.value = false
             })
-//        }
     }
 
+    /**
+     * Метод, устанавливающий в системе текущий город.
+     */
+    fun setCity(city: String) {
+        _selectedCity.value = city
+        sharedRepository.saveCity(city)
+        forecastApiCommunicator.setCityID(city)
+        // При смене города данные становятся неактуальны.
+        _isDataUnprepared.value = true
+        update()
+    }
+
+    /**
+     * Метод, передающий данные текущей погоды в репозиторий.
+     */
+    private fun saveCurrentWeather() {
+        sharedRepository.saveWeatherData(_dateTimeOfLastUpdate.value!!, currentWeather.value!!)
+    }
+
+    /**
+     * Метод, сохраняющий текущее время в поле [_dateTimeOfLastUpdate].
+     * Сохраняется время последнего сохранения.
+     */
+    private fun rememberDateTimeOfUpdate() {
+        val date = Date().presentationDateTimeFormat()
+        _dateTimeOfLastUpdate.value = date
+
+    }
 
     /**
      * Метод, передающий текущие единицы исзмерения в коммуникатор для модификации http-запроса.
      */
-    private fun acceptCurrentUnits() {
+    private fun submitUnitsToApiCommunicator() {
         forecastApiCommunicator.units = currentUnitsLiveData.value!!.getUnitString()
     }
 

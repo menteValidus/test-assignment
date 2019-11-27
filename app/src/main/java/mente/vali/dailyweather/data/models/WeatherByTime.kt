@@ -1,8 +1,6 @@
 package mente.vali.dailyweather.data.models
 
-/**
- * Класс, предназначенный для хранения 3-часовых отчётов по погоде.
- */
+/** Класс, предназначенный для хранения 3-часовых отчётов по погоде. */
 data class WeatherByTime(
     val date: Long,
     val temperature: Short,
@@ -18,9 +16,7 @@ data class WeatherByTime(
     val snowVolume: Int?
 )
 
-/**
- * Состояния погоды.
- */
+/** Состояния погоды. */
 enum class WeatherCondition {
     CLEAR {
         override fun getConditionName() = "Ясно"
@@ -76,6 +72,7 @@ enum class WeatherCondition {
     companion object {
         /**
          * Статический метод для конвертации строки в [WeatherCondition] при получении строки из API.
+         *
          * Стандартное значение [WeatherCondition.NONE].
          */
         fun getByNameFromApi(conditionString: String): WeatherCondition {
@@ -101,6 +98,7 @@ enum class WeatherCondition {
 
         /**
          * Статический метод для конвертации строки в [WeatherCondition] при получении строки из API.
+         *
          * Стандартное значение [WeatherCondition.NONE].
          */
         fun getByName(conditionString: String): WeatherCondition {

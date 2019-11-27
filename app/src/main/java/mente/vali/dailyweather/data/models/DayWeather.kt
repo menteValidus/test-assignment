@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 /**
- * TODO
+ * Класс для работы со средними значениями целого дня.
+ * Стандартный конструктор принимает список из отчётов по погоде на 1 день и инициилизирует поля
+ * средними значениями из списка.
+ * При вызове пустого конструктора все поля будут проинициализрованы стандартными значениями.
  */
 class DayWeather(dayWeatherByTimeList: List<WeatherByTime>) {
 
@@ -28,7 +31,10 @@ class DayWeather(dayWeatherByTimeList: List<WeatherByTime>) {
         var humiditySum = 0
         var pressureSum = 0
         var speedSum = 0
+
+        // Если передан полный прогноз.
         if (dayWeatherByTimeList.size == DAY_CHUNKS) {
+            // Получить сумму по всем полям.
             dayWeatherByTimeList.forEach {
                 tempSum += it.temperature
                 humiditySum += it.humidity
@@ -36,6 +42,7 @@ class DayWeather(dayWeatherByTimeList: List<WeatherByTime>) {
                 speedSum += it.windSpeed
             }
         }
+        // Получить средние значения.
         val avgTemperature = (tempSum / DAY_CHUNKS).toShort()
         val avgHumidity = (humiditySum / DAY_CHUNKS).toShort()
         val avgPressure = pressureSum / DAY_CHUNKS
@@ -63,9 +70,7 @@ class DayWeather(dayWeatherByTimeList: List<WeatherByTime>) {
     constructor() : this(listOf())
 
     companion object {
-        /**
-         * Количество обрабатываемых отчётов по одному дню.
-         */
+        /** Количество обрабатываемых отчётов по одному дню. */
         private const val DAY_CHUNKS = 8
     }
 }

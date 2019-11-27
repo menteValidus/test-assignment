@@ -5,7 +5,16 @@ import com.google.gson.GsonBuilder
 import mente.vali.dailyweather.domain.deserializers.WeatherDeserializer
 import mente.vali.dailyweather.util.windDegreeToWindDirection
 
-// TODO add comments
+/**
+ * Класс для работы с показаниями погоды одного отчёта (3 часа).
+ *
+ * Стандартный конструктор принимает данные всех полей и инициализирует их этими значениями.
+ *
+ * При передачи в конструктор [WeatherByTime] все поля буду проинициализированы значениями из
+ * [WeatherByTime].
+ *
+ * При вызове пустого конструктора все поля будут проинициализрованы стандартными значениями.
+ */
 class ObservableWeather (
     temperature: Short,
     weatherCondition: WeatherCondition,
