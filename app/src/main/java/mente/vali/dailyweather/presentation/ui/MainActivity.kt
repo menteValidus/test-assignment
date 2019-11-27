@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.activity.OnBackPressedCallback
@@ -64,14 +66,16 @@ class MainActivity : AppCompatActivity() {
 
         // Прослушивание для определения, когда происходит запрос данных.
         forecastViewModel.isFetching.observe(this, Observer { isFetching ->
-            if (isFetching) {
-                // Если данные являются неподходящими.
-                if (forecastViewModel.isDataUnprepared.value!!) {
-                    // То обновляем UI с сокрытием
-                    showProgressView()
-                } else {
-                    showProgressView(false)
-                }
+            if (!isFetching) {
+                srl_update.isRefreshing = false
+            }
+        })
+
+        forecastViewModel.isDataUnprepared.observe(this, Observer { isDataUnprepared ->
+            // Если данные являются неинициализированными.
+            if (isDataUnprepared) {
+                // То обновляем UI с сокрытием
+                showProgressView()
             } else {
                 hideProgressView()
             }
@@ -80,12 +84,12 @@ class MainActivity : AppCompatActivity() {
         // При совершении действия Drag to update - происходит обновление.
         srl_update.setOnRefreshListener {
             forecastViewModel.update()
-            srl_update.isRefreshing = false
+            //srl_update.isRefreshing = false
         }
 
         srl_update.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
-                when(forecastViewModel.currentScreenType) {
+                when (forecastViewModel.currentScreenType) {
                     ForecastViewModel.ScreenType.TODAY -> navigateToTomorrow()
                     ForecastViewModel.ScreenType.TOMORROW -> navigateToFiveDays()
                     ForecastViewModel.ScreenType.FIVE_DAYS -> return super.onSwipeLeft()
@@ -94,13 +98,14 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwipeRight() {
-                when(forecastViewModel.currentScreenType) {
+                when (forecastViewModel.currentScreenType) {
                     ForecastViewModel.ScreenType.TODAY -> return super.onSwipeRight()
                     ForecastViewModel.ScreenType.TOMORROW -> navigateToToday()
                     ForecastViewModel.ScreenType.FIVE_DAYS -> navigateToTomorrow()
                 }
             }
         })
+
 
         // Обработка нажатия системной кнопки "Back".
         val callback = object : OnBackPressedCallback(true) {
@@ -117,9 +122,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun showProgressView(isHiding: Boolean = true) {
         rl_progress.visibility = VISIBLE
-        if (isHiding) {
-            nav_host_fragment.view?.visibility = GONE
-        }
+        nav_host_fragment.view?.visibility = GONE
     }
 
     /**

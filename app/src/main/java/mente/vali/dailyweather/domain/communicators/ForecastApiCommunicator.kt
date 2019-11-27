@@ -1,13 +1,11 @@
 package mente.vali.dailyweather.domain.communicators
 
 import android.content.Context
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 import org.json.JSONObject
 
 /**
@@ -29,6 +27,7 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
      * Поле, определяющее, какая система мер используется при вызове к API.
      */
     var units = "metric"
+
     fun setCityID(city: String) {
         cityID = citiesIDMap[city] ?: "484907"
     }
@@ -36,31 +35,42 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     /**
      * Метод, производящий запрос прогноза на 5 дней с сервера.
      */
-    fun requestForecast(units: String?,listener: Response.Listener<JSONObject>) {
-        request(units, listener, generateForecastApiUrl())
+    fun requestForecast(
+        units: String?,
+        responseListener: Response.Listener<JSONObject>,
+        errorListener: Response.ErrorListener
+    ) {
+        request(units, generateForecastApiUrl(), responseListener, errorListener)
     }
 
     /**
      * Метод, производящий запрос текущей погоды с сервера.
      */
-    fun requestWeatherByNow(units: String?,listener: Response.Listener<JSONObject>) {
-        request(units, listener, generateWeatherApiUrl())
+    fun requestWeatherByNow(
+        units: String?,
+        responseListener: Response.Listener<JSONObject>,
+        errorListener: Response.ErrorListener
+    ) {
+        request(units, generateWeatherApiUrl(), responseListener, errorListener)
     }
 
     /**
      * Общий метод запроса данных с сервера.
      */
-    private fun request(units: String?, listener: Response.Listener<JSONObject>, url: String) {
+    private fun request(
+        units: String?,
+        url: String,
+        responseListener: Response.Listener<JSONObject>,
+        errorListener: Response.ErrorListener
+    ) {
         this.units = units ?: "metric"
 
         val request = JsonObjectRequest(
             Request.Method.GET,
             url,
             null,
-            listener,
-            Response.ErrorListener {
-                Log.d("test", "Error! ${it.message}")
-            }
+            responseListener,
+            errorListener
         )
 
         add(request)

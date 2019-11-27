@@ -16,6 +16,7 @@ import mente.vali.dailyweather.data.models.WeatherByTime
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.extensions.isSameDay
 import mente.vali.dailyweather.domain.repositories.SharedRepository
+import mente.vali.dailyweather.util.displayMessage
 import mente.vali.dailyweather.util.parseDate
 import java.util.*
 
@@ -213,6 +214,10 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                     if (_isDataUnappropriated.value!!) {
                         _isDataUnappropriated.value = false
                     }
+                },
+                Response.ErrorListener {
+                    displayMessage(appContext, "Проблемы соединения с сервером.")
+                    _isFetching.value = false
                 }
             )
         } else {
@@ -240,11 +245,15 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                     daysWeatherList.value = daysWeatherMutableList
 
                     _isFetching.value = false
-                    // Если данные были неподходящими, то после получения данных необходимо сбросить
-                    // флаг.
+                    // Если данные были неинициализированными, то после получения данных необходимо
+                    // сбросить флаг.
                     if (_isDataUnappropriated.value!!) {
                         _isDataUnappropriated.value = false
                     }
+                },
+                Response.ErrorListener {
+                    displayMessage(appContext, "Проблемы соединения с сервером.")
+                    _isFetching.value = false
                 })
         }
     }
