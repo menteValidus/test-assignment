@@ -25,6 +25,8 @@ import java.util.*
  * Основная ViewModel приложения.
  */
 class ForecastViewModel(application: Application) : AndroidViewModel(application) {
+    // region Private Properties
+
     /**
      * Context приложения.
      * Применяется для вывода сообщений об ошибках.
@@ -136,6 +138,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      */
     private val preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
 
+    // endregion
+
     init {
         // Прослушивание изменений текущих единиц измерения - C/F.
         preferenceChangeListener =
@@ -170,6 +174,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
         update()
     }
+
+    // region Public Methods
 
     /**
      * Wrapper для запроса данных с сервера API.
@@ -249,9 +255,11 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         update()
     }
 
-    /**
-     * Метод, передающий данные текущей погоды в репозиторий.
-     */
+    // endregion
+
+    //region Private Methods
+
+    /** Метод, передающий данные текущей погоды в репозиторий. */
     private fun saveCurrentWeather() {
         sharedRepository.saveWeatherData(_dateTimeOfLastUpdate.value!!, currentWeather.value!!)
     }
@@ -266,10 +274,10 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
     }
 
-    /**
-     * Метод, передающий текущие единицы исзмерения в коммуникатор для модификации http-запроса.
-     */
+    /** Метод, передающий текущие единицы исзмерения в коммуникатор для модификации http-запроса. */
     private fun submitUnitsToApiCommunicator() {
         forecastApiCommunicator.units = currentUnitsLiveData.value!!.getUnitString()
     }
+
+    //endregion
 }

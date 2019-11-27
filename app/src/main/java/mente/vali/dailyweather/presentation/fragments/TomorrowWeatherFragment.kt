@@ -12,14 +12,10 @@ import mente.vali.dailyweather.databinding.FragmentTomorrowWeatherBinding
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 import mente.vali.dailyweather.presentation.activities.MainActivity
 
-/**
- * Подкласс [Fragment], представляющий информацию о погоде на завтра.
- */
+/** Подкласс [Fragment], представляющий информацию о погоде на завтра. */
 class TomorrowWeatherFragment : Fragment() {
 
-    /**
-     * Поле [ForecastViewModel] для работы с данными, получаемыми от API.
-     */
+    /** Поле [ForecastViewModel] для работы с данными, получаемыми от API. */
     private lateinit var forecastViewModel: ForecastViewModel
 
     override fun onCreateView(
@@ -31,8 +27,6 @@ class TomorrowWeatherFragment : Fragment() {
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
         // Сообщаем ViewModel, какой сейчас экран.
         forecastViewModel.currentScreenType = ScreenType.TOMORROW
-
-        forecastViewModel.update()
 
         // Binding значений.
         binding.weather = forecastViewModel.tomorrowWeather

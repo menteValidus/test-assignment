@@ -72,13 +72,13 @@ class MainActivity : AppCompatActivity() {
 
     // region Initializators
 
-    /** Инициализация основных полей приложения. */
+    /** Инициализация основных полей Activity. */
     private fun initFields() {
 
         navController = nav_host_fragment.findNavController()
     }
 
-    /** Инициализация всех Callback приложения. */
+    /** Инициализация всех Callback Activity. */
     private fun initCallbacks() {
         // Обработка нажатия системной кнопки "Back".
         val callback = object : OnBackPressedCallback(true) {
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, callback)
     }
 
-    /** Инициализация всех Observers приложения. */
+    /** Инициализация всех Observers Activity. */
     private fun initObservers() {
         // Прослушивание для определения, когда происходит запрос данных.
         forecastViewModel.isFetching.observe(this, Observer { isFetching ->
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    /** Инициализация всех Listeners приложения. */
+    /** Инициализация всех Listeners Activity. */
     private fun initListeners() {
         // Инициализация Listener, определяющего действия в зависимости от выбранного пункта
         // BottomNavigationView.
@@ -164,17 +164,13 @@ class MainActivity : AppCompatActivity() {
 
     // region UI hiders/showers
 
-    /**
-     * Отобразить показатель прогресса загрузки данных.
-     */
+    /** Отобразить показатель прогресса загрузки данных. */
     private fun showProgressView(isHiding: Boolean = true) {
         rl_progress.visibility = VISIBLE
         nav_host_fragment.view?.visibility = GONE
     }
 
-    /**
-     * Скрыть показатель прогресса загрузки данных.
-     */
+    /** Скрыть показатель прогресса загрузки данных. */
     private fun hideProgressView() {
         rl_progress.visibility = GONE
         nav_host_fragment.view?.visibility = VISIBLE

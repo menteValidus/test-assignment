@@ -16,21 +16,27 @@ import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 import mente.vali.dailyweather.presentation.activities.MainActivity
 
 /**
- * A simple [Fragment] subclass.
- */
+ * Подкласс [Fragment], представляющий информацию о текущем городе,
+ * а также позволяющий его выбирать.
+ **/
 class HeaderFragment : Fragment() {
+    /** Поле [ForecastViewModel] для работы с данными, получаемыми от API. */
     private lateinit var forecastViewModel: ForecastViewModel
+    /** Поле [ArrayAdapter] для работы с Spinner в layout. */
+    private lateinit var adapter: ArrayAdapter<String>
+
+    // region onMethods
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding =
-            FragmentHeaderBinding.inflate(inflater, container, false)
-
-        binding.lifecycleOwner = this
         // Получить ViewModel из MainActivity.
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
+
+        val binding =
+            FragmentHeaderBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
         // Binding значений.
         binding.viewmodel = forecastViewModel
 
@@ -39,10 +45,7 @@ class HeaderFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        // Инициализация адаптера для отображения списка городов в Spinner.
-        val adapter = ArrayAdapter(
-            context!!, android.R.layout.simple_spinner_item, ForecastApiCommunicator.getCitiesList()
-        )
+        initAdapters()
 
         sp_cities.adapter = adapter
         // Установка выбранного города из значения полученного из репозитория в ViewModel.
@@ -67,4 +70,17 @@ class HeaderFragment : Fragment() {
 
         }
     }
+
+    // endregion
+
+    // region Initializators
+
+    private fun initAdapters() {
+        // Инициализация адаптера для отображения списка городов в Spinner.
+        adapter = ArrayAdapter(
+            context!!, android.R.layout.simple_spinner_item, ForecastApiCommunicator.getCitiesList()
+        )
+    }
+
+    // endregion
 }

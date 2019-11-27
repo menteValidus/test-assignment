@@ -16,9 +16,7 @@ import mente.vali.dailyweather.presentation.activities.MainActivity
  */
 class TodayWeatherFragment : Fragment() {
 
-    /**
-     * Поле [ForecastViewModel] для работы с данными, получаемыми от API.
-     */
+    /** Поле [ForecastViewModel] для работы с данными, получаемыми от API. */
     private lateinit var forecastViewModel: ForecastViewModel
 
     override fun onCreateView(
