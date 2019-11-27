@@ -3,14 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_days_weather"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="@dimen/divider_small_1"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/list_item" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_avg_temp_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/average_temperature_header_string"
+            android:textSize="@dimen/text_middle_24" />
+
+        <View
+            android:id="@+id/v_avg_temp_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_small_1"
+            android:layout_below="@id/tv_avg_temp_header"
+            android:layout_marginStart="@dimen/spacing_big_24"
+            android:layout_marginEnd="@dimen/spacing_big_24"
+            android:background="@android:color/darker_gray" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_days_weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:layout_below="@id/v_avg_temp_divider"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/list_item" />
+
+    </RelativeLayout>
 
 </layout>

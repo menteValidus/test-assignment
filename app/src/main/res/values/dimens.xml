@@ -12,6 +12,7 @@
     <dimen name="item_size_huge_96">96dp</dimen>
 <!--    Text Size-->
     <dimen name="text_small_16">16sp</dimen>
+    <dimen name="text_middle_24">24sp</dimen>
     <dimen name="text_normal_32">32sp</dimen>
     <dimen name="text_huge_64">64sp</dimen>
 <!--    Misc-->

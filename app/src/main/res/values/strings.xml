@@ -20,4 +20,5 @@
     <string name="navigation_today">Сегодня</string>
     <string name="navigation_tomorrow">Завтра</string>
     <string name="navigation_five_days">На 5 дней</string>
+    <string name="average_temperature_header_string">Средняя температура за день:</string>
 </resources>
