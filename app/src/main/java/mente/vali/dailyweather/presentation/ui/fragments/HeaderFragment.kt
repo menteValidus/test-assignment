@@ -28,24 +28,27 @@ class HeaderFragment : Fragment() {
         val binding =
             FragmentHeaderBinding.inflate(inflater, container, false)
 
-        forecastViewModel = (activity as MainActivity).getSharedViewModel()
         binding.lifecycleOwner = this
         // Получить ViewModel из MainActivity.
+        forecastViewModel = (activity as MainActivity).getSharedViewModel()
+        // Binding значений.
         binding.viewmodel = forecastViewModel
-        return binding.root
 
+        return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-
+        // Инициализация адаптера для отображения списка городов в Spinner.
         val adapter = ArrayAdapter(
             context!!, android.R.layout.simple_spinner_item, ForecastApiCommunicator.getCitiesList()
         )
 
         sp_cities.adapter = adapter
+        // Установка выбранного города из значения полученного из репозитория в ViewModel.
         sp_cities.setSelection(adapter.getPosition(forecastViewModel.selectedCity.value))
 
+        // Сообщать ViewModel о выборе нового города.
         sp_cities.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 

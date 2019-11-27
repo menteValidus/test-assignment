@@ -21,7 +21,7 @@ import mente.vali.dailyweather.presentation.ui.MainActivity
 import mente.vali.dailyweather.util.OnSwipeTouchListener
 
 /**
- * A simple [Fragment] subclass.
+ * Подкласс [Fragment], представляющий информацию о погоде на завтра.
  */
 class TomorrowWeatherFragment : Fragment() {
 

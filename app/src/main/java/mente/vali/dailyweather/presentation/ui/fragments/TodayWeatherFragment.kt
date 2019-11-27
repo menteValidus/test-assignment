@@ -28,9 +28,12 @@ class TodayWeatherFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
+        // Получить ViewModel из MainActivity.
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
+        // Сообщить ViewModel, какой сейчас экран активен.
         forecastViewModel.currentScreenType = ForecastViewModel.ScreenType.TODAY
 
+        // Binding значений.
         binding.lastUpdateTime = forecastViewModel.dateTimeOfLastUpdate
         binding.units = forecastViewModel.currentUnitsLiveData
         binding.weather = forecastViewModel.currentWeather

@@ -22,7 +22,7 @@ import mente.vali.dailyweather.presentation.ui.MainActivity
 import mente.vali.dailyweather.util.OnSwipeTouchListener
 
 /**
- * A simple [Fragment] subclass.
+ * Подкласс [Fragment], представляющий информацию о погоде на 5 дней.
  */
 class FiveDaysFragment : Fragment() {
     private lateinit var forecastViewModel: ForecastViewModel
@@ -44,15 +44,17 @@ class FiveDaysFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        // Инициализировать адаптер для отображения данных в RecyclerView посредством binding.
         adapter = DaysWeatherAdapter(viewModel = forecastViewModel)
+        // Добавить в RecyclerView разделитель между элементами.
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         binding.rvDaysWeather.addItemDecoration(divider)
 
         binding.rvDaysWeather.adapter = adapter
-        val list = forecastViewModel.daysWeatherList.value!!
-        adapter.replaceItems(list)
 
+        // Прослушивать список погоды на 5 дней.
         forecastViewModel.daysWeatherList.observe(viewLifecycleOwner, Observer {
+            // Если произошло изменение заменить элементы в адаптере.
             adapter.replaceItems(it)
         })
     }
