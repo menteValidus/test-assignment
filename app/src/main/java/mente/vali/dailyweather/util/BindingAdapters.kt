@@ -8,9 +8,7 @@ import mente.vali.dailyweather.data.enums.Units
 import mente.vali.dailyweather.data.enums.WeatherCondition
 import mente.vali.dailyweather.domain.extensions.presentationDateWithDayOffsetFormat
 
-/**
- * TODO
- */
+/** Адаптер для отображения [temperature] с текущими [degreesUnit] в [textView]. */
 @BindingAdapter(value = ["app:degreesUnit", "app:temperature"], requireAll = true)
 fun setTemperatureString(
     textView: TextView,
@@ -24,6 +22,10 @@ fun setTemperatureString(
     )
 }
 
+/**
+ * Адаптер для отображения уровня температуры - выше нуля или ниже нуля.
+ * В зависимости от [temperature] и [degreesUnit] устанавливается изображение в [imageView].
+ **/
 @BindingAdapter(value = ["app:degreesUnit", "app:temperature"], requireAll = true)
 fun setTemperatureDrawable(
     imageView: ImageView,
@@ -48,6 +50,10 @@ fun setTemperatureDrawable(
     }
 }
 
+/**
+ * Адаптер для отображения текущей погоды.
+ * В зависимости от [weatherCondition] устанавливается изображение в [imageView].
+ **/
 @BindingAdapter("app:weatherCondition")
 fun setWeatherConditionDrawable(imageView: ImageView, weatherCondition: WeatherCondition) {
     when (weatherCondition) {
@@ -70,16 +76,22 @@ fun setWeatherConditionDrawable(imageView: ImageView, weatherCondition: WeatherC
     }
 }
 
+/**
+ * Адаптер для текстового отображения текущей погоды.
+ * В зависимости от [weatherCondition] устанавливается текст в [textView].
+ **/
 @BindingAdapter("app:weatherCondition")
 fun setWeatherConditionText(textView: TextView, weatherCondition: WeatherCondition) {
     textView.text = weatherCondition.getConditionName()
 }
 
+/** Адаптер для текстового отображения [percents] в [textView]. */
 @BindingAdapter("app:percentage")
 fun setPercentageText(textView: TextView, percents: Short) {
     textView.text = textView.context.resources.getString(R.string.percentage_placeholder, percents)
 }
 
+/** Адаптер для текстового отображения [pressure] в [textView]. */
 @BindingAdapter("app:pressure")
 fun setPressureText(textView: TextView, pressure: Int) {
     textView.text = textView.context.resources.getString(
@@ -87,6 +99,12 @@ fun setPressureText(textView: TextView, pressure: Int) {
         barToHg(pressure).toString()
     )
 }
+
+/**
+ * Адаптер для конвертирования [dayOffset] относительно текущей даты в [textView].
+ * Если передаётся [dayOffset] = 0, то текст устанавливается "Сегодня".
+ * Иначе устанавливается дата в формате "День Месяца", например, "6 ноября".
+ **/
 @BindingAdapter("app:dayOffset")
 fun setDayOffsetText(textView: TextView, dayOffset: Int) {
     if (dayOffset > 0) {
@@ -96,6 +114,7 @@ fun setDayOffsetText(textView: TextView, dayOffset: Int) {
     }
 }
 
+/** Адаптер для текстового отображения [speed] в [textView].. */
 @BindingAdapter(value = ["app:degreesUnit", "app:speed"], requireAll = true)
 fun setSpeedText(textView: TextView, degreesUnit: Units, speed: Int) {
     if (degreesUnit == Units.FAHRENHEIT) {
