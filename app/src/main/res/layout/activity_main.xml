@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.ui.MainActivity">
+    tools:context=".presentation.activities.MainActivity">
 
 
 
 <!--    City selection-->
     <fragment
         android:id="@+id/fr_city_selection"
-        android:name="mente.vali.dailyweather.presentation.ui.fragments.HeaderFragment"
+        android:name="mente.vali.dailyweather.presentation.fragments.HeaderFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_header" />

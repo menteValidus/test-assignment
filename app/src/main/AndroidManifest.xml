@@ -14,13 +14,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".presentation.ui.SettingsActivity"
+            android:name=".presentation.activities.SettingsActivity"
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="mente.vali.dailyweather.presentation.ui.MainActivity" />
+                android:value="mente.vali.dailyweather.presentation.activities.MainActivity" />
         </activity>
-        <activity android:name=".presentation.ui.MainActivity"
+        <activity android:name=".presentation.activities.MainActivity"
             android:launchMode="singleTop">
 
             <intent-filter>

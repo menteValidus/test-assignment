@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/todayWeatherFragment"
-        android:name="mente.vali.dailyweather.presentation.ui.fragments.TodayWeatherFragment"
+        android:name="mente.vali.dailyweather.presentation.fragments.TodayWeatherFragment"
         android:label="fragment_today_weather"
         tools:layout="@layout/fragment_today_weather" >
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/tomorrowWeatherFragment"
-        android:name="mente.vali.dailyweather.presentation.ui.fragments.TomorrowWeatherFragment"
+        android:name="mente.vali.dailyweather.presentation.fragments.TomorrowWeatherFragment"
         android:label="fragment_tomorrow_weather"
         tools:layout="@layout/fragment_tomorrow_weather" >
         <action
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/fiveDaysFragment"
-        android:name="mente.vali.dailyweather.presentation.ui.fragments.FiveDaysFragment"
+        android:name="mente.vali.dailyweather.presentation.fragments.FiveDaysFragment"
         android:label="fragment_five_days"
         tools:layout="@layout/fragment_five_days" >
         <action

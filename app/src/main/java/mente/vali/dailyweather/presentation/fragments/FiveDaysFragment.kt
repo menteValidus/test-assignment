@@ -1,4 +1,4 @@
-package mente.vali.dailyweather.presentation.ui.fragments
+package mente.vali.dailyweather.presentation.fragments
 
 
 import android.os.Bundle
@@ -6,21 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_five_days.*
 
-import mente.vali.dailyweather.R
 import mente.vali.dailyweather.data.enums.ScreenType
 import mente.vali.dailyweather.databinding.FragmentFiveDaysBinding
 import mente.vali.dailyweather.domain.adapters.DaysWeatherAdapter
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
-import mente.vali.dailyweather.presentation.ui.MainActivity
-import mente.vali.dailyweather.util.OnSwipeTouchListener
+import mente.vali.dailyweather.presentation.activities.MainActivity
 
 /**
  * Подкласс [Fragment], представляющий информацию о погоде на 5 дней.

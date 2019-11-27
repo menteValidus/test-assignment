@@ -1,4 +1,4 @@
-package mente.vali.dailyweather.presentation.ui.fragments
+package mente.vali.dailyweather.presentation.fragments
 
 
 import android.os.Bundle
@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_header.*
 import mente.vali.dailyweather.databinding.FragmentHeaderBinding
 import mente.vali.dailyweather.domain.communicators.ForecastApiCommunicator
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
-import mente.vali.dailyweather.presentation.ui.MainActivity
+import mente.vali.dailyweather.presentation.activities.MainActivity
 
 /**
  * A simple [Fragment] subclass.

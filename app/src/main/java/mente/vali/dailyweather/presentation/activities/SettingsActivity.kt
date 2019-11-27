@@ -1,4 +1,4 @@
-package mente.vali.dailyweather.presentation.ui
+package mente.vali.dailyweather.presentation.activities
 
 import android.os.Bundle
 import android.view.MenuItem
