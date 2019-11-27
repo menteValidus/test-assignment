@@ -22,8 +22,18 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
     /** Поле, определяющее, какая система мер используется при вызове к API. */
     var units = "metric"
 
-    fun setCityID(city: String) {
-        cityID = citiesIDMap[city] ?: "484907"
+    /**
+     * Установить ID переданного города [city].
+     * Если этот город уже установлен в [cityID], то возвращается true, иначе false.
+     **/
+    fun setCityID(city: String): Boolean {
+        // Если предыдущий город такой же как и новый,
+        return if (cityID == citiesIDMap[city]) { // то возвращаем false.
+            false
+        } else { // иначе true.
+            cityID = citiesIDMap[city] ?: "484907"
+            true
+        }
     }
 
     /** Метод, производящий запрос прогноза на 5 дней с сервера. */

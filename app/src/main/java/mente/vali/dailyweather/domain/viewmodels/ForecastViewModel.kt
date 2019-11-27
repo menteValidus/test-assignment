@@ -113,6 +113,9 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     init {
         initListeners()
 
+        // Передать в коммуникатор город, полученный из репозитория.
+        forecastApiCommunicator.setCityID(_selectedCity.value!!)
+
         // Получение последних данных о текущей погоде.
         val (date, lastWeather) =
             sharedRepository.getWeatherDate() ?: "" to ObservableWeather()
@@ -227,10 +230,13 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     fun setCity(city: String) {
         _selectedCity.value = city
         sharedRepository.saveCity(city)
-        forecastApiCommunicator.setCityID(city)
-        // При смене города данные становятся неактуальны.
-        _isDataUnprepared.value = true
-        update()
+        // Если setCityID возвращает true - город изменился,
+        // false - не изменился
+        if (forecastApiCommunicator.setCityID(city) == true) {
+            // При смене города данные становятся неактуальны.
+            _isDataUnprepared.value = true
+            update()
+        }
     }
 
     // endregion
