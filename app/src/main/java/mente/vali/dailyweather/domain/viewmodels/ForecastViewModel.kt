@@ -61,7 +61,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /** Свойство, представляющее поле [_tomorrowWeather]. */
     val tomorrowWeather: LiveData<ObservableWeather> by lazy {
         _isDataUnprepared.value = true
-        update()
+        //update()
         _tomorrowWeather
     }
 
@@ -152,7 +152,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                     val unitsPref = sharedPreferences.getString(key, "metric")!!
                     _currentUnitsLiveData.value = Units.get(unitsPref)
                     _isDataUnprepared.value = true
-                    update()
+                    //update()
                 }
             }
         sharedRepository.registerListener(preferenceChangeListener)
@@ -168,7 +168,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         _isFetching.value = true
         // Запрос погоды только на сегодня.
         forecastApiCommunicator.requestWeatherByNow(
-            currentUnitsLiveData.value?.getUnitString(),
+            _currentUnitsLiveData.value?.getUnitString(),
             Response.Listener { response ->
                 val weather = ObservableWeather.parseSingle(response.toString())
                 _currentWeather.value!!.setValues(weather)
@@ -191,7 +191,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
 
         // Запрос погоды на 5 дней.
         forecastApiCommunicator.requestForecast(
-            currentUnitsLiveData.value?.getUnitString(),
+            _currentUnitsLiveData.value?.getUnitString(),
             Response.Listener { response ->
                 // Получаем список всех прогнозов.
                 val list = Forecast.parse(response.toString())
@@ -235,7 +235,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         if (forecastApiCommunicator.setCityID(city) == true) {
             // При смене города данные становятся неактуальны.
             _isDataUnprepared.value = true
-            update()
+            //update()
         }
     }
 
@@ -244,7 +244,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         val lastUpdate = _dateTimeOfLastUpdate.value ?: ""
         if (lastUpdate == "" || !Date().isSameDay(parseDate(lastUpdate))) {
             _isDataUnprepared.value = true
-            update()
+            //update()
         }
     }
 

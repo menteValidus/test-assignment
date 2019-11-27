@@ -109,6 +109,7 @@ class MainActivity : AppCompatActivity() {
             // Если данные являются неинициализированными,
             if (isDataUnprepared) { // То обновляем UI с сокрытием,
                 showProgressView()
+                forecastViewModel.update()
             } else { // Иначе показываем UI.
                 hideProgressView()
             }

@@ -42,6 +42,7 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
         responseListener: Response.Listener<JSONObject>,
         errorListener: Response.ErrorListener
     ) {
+        this.units = units ?: "metric"
         request(units, generateForecastApiUrl(), responseListener, errorListener)
     }
 
@@ -51,6 +52,7 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
         responseListener: Response.Listener<JSONObject>,
         errorListener: Response.ErrorListener
     ) {
+        this.units = units ?: "metric"
         request(units, generateWeatherApiUrl(), responseListener, errorListener)
     }
 
@@ -61,8 +63,6 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
         responseListener: Response.Listener<JSONObject>,
         errorListener: Response.ErrorListener
     ) {
-        this.units = units ?: "metric"
-
         val request = JsonObjectRequest(
             Request.Method.GET,
             url,
