@@ -51,14 +51,4 @@ class TomorrowWeatherFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        // При совершении действия Drag to update - происходит обновление.
-        srl_update_tomorrow.setOnRefreshListener {
-            forecastViewModel.update()
-            srl_update_tomorrow.isRefreshing = false
-        }
-
-    }
 }

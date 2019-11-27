@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import mente.vali.dailyweather.R
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
+import mente.vali.dailyweather.util.OnSwipeTouchListener
 
 /**
  * Класс Activity, представляющий главный экран приложения.
@@ -63,7 +65,9 @@ class MainActivity : AppCompatActivity() {
         // Прослушивание для определения, когда происходит запрос данных.
         forecastViewModel.isFetching.observe(this, Observer { isFetching ->
             if (isFetching) {
+                // Если данные являются неподходящими.
                 if (forecastViewModel.isDataUnappropriated.value!!) {
+                    // То обновляем UI с сокрытием
                     showProgressView()
                 } else {
                     showProgressView(false)
@@ -73,6 +77,39 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        // При совершении действия Drag to update - происходит обновление.
+        srl_update.setOnRefreshListener {
+            forecastViewModel.update()
+            srl_update.isRefreshing = false
+        }
+
+        srl_update.setOnTouchListener(object : OnSwipeTouchListener(this) {
+            override fun onSwipeLeft() {
+                when(forecastViewModel.currentScreenType) {
+                    ForecastViewModel.ScreenType.TODAY -> navigateToTomorrow()
+                    ForecastViewModel.ScreenType.TOMORROW -> navigateToFiveDays()
+                    ForecastViewModel.ScreenType.FIVE_DAYS -> return super.onSwipeLeft()
+                }
+
+            }
+
+            override fun onSwipeRight() {
+                when(forecastViewModel.currentScreenType) {
+                    ForecastViewModel.ScreenType.TODAY -> return super.onSwipeRight()
+                    ForecastViewModel.ScreenType.TOMORROW -> navigateToToday()
+                    ForecastViewModel.ScreenType.FIVE_DAYS -> navigateToTomorrow()
+                }
+            }
+        })
+
+        // Обработка нажатия системной кнопки "Back".
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 
     /**
@@ -83,11 +120,6 @@ class MainActivity : AppCompatActivity() {
         if (isHiding) {
             nav_host_fragment.view?.visibility = GONE
         }
-//        bnv_navigation.visibility = GONE
-//        window.setFlags(
-//            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-//            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-//        )
     }
 
     /**
@@ -96,8 +128,6 @@ class MainActivity : AppCompatActivity() {
     private fun hideProgressView() {
         rl_progress.visibility = GONE
         nav_host_fragment.view?.visibility = VISIBLE
-//        bnv_navigation.visibility = VISIBLE
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -145,20 +175,18 @@ class MainActivity : AppCompatActivity() {
             nav_host_fragment.findNavController()
                 .navigate(R.id.action_tomorrowWeatherFragment_to_fiveDaysFragment)
         }
-        nav_host_fragment.findNavController()
-            .navigate(R.id.fiveDaysFragment)
     }
 
-    fun navigateToToday() {
+    private fun navigateToToday() {
+        bnv_navigation.selectedItemId = R.id.navigation_today
+    }
+
+    private fun navigateToTomorrow() {
         bnv_navigation.selectedItemId = R.id.navigation_tomorrow
     }
 
-    fun navigateToTomorrow() {
-        bnv_navigation.selectedItemId = R.id.navigation_tomorrow
-    }
-
-    fun navigateToFiveDays() {
-        bnv_navigation.selectedItemId = R.id.navigation_tomorrow
+    private fun navigateToFiveDays() {
+        bnv_navigation.selectedItemId = R.id.navigation_five_days
     }
 
     fun getSharedViewModel() = forecastViewModel

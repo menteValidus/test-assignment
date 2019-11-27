@@ -44,32 +44,12 @@ class TodayWeatherFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        srl_update_today.setOnRefreshListener {
-            forecastViewModel.update()
-            srl_update_today.isRefreshing = false
-        }
+//        srl_update_today.setOnRefreshListener {
+//            forecastViewModel.update()
+//            srl_update_today.isRefreshing = false
+//        }
 
-        srl_update_today.setOnTouchListener(object : OnSwipeTouchListener(context) {
-            override fun onSwipeLeft() {
-                with(activity as MainActivity) {
-                    when (forecastViewModel.currentScreenType) {
-                        ForecastViewModel.ScreenType.TODAY -> navigateToTomorrow()
-                        ForecastViewModel.ScreenType.TOMORROW -> navigateToFiveDays()
-                        ForecastViewModel.ScreenType.FIVE_DAYS -> return
-                    }
-                }
-            }
 
-            override fun onSwipeRight() {
-                with(activity as MainActivity) {
-                    when (forecastViewModel.currentScreenType) {
-                        ForecastViewModel.ScreenType.TODAY -> return
-                        ForecastViewModel.ScreenType.TOMORROW -> navigateToToday()
-                        ForecastViewModel.ScreenType.FIVE_DAYS -> navigateToTomorrow()
-                    }
-                }
-            }
-        })
 
     }
 

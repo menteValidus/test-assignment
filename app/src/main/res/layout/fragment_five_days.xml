@@ -4,10 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/srl_update_five_days"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_days_weather"
@@ -19,6 +16,5 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/list_item" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

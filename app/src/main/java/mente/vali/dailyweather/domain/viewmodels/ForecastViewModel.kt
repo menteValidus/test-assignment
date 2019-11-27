@@ -62,7 +62,11 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /**
      * Свойство, представляющее поле [_tomorrowWeather].
      */
-    val tomorrowWeather: LiveData<DayWeather> = _tomorrowWeather
+    val tomorrowWeather: LiveData<DayWeather> by lazy {
+        _isDataUnappropriated.value = true
+        update()
+        _tomorrowWeather
+    }
 
     /**
      * Список всех 3-часовых прогнозов на 5 дней.
@@ -130,6 +134,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                 if (key == "UNITS") {
                     val unitsPref = sharedPreferences.getString(key, "metric")!!
                     _currentUnitsLiveData.value = Units.get(unitsPref)
+                    _isDataUnappropriated.value = true
                     update()
                 }
             }

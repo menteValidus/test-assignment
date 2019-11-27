@@ -15,10 +15,7 @@
 
     </data>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/srl_update_tomorrow"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -38,7 +35,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_huge_32"
+                        android:layout_marginTop="@dimen/spacing_large_32"
                         android:orientation="horizontal">
 
                         <TextView
@@ -71,9 +68,9 @@
                         android:layout_width="@dimen/item_size_huge_96"
                         android:layout_height="@dimen/item_size_huge_96"
                         android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/spacing_huge_32"
-                        android:layout_marginEnd="@dimen/spacing_huge_32"
-                        android:layout_marginStart="@dimen/spacing_huge_32"
+                        android:layout_marginTop="@dimen/spacing_large_32"
+                        android:layout_marginEnd="@dimen/spacing_large_32"
+                        android:layout_marginStart="@dimen/spacing_large_32"
                         android:layout_marginBottom="@dimen/spacing_middle_16"
                         app:weatherCondition="@{weather.weatherCondition}"
                         tools:src="@drawable/ic_cloudy" />
@@ -128,7 +125,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_huge_32"
+                        android:layout_marginStart="@dimen/spacing_large_32"
                         android:layout_marginTop="@dimen/spacing_small_8"
                         app:percentage="@{weather.humidity}"
                         tools:text="48%" />
@@ -136,7 +133,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_huge_32"
+                        android:layout_marginStart="@dimen/spacing_large_32"
                         android:layout_marginTop="@dimen/spacing_small_8"
                         app:pressure="@{weather.pressure}"
                         tools:text="1039 мм. рт. ст." />
@@ -144,7 +141,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_huge_32"
+                        android:layout_marginStart="@dimen/spacing_large_32"
                         android:layout_marginTop="@dimen/spacing_small_8"
                         app:degreesUnit="@{currentUnits}"
                         app:speed="@{weather.windSpeed}"
@@ -159,6 +156,5 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

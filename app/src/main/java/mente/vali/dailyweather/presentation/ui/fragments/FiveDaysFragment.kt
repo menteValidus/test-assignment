@@ -41,17 +41,6 @@ class FiveDaysFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        srl_update_five_days.setOnRefreshListener {
-            // TODO change to 5 days update instead
-            forecastViewModel.update()
-            srl_update_five_days.isRefreshing = false
-        }
-
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 

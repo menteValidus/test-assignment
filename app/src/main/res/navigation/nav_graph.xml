@@ -29,8 +29,8 @@
         <action
             android:id="@+id/action_tomorrowWeatherFragment_to_fiveDaysFragment"
             app:destination="@id/fiveDaysFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_tomorrowWeatherFragment_to_todayWeatherFragment"
             app:destination="@id/todayWeatherFragment"
