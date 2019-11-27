@@ -19,7 +19,7 @@
     <PreferenceCategory app:title="Основные">
 
         <ListPreference
-            app:defaultValue="imperial"
+            app:defaultValue="@string/pref_syncUnitsType_default_value"
             app:entries="@array/units_entries"
             app:entryValues="@array/units_values"
             app:key="UNITS"

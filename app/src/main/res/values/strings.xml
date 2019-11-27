@@ -1,22 +1,22 @@
 <resources>
+    <!-- Titles -->
     <string name="app_name">Погода</string>
     <string name="title_activity_settings">Настройки</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Placeholders-->
     <string name="celsius_degree_string">°C</string>
     <string name="fahrenheit_degree_string">°F</string>
     <string name="current_temp_placeholder">%1$d°%2$s</string>
     <string name="percentage_placeholder">%1$d%%</string>
     <string name="hg_placeholder">%1$s мм рт. ст.</string>
     <string name="speed_placeholder">%1$d м/с</string>
+    <!-- Simple Strings -->
     <string name="humidity_header">Влажность</string>
     <string name="pressure_header">Давление</string>
     <string name="wind_direction_header">Направление ветра</string>
     <string name="wind_speed_header">Скорость ветра</string>
     <!-- Sync Preferences -->
     <string name="sync_units">UNITS</string>
-    <string name="pref_syncUnitsType_default_value">Цельсия (°C)</string>
+    <string name="pref_syncUnitsType_default_value">metric</string>
     <string name="navigation_today">Сегодня</string>
     <string name="navigation_tomorrow">Завтра</string>
     <string name="navigation_five_days">На 5 дней</string>
