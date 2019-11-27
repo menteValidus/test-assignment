@@ -43,7 +43,7 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
         errorListener: Response.ErrorListener
     ) {
         this.units = units ?: "metric"
-        request(units, generateForecastApiUrl(), responseListener, errorListener)
+        request(generateForecastApiUrl(), responseListener, errorListener)
     }
 
     /** Метод, производящий запрос текущей погоды с сервера. */
@@ -53,12 +53,11 @@ class ForecastApiCommunicator constructor(applicationContext: Context) {
         errorListener: Response.ErrorListener
     ) {
         this.units = units ?: "metric"
-        request(units, generateWeatherApiUrl(), responseListener, errorListener)
+        request(generateWeatherApiUrl(), responseListener, errorListener)
     }
 
     /** Общий метод запроса данных с сервера. */
     private fun request(
-        units: String?,
         url: String,
         responseListener: Response.Listener<JSONObject>,
         errorListener: Response.ErrorListener

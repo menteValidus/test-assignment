@@ -61,7 +61,6 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /** Свойство, представляющее поле [_tomorrowWeather]. */
     val tomorrowWeather: LiveData<ObservableWeather> by lazy {
         _isDataUnprepared.value = true
-        //update()
         _tomorrowWeather
     }
 
@@ -152,7 +151,6 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                     val unitsPref = sharedPreferences.getString(key, "metric")!!
                     _currentUnitsLiveData.value = Units.get(unitsPref)
                     _isDataUnprepared.value = true
-                    //update()
                 }
             }
         sharedRepository.registerListener(preferenceChangeListener)
@@ -235,7 +233,6 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         if (forecastApiCommunicator.setCityID(city) == true) {
             // При смене города данные становятся неактуальны.
             _isDataUnprepared.value = true
-            //update()
         }
     }
 
@@ -244,7 +241,6 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         val lastUpdate = _dateTimeOfLastUpdate.value ?: ""
         if (lastUpdate == "" || !Date().isSameDay(parseDate(lastUpdate))) {
             _isDataUnprepared.value = true
-            //update()
         }
     }
 
