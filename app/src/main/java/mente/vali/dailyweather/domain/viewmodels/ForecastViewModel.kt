@@ -70,7 +70,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * Свойство, представляющее поле [_tomorrowWeather].
      */
     val tomorrowWeather: LiveData<DayWeather> by lazy {
-        _isDataUnappropriated.value = true
+        _isDataUnprepared.value = true
         update()
         _tomorrowWeather
     }
@@ -118,11 +118,11 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * Флаг, устанавливаемый, если данные ещё неинициализированы.
      * Например, при смене города данные старого города будут отображаться пока не придут новые.
      */
-    private val _isDataUnappropriated = MutableLiveData(false)
+    private val _isDataUnprepared = MutableLiveData(false)
     /**
      * Свойство, представляющее поле [_isFetching].
      */
-    val isDataUnprepared: LiveData<Boolean> = _isDataUnappropriated
+    val isDataUnprepared: LiveData<Boolean> = _isDataUnprepared
 
     /**
      * Поле, хранящее данные о текущем активном экране.
@@ -141,7 +141,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                 if (key == "UNITS") {
                     val unitsPref = sharedPreferences.getString(key, "metric")!!
                     _currentUnitsLiveData.value = Units.get(unitsPref)
-                    _isDataUnappropriated.value = true
+                    _isDataUnprepared.value = true
                     update()
                 }
             }
@@ -154,7 +154,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         // Если полученный из SharedPreferences прогноз не на сегодня, то скрывакм UI, пока не
         // приду новые данные с сервера.
         if (date == "" || !Date().isSameDay(parseDate(date))) {
-            _isDataUnappropriated.value = true
+            _isDataUnprepared.value = true
         }
 
         _currentWeather = MutableLiveData(lastWeather)
@@ -173,6 +173,8 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         _selectedCity.value = city
         sharedRepository.saveCity(city)
         forecastApiCommunicator.setCityID(city)
+        // При смене города данные становятся неактуальны.
+        _isDataUnprepared.value = true
         update()
     }
 
@@ -200,62 +202,62 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         // Сообщаем, что идёт загрузка данных
         _isFetching.value = true
         // Если отерыт экран погоды на сегодня, то будет запрос погоды только на сегодня.
-        if (currentScreenType == ScreenType.TODAY) {
-            forecastApiCommunicator.requestWeatherByNow(
-                currentUnitsLiveData.value?.getUnitString(),
-                Response.Listener { response ->
-                    val weather = ObservableWeather.parse(response.toString())
-                    _currentWeather.value!!.setValues(weather)
-                    rememberDateTimeOfUpdate()
+//        if (currentScreenType == ScreenType.TODAY) {
+        forecastApiCommunicator.requestWeatherByNow(
+            currentUnitsLiveData.value?.getUnitString(),
+            Response.Listener { response ->
+                val weather = ObservableWeather.parse(response.toString())
+                _currentWeather.value!!.setValues(weather)
+                rememberDateTimeOfUpdate()
 
-                    _isFetching.value = false
-                    // Если данные были неподходящими, то после получения данных необходимо сбросить
-                    // флаг.
-                    if (_isDataUnappropriated.value!!) {
-                        _isDataUnappropriated.value = false
-                    }
-                },
-                Response.ErrorListener {
-                    displayMessage(appContext, "Проблемы соединения с сервером.")
-                    _isFetching.value = false
+                _isFetching.value = false
+                // Если данные были неподходящими, то после получения данных необходимо сбросить
+                // флаг.
+                if (_isDataUnprepared.value!!) {
+                    _isDataUnprepared.value = false
                 }
-            )
-        } else {
-            forecastApiCommunicator.requestForecast(
-                currentUnitsLiveData.value?.getUnitString(),
-                Response.Listener { response ->
-                    // Получаем список всех прогнозов.
-                    val list = Forecast.parse(response.toString())
-                    val daysWeatherMutableList =
-                        mutableListOf<Pair<Int, DayWeather>>()
+            },
+            Response.ErrorListener {
+                displayMessage(appContext, "Проблемы соединения с сервером.")
+                _isFetching.value = false
+            }
+        )
+//        } else {
+        forecastApiCommunicator.requestForecast(
+            currentUnitsLiveData.value?.getUnitString(),
+            Response.Listener { response ->
+                // Получаем список всех прогнозов.
+                val list = Forecast.parse(response.toString())
+                val daysWeatherMutableList =
+                    mutableListOf<Pair<Int, DayWeather>>()
 
-                    // Проходим по полученному списку, собираем средние данные по дням.
-                    for (i in 0..4) {
-                        val weatherList = mutableListOf<WeatherByTime>()
-                        for (j in 0..7) {
-                            // i - номер дня.
-                            // j - номер 3-часового отчёта.
-                            weatherList.add(list.weatherByTimeList[i * 8 + j])
-                        }
-                        daysWeatherMutableList.add(i to DayWeather(weatherList))
+                // Проходим по полученному списку, собираем средние данные по дням.
+                for (i in 0..4) {
+                    val weatherList = mutableListOf<WeatherByTime>()
+                    for (j in 0..7) {
+                        // i - номер дня.
+                        // j - номер 3-часового отчёта.
+                        weatherList.add(list.weatherByTimeList[i * 8 + j])
                     }
-                    // Погода на завтра.
-                    _tomorrowWeather.value = daysWeatherMutableList[1].second
-                    // Погода на 5 дней.
-                    daysWeatherList.value = daysWeatherMutableList
+                    daysWeatherMutableList.add(i to DayWeather(weatherList))
+                }
+                // Погода на завтра.
+                _tomorrowWeather.value = daysWeatherMutableList[1].second
+                // Погода на 5 дней.
+                daysWeatherList.value = daysWeatherMutableList
 
-                    _isFetching.value = false
-                    // Если данные были неинициализированными, то после получения данных необходимо
-                    // сбросить флаг.
-                    if (_isDataUnappropriated.value!!) {
-                        _isDataUnappropriated.value = false
-                    }
-                },
-                Response.ErrorListener {
-                    displayMessage(appContext, "Проблемы соединения с сервером.")
-                    _isFetching.value = false
-                })
-        }
+                _isFetching.value = false
+                // Если данные были неинициализированными, то после получения данных необходимо
+                // сбросить флаг.
+                if (_isDataUnprepared.value!!) {
+                    _isDataUnprepared.value = false
+                }
+            },
+            Response.ErrorListener {
+                displayMessage(appContext, "Проблемы соединения с сервером.")
+                _isFetching.value = false
+            })
+//        }
     }
 
 
