@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         forecastViewModel.isFetching.observe(this, Observer { isFetching ->
             if (isFetching) {
                 // Если данные являются неподходящими.
-                if (forecastViewModel.isDataUnappropriated.value!!) {
+                if (forecastViewModel.isDataUnprepared.value!!) {
                     // То обновляем UI с сокрытием
                     showProgressView()
                 } else {

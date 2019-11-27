@@ -24,6 +24,12 @@ import java.util.*
  */
 class ForecastViewModel(application: Application) : AndroidViewModel(application) {
     /**
+     * Context приложения.
+     * Применяется для вывода сообщений об ошибках.
+     */
+    private val appContext = application.applicationContext
+
+    /**
      * Свойство для получения объекта класса [ForecastApiCommunicator].
      * Предназначено для общения с сервером API.
      */
@@ -108,14 +114,14 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     val isFetching: LiveData<Boolean> = _isFetching
 
     /**
-     * Флаг, устанавливаемый при неподходящих данных.
+     * Флаг, устанавливаемый, если данные ещё неинициализированы.
      * Например, при смене города данные старого города будут отображаться пока не придут новые.
      */
     private val _isDataUnappropriated = MutableLiveData(false)
     /**
      * Свойство, представляющее поле [_isFetching].
      */
-    val isDataUnappropriated: LiveData<Boolean> = _isDataUnappropriated
+    val isDataUnprepared: LiveData<Boolean> = _isDataUnappropriated
 
     /**
      * Поле, хранящее данные о текущем активном экране.
