@@ -21,9 +21,7 @@ import mente.vali.dailyweather.util.displayMessage
 import mente.vali.dailyweather.util.parseDate
 import java.util.*
 
-/**
- * Основная ViewModel приложения.
- */
+/** Основная ViewModel приложения. */
 class ForecastViewModel(application: Application) : AndroidViewModel(application) {
     // region Private Properties
 
@@ -46,33 +44,21 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     private val sharedRepository: SharedRepository =
         SharedRepository.getInstance(application.applicationContext)
 
-    /**
-     * Текущие единицы измерения градуса.
-     */
+    /** Текущие единицы измерения градуса. */
     private val _currentUnitsLiveData: MutableLiveData<Units> =
         MutableLiveData(Units.get(sharedRepository.getSelectedUnit()))
-    /**
-     * Свойство, представляющее поле [_currentUnitsLiveData].
-     */
+    /** Свойство, представляющее поле [_currentUnitsLiveData]. */
     val currentUnitsLiveData: LiveData<Units> = _currentUnitsLiveData
 
-    /**
-     * Погода на текущее время.
-     */
+    /** Погода на текущее время. */
     private val _currentWeather: MutableLiveData<ObservableWeather>
-    /**
-     * Свойство, представляющее поле [_currentWeather].
-     */
+    /** Свойство, представляющее поле [_currentWeather]. */
     val currentWeather: LiveData<ObservableWeather>
 
-    /**
-     * Погода на завтра.
-     */
-    private val _tomorrowWeather: MutableLiveData<ObservableWeather>
-            = MutableLiveData(ObservableWeather())
-    /**
-     * Свойство, представляющее поле [_tomorrowWeather].
-     */
+    /** Погода на завтра. */
+    private val _tomorrowWeather: MutableLiveData<ObservableWeather> =
+        MutableLiveData(ObservableWeather())
+    /** Свойство, представляющее поле [_tomorrowWeather]. */
     val tomorrowWeather: LiveData<ObservableWeather> by lazy {
         _isDataUnprepared.value = true
         update()
@@ -85,27 +71,17 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      */
     private val _daysWeatherList: MutableLiveData<List<Pair<Int, ObservableWeather>>> =
         MutableLiveData(listOf())
-    /**
-     * Свойство, представляющее поле [_daysWeatherList].
-     */
+    /** Свойство, представляющее поле [_daysWeatherList]. */
     val daysWeatherList: MutableLiveData<List<Pair<Int, ObservableWeather>>> = _daysWeatherList
 
-    /**
-     * Текущий город, по которому собираются все данные.
-     */
+    /** Текущий город, по которому собираются все данные. */
     private val _selectedCity: MutableLiveData<String> = MutableLiveData(sharedRepository.getCity())
-    /**
-     * Свойство, представляющее поле [_selectedCity].
-     */
+    /** Свойство, представляющее поле [_selectedCity]. */
     val selectedCity: LiveData<String> = _selectedCity
 
-    /**
-     * Время последнего обновления текущей погоды.
-     */
+    /** Время последнего обновления текущей погоды. */
     private val _dateTimeOfLastUpdate: MutableLiveData<String>
-    /**
-     * Свойство, представляющее поле [_dateTimeOfLastUpdate].
-     */
+    /** Свойство, представляющее поле [_dateTimeOfLastUpdate]. */
     val dateTimeOfLastUpdate: LiveData<String>
 
     /**
@@ -113,9 +89,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * В случае, если при первом запуске
      */
     private val _isFetching: MutableLiveData<Boolean> = MutableLiveData(false)
-    /**
-     * Свойство, представляющее поле [_isFetching].
-     */
+    /** Свойство, представляющее поле [_isFetching]. */
     val isFetching: LiveData<Boolean> = _isFetching
 
     /**
@@ -123,35 +97,21 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * Например, при смене города данные старого города будут отображаться пока не придут новые.
      */
     private val _isDataUnprepared = MutableLiveData(false)
-    /**
-     * Свойство, представляющее поле [_isFetching].
-     */
+    /** Свойство, представляющее поле [_isFetching]. */
     val isDataUnprepared: LiveData<Boolean> = _isDataUnprepared
 
-    /**
-     * Поле, хранящее данные о текущем активном экране.
-     */
+    /** Поле, хранящее данные о текущем активном экране. */
     var currentScreenType: ScreenType = ScreenType.TODAY
 
-    /**
-     * Поле для прослушивания изменений в репозитории.
-     */
-    private val preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
+    /** Поле для прослушивания изменений в репозитории. */
+    private lateinit var preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     // endregion
 
+    // region Constructor
+
     init {
-        // Прослушивание изменений текущих единиц измерения - C/F.
-        preferenceChangeListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                if (key == "UNITS") {
-                    val unitsPref = sharedPreferences.getString(key, "metric")!!
-                    _currentUnitsLiveData.value = Units.get(unitsPref)
-                    _isDataUnprepared.value = true
-                    update()
-                }
-            }
-        sharedRepository.registerListener(preferenceChangeListener)
+        initListeners()
 
         // Получение последних данных о текущей погоде.
         val (date, lastWeather) =
@@ -169,17 +129,37 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         // Инициализация даты последнего обновления полученным из репозитория значением.
         _dateTimeOfLastUpdate = MutableLiveData(date)
         dateTimeOfLastUpdate = _dateTimeOfLastUpdate
+
         // Сообщить API коммуникатору, какие единицы измерения будут использоваться в приложении.
         submitUnitsToApiCommunicator()
 
         update()
     }
 
+    // endregion
+
+    // region Initializators
+
+    /** Инициализация всех Listeners ViewModel. */
+    private fun initListeners() {
+        // Прослушивание изменений текущих единиц измерения - C/F.
+        preferenceChangeListener =
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+                if (key == "UNITS") {
+                    val unitsPref = sharedPreferences.getString(key, "metric")!!
+                    _currentUnitsLiveData.value = Units.get(unitsPref)
+                    _isDataUnprepared.value = true
+                    update()
+                }
+            }
+        sharedRepository.registerListener(preferenceChangeListener)
+    }
+
+    // endregion
+
     // region Public Methods
 
-    /**
-     * Wrapper для запроса данных с сервера API.
-     */
+    /** Wrapper для запроса данных с сервера API. */
     fun update() = viewModelScope.launch {
         // Сообщаем, что идёт загрузка данных
         _isFetching.value = true
@@ -243,9 +223,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
             })
     }
 
-    /**
-     * Метод, устанавливающий в системе текущий город.
-     */
+    /** Метод, устанавливающий в системе текущий город. */
     fun setCity(city: String) {
         _selectedCity.value = city
         sharedRepository.saveCity(city)
