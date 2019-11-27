@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_five_days.*
 
 import mente.vali.dailyweather.R
+import mente.vali.dailyweather.data.enums.ScreenType
 import mente.vali.dailyweather.databinding.FragmentFiveDaysBinding
 import mente.vali.dailyweather.domain.adapters.DaysWeatherAdapter
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
@@ -34,7 +35,7 @@ class FiveDaysFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
-        forecastViewModel.currentScreenType = ForecastViewModel.ScreenType.FIVE_DAYS
+        forecastViewModel.currentScreenType = ScreenType.FIVE_DAYS
         // Inflate the layout for this fragment
         binding = FragmentFiveDaysBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner

@@ -8,14 +8,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
-import mente.vali.dailyweather.data.models.DayWeather
+import mente.vali.dailyweather.data.models.ObservableWeather
 import mente.vali.dailyweather.databinding.ListItemBinding
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 
 /** Адаптер для отображения списка и binding данных всего прогноза погоды. */
 class DaysWeatherAdapter(private val viewModel: ForecastViewModel) :
     RecyclerView.Adapter<DaysWeatherAdapter.ViewHolder>() {
-    private var items: List<Pair<Int, DayWeather>> = viewModel.daysWeatherList.value ?: listOf()
+    private var items: List<Pair<Int, ObservableWeather>> = viewModel.daysWeatherList.value ?: listOf()
 
     override fun getItemCount(): Int {
         return items.size
@@ -56,7 +56,7 @@ class DaysWeatherAdapter(private val viewModel: ForecastViewModel) :
         }
     }
 
-    fun replaceItems(items: List<Pair<Int,DayWeather>>) {
+    fun replaceItems(items: List<Pair<Int,ObservableWeather>>) {
         this.items = items
         notifyDataSetChanged()
     }

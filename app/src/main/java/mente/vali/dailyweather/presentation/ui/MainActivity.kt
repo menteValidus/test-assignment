@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import mente.vali.dailyweather.R
+import mente.vali.dailyweather.data.enums.ScreenType
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 import mente.vali.dailyweather.util.OnSwipeTouchListener
 
@@ -90,18 +91,18 @@ class MainActivity : AppCompatActivity() {
         srl_update.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
                 when (forecastViewModel.currentScreenType) {
-                    ForecastViewModel.ScreenType.TODAY -> navigateToTomorrow()
-                    ForecastViewModel.ScreenType.TOMORROW -> navigateToFiveDays()
-                    ForecastViewModel.ScreenType.FIVE_DAYS -> return super.onSwipeLeft()
+                    ScreenType.TODAY -> navigateToTomorrow()
+                    ScreenType.TOMORROW -> navigateToFiveDays()
+                    ScreenType.FIVE_DAYS -> return super.onSwipeLeft()
                 }
 
             }
 
             override fun onSwipeRight() {
                 when (forecastViewModel.currentScreenType) {
-                    ForecastViewModel.ScreenType.TODAY -> return super.onSwipeRight()
-                    ForecastViewModel.ScreenType.TOMORROW -> navigateToToday()
-                    ForecastViewModel.ScreenType.FIVE_DAYS -> navigateToTomorrow()
+                    ScreenType.TODAY -> return super.onSwipeRight()
+                    ScreenType.TOMORROW -> navigateToToday()
+                    ScreenType.FIVE_DAYS -> navigateToTomorrow()
                 }
             }
         })
@@ -153,14 +154,14 @@ class MainActivity : AppCompatActivity() {
         if (navController.currentDestination?.id == R.id.tomorrowWeatherFragment) {
             nav_host_fragment.findNavController()
                 .navigate(R.id.action_tomorrowWeatherFragment_to_todayWeatherFragment)
-        } else if (forecastViewModel.currentScreenType == ForecastViewModel.ScreenType.FIVE_DAYS) {
+        } else if (forecastViewModel.currentScreenType == ScreenType.FIVE_DAYS) {
             nav_host_fragment.findNavController()
                 .navigate(R.id.action_fiveDaysFragment_to_todayWeatherFragment)
         }
     }
 
     private fun goToTomorrow() {
-        if (forecastViewModel.currentScreenType == ForecastViewModel.ScreenType.TODAY) {
+        if (forecastViewModel.currentScreenType == ScreenType.TODAY) {
             nav_host_fragment.findNavController()
                 .navigate(R.id.action_todayWeatherFragment_to_tomorrowWeatherFragment)
         } else if (navController.currentDestination?.id == R.id.fiveDaysFragment) {
@@ -171,10 +172,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun goToFiveDays() {
-        if (forecastViewModel.currentScreenType == ForecastViewModel.ScreenType.TODAY) {
+        if (forecastViewModel.currentScreenType == ScreenType.TODAY) {
             nav_host_fragment.findNavController()
                 .navigate(R.id.action_todayWeatherFragment_to_fiveDaysFragment)
-        } else if (forecastViewModel.currentScreenType == ForecastViewModel.ScreenType.TOMORROW) {
+        } else if (forecastViewModel.currentScreenType == ScreenType.TOMORROW) {
             nav_host_fragment.findNavController()
                 .navigate(R.id.action_tomorrowWeatherFragment_to_fiveDaysFragment)
         }

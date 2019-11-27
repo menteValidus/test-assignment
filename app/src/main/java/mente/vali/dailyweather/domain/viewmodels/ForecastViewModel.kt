@@ -8,8 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Response
 import kotlinx.coroutines.launch
+import mente.vali.dailyweather.data.enums.ScreenType
+import mente.vali.dailyweather.data.enums.Units
 import mente.vali.dailyweather.domain.extensions.presentationDateTimeFormat
-import mente.vali.dailyweather.data.models.DayWeather
 import mente.vali.dailyweather.data.models.Forecast
 import mente.vali.dailyweather.data.models.ObservableWeather
 import mente.vali.dailyweather.data.models.WeatherByTime
@@ -65,11 +66,12 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
     /**
      * Погода на завтра.
      */
-    private val _tomorrowWeather: MutableLiveData<DayWeather> = MutableLiveData(DayWeather())
+    private val _tomorrowWeather: MutableLiveData<ObservableWeather>
+            = MutableLiveData(ObservableWeather())
     /**
      * Свойство, представляющее поле [_tomorrowWeather].
      */
-    val tomorrowWeather: LiveData<DayWeather> by lazy {
+    val tomorrowWeather: LiveData<ObservableWeather> by lazy {
         _isDataUnprepared.value = true
         update()
         _tomorrowWeather
@@ -79,12 +81,12 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      * Список всех 3-часовых прогнозов на 5 дней.
      * Формат хранимых данных = Список<Пар<Дневного сдвига И Средней погоды на день>>
      */
-    private val _daysWeatherList: MutableLiveData<List<Pair<Int, DayWeather>>> =
+    private val _daysWeatherList: MutableLiveData<List<Pair<Int, ObservableWeather>>> =
         MutableLiveData(listOf())
     /**
      * Свойство, представляющее поле [_daysWeatherList].
      */
-    val daysWeatherList: MutableLiveData<List<Pair<Int, DayWeather>>> = _daysWeatherList
+    val daysWeatherList: MutableLiveData<List<Pair<Int, ObservableWeather>>> = _daysWeatherList
 
     /**
      * Текущий город, по которому собираются все данные.
@@ -179,7 +181,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
         forecastApiCommunicator.requestWeatherByNow(
             currentUnitsLiveData.value?.getUnitString(),
             Response.Listener { response ->
-                val weather = ObservableWeather.parse(response.toString())
+                val weather = ObservableWeather.parseSingle(response.toString())
                 _currentWeather.value!!.setValues(weather)
                 rememberDateTimeOfUpdate()
 
@@ -205,7 +207,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                 // Получаем список всех прогнозов.
                 val list = Forecast.parse(response.toString())
                 val daysWeatherMutableList =
-                    mutableListOf<Pair<Int, DayWeather>>()
+                    mutableListOf<Pair<Int, ObservableWeather>>()
 
                 // Проходим по полученному списку, собираем средние данные по дням.
                 for (i in 0..4) {
@@ -215,7 +217,7 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
                         // j - номер 3-часового отчёта.
                         weatherList.add(list.weatherByTimeList[i * 8 + j])
                     }
-                    daysWeatherMutableList.add(i to DayWeather(weatherList))
+                    daysWeatherMutableList.add(i to ObservableWeather(weatherList))
                 }
                 // Погода на завтра.
                 _tomorrowWeather.value = daysWeatherMutableList[1].second
@@ -269,57 +271,5 @@ class ForecastViewModel(application: Application) : AndroidViewModel(application
      */
     private fun submitUnitsToApiCommunicator() {
         forecastApiCommunicator.units = currentUnitsLiveData.value!!.getUnitString()
-    }
-
-    /**
-     * Единицы градуса.
-     */
-    enum class Units {
-        CELSIUS {
-            override fun getString() = "C"
-
-            override fun getUnitString() = "metric"
-
-        },
-        FAHRENHEIT {
-            override fun getString() = "F"
-
-            override fun getUnitString() = "imperial"
-        };
-
-        /**
-         * Получить строку со значениями единицы градуса.
-         * Для отображения на экране.
-         */
-        abstract fun getString(): String
-
-        /**
-         * Получить строку со значениями единицы градуса.
-         * Для передачи на сервер API.
-         */
-        abstract fun getUnitString(): String
-
-        companion object {
-            /**
-             * Статический метод для конвертации строки в [Units].
-             * Стандартное значение [Units.CELSIUS].
-             */
-            fun get(conditionString: String): Units {
-                return when (conditionString) {
-                    CELSIUS.getUnitString() -> CELSIUS
-                    FAHRENHEIT.getUnitString() -> FAHRENHEIT
-                    else -> CELSIUS
-                }
-            }
-        }
-    }
-
-    /**
-     * Перечисление для определения текущего экрана приложения.
-     */
-    enum class ScreenType {
-        TODAY,
-        TOMORROW,
-        FIVE_DAYS
     }
 }

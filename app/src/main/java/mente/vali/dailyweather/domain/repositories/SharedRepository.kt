@@ -3,8 +3,9 @@ package mente.vali.dailyweather.domain.repositories
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import mente.vali.dailyweather.data.enums.WeatherCondition
 import mente.vali.dailyweather.data.models.ObservableWeather
-import mente.vali.dailyweather.data.models.WeatherCondition
+import mente.vali.dailyweather.data.models.Weather
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 
 /**
@@ -66,12 +67,14 @@ class SharedRepository constructor(appRepository: Context) {
             val windSpeed = getInt(WIND_SPEED, 0)
 
             return date to ObservableWeather(
-                temperature,
-                weatherCondition,
-                humidity,
-                pressure,
-                windDirection,
-                windSpeed
+                Weather().apply {
+                    this.temperature = temperature
+                    this.weatherCondition = weatherCondition
+                    this.humidity = humidity
+                    this.pressure = pressure
+                    this.windDirection = windDirection
+                    this.windSpeed = windSpeed
+                }
             )
         }
     }

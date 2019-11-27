@@ -6,10 +6,10 @@
     <data>
         <variable
             name="degreesUnits"
-            type="mente.vali.dailyweather.domain.viewmodels.ForecastViewModel.Units" />
+            type="mente.vali.dailyweather.data.enums.Units" />
         <variable
             name="item"
-            type="mente.vali.dailyweather.data.models.DayWeather" />
+            type="mente.vali.dailyweather.data.models.ObservableWeather" />
         <variable
             name="dayOffset"
             type="Integer" />

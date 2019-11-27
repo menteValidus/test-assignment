@@ -1,9 +1,10 @@
 package mente.vali.dailyweather.data.models
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.GsonBuilder
+import mente.vali.dailyweather.data.enums.WeatherCondition
 import mente.vali.dailyweather.domain.deserializers.WeatherDeserializer
-import mente.vali.dailyweather.util.windDegreeToWindDirection
 
 /**
  * Класс для работы с показаниями погоды одного отчёта (3 часа).
@@ -15,52 +16,54 @@ import mente.vali.dailyweather.util.windDegreeToWindDirection
  *
  * При вызове пустого конструктора все поля будут проинициализрованы стандартными значениями.
  */
-class ObservableWeather (
-    temperature: Short,
-    weatherCondition: WeatherCondition,
-    humidity: Short,
-    pressure: Int,
-    windDirection: String,
-    windSpeed: Int) {
-    val temperature: MutableLiveData<Short> = MutableLiveData()
-    val weatherCondition: MutableLiveData<WeatherCondition> = MutableLiveData()
-    val humidity: MutableLiveData<Short> = MutableLiveData()
-    val pressure: MutableLiveData<Int> = MutableLiveData()
-    val windDirection: MutableLiveData<String> = MutableLiveData()
-    val windSpeed: MutableLiveData<Int> = MutableLiveData()
+class ObservableWeather(weather: Weather) {
+    private val _temperature: MutableLiveData<Short> = MutableLiveData(weather.temperature)
+    val temperature: LiveData<Short> = _temperature
 
-    init {
-        this.temperature.value = temperature
-        this.weatherCondition.value = weatherCondition
-        this.humidity.value = humidity
-        this.pressure.value = pressure
-        this.windDirection.value = windDirection
-        this.windSpeed.value = windSpeed
-    }
+    private val _weatherCondition: MutableLiveData<WeatherCondition> =
+        MutableLiveData(weather.weatherCondition)
+    val weatherCondition: LiveData<WeatherCondition> = _weatherCondition
 
-    constructor() : this(0, WeatherCondition.NONE, 0, 0, "", 0)
-    constructor(weather: WeatherByTime) : this
-        (weather.temperature,
-        weather.weatherCondition,
-        weather.humidity,
-        weather.pressure,
-        windDegreeToWindDirection(weather.windDegrees.toFloat()),
-        weather.windSpeed)
+    private val _humidity: MutableLiveData<Short> = MutableLiveData(weather.humidity)
+    val humidity: LiveData<Short> = _humidity
 
+    private val _pressure: MutableLiveData<Int> = MutableLiveData(weather.pressure)
+    val pressure: LiveData<Int> = _pressure
+
+    private val _windDirection: MutableLiveData<String> = MutableLiveData(weather.windDirection)
+    val windDirection: LiveData<String> = _windDirection
+
+    private val _windSpeed: MutableLiveData<Int> = MutableLiveData(weather.windSpeed)
+    val windSpeed: LiveData<Int> = _windSpeed
+
+    /** Возвращает [ObservableWeather] со стандартными значениями полей. */
+    constructor() : this(Weather())
+    /** Возвращает [ObservableWeather], составленный на основе одного отчёта [WeatherByTime]. */
+    constructor(weatherByTime: WeatherByTime) : this(Weather.makeWeather(weatherByTime))
+
+    /** Возвращает [ObservableWeather], составленный на основе списка отчётов [WeatherByTime]. */
+    constructor(weatherByTimeList: List<WeatherByTime>) : this(
+        Weather.makeDayWeather(
+            weatherByTimeList
+        )
+    )
+
+    /** Установить значения полей на основе [weather]. */
     fun setValues(weather: ObservableWeather) {
-        temperature.value = weather.temperature.value
-        weatherCondition.value = weather.weatherCondition.value
-        humidity.value = weather.humidity.value
-        pressure.value = weather.pressure.value
-        windDirection.value = weather.windDirection.value
-        windSpeed.value = weather.windSpeed.value
+        _temperature.value = weather.temperature.value
+        _weatherCondition.value = weather.weatherCondition.value
+        _humidity.value = weather.humidity.value
+        _pressure.value = weather.pressure.value
+        _windDirection.value = weather.windDirection.value
+        _windSpeed.value = weather.windSpeed.value
     }
 
     companion object {
         /**
-        * Парсинг полученного [JsonObject] с получением объекта [ObservableWeather].
-        */
-        fun parse(json: String): ObservableWeather {
+         * Парсинг полученного [JsonObject] в виде [WeatherByTime] с получением объекта
+         * [ObservableWeather].
+         */
+        fun parseSingle(json: String): ObservableWeather {
             val gson = GsonBuilder()
                 .registerTypeAdapter(
                     WeatherByTime::class.java,

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_today_weather.*
+import mente.vali.dailyweather.data.enums.ScreenType
 import mente.vali.dailyweather.databinding.FragmentTodayWeatherBinding
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 import mente.vali.dailyweather.presentation.ui.MainActivity
@@ -31,7 +32,7 @@ class TodayWeatherFragment : Fragment() {
         // Получить ViewModel из MainActivity.
         forecastViewModel = (activity as MainActivity).getSharedViewModel()
         // Сообщить ViewModel, какой сейчас экран активен.
-        forecastViewModel.currentScreenType = ForecastViewModel.ScreenType.TODAY
+        forecastViewModel.currentScreenType = ScreenType.TODAY
 
         // Binding значений.
         binding.lastUpdateTime = forecastViewModel.dateTimeOfLastUpdate

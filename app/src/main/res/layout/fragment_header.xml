@@ -26,8 +26,6 @@
             android:layout_marginEnd="@dimen/spacing_small_8"
             android:layout_marginBottom="@dimen/spacing_small_8"/>
 
-
     </LinearLayout>
-
 
 </layout>

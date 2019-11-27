@@ -10,7 +10,7 @@
             type="androidx.lifecycle.LiveData&lt;String&gt;" />
         <variable
             name="units"
-            type="androidx.lifecycle.LiveData&lt;mente.vali.dailyweather.domain.viewmodels.ForecastViewModel.Units&gt;" />
+            type="androidx.lifecycle.LiveData&lt;mente.vali.dailyweather.data.enums.Units&gt;" />
         <variable
             name="weather"
             type="androidx.lifecycle.LiveData&lt;mente.vali.dailyweather.data.models.ObservableWeather&gt;" />

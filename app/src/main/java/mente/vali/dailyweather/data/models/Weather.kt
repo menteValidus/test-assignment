@@ -1,21 +1,24 @@
 package mente.vali.dailyweather.data.models
 
+import mente.vali.dailyweather.data.enums.WeatherCondition
 import mente.vali.dailyweather.util.windDegreeToWindDirection
 
+/** Класс, представляющий погоду. */
 data class Weather(
-    val temperature: Short = 0,
-    val weatherCondition: WeatherCondition = WeatherCondition.NONE,
-    val humidity: Short = 0,
-    val pressure: Int = 0,
-    val windDirection: String = "",
-    val windSpeed: Int = 0
+    var temperature: Short = 0,
+    var weatherCondition: WeatherCondition = WeatherCondition.NONE,
+    var humidity: Short = 0,
+    var pressure: Int = 0,
+    var windDirection: String = "",
+    var windSpeed: Int = 0
 ) {
 
-
     companion object Factory {
+        /** Количество 3-часовых отчётов. */
         private const val DAY_CHUNKS = 8
 
-        fun makeTodayWeather(weatherByTime: WeatherByTime) = with(weatherByTime) {
+        /** Возвращает погоду, составленную на основе одного отчёта [WeatherByTime]. */
+        fun makeWeather(weatherByTime: WeatherByTime) = with(weatherByTime) {
             Weather(
                 temperature = temperature,
                 weatherCondition = weatherCondition,
@@ -26,6 +29,7 @@ data class Weather(
             )
         }
 
+        /** Возвращает погоду, составленную на основе списка отчётов [WeatherByTime]. */
         fun makeDayWeather(weatherByTimeList: List<WeatherByTime>): Weather {
             var tempSum = 0
             var humiditySum = 0
@@ -63,4 +67,5 @@ data class Weather(
             )
         }
     }
+
 }

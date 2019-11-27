@@ -4,10 +4,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import mente.vali.dailyweather.R
+import mente.vali.dailyweather.data.enums.Units
+import mente.vali.dailyweather.data.enums.WeatherCondition
 import mente.vali.dailyweather.domain.extensions.presentationDateWithDayOffsetFormat
-import mente.vali.dailyweather.data.models.WeatherCondition
-import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
-
 
 /**
  * TODO
@@ -15,7 +14,7 @@ import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 @BindingAdapter(value = ["app:degreesUnit", "app:temperature"], requireAll = true)
 fun setTemperatureString(
     textView: TextView,
-    degreesUnit: ForecastViewModel.Units,
+    degreesUnit: Units,
     temperature: Short
 ) {
     textView.text = textView.context.resources.getString(
@@ -28,18 +27,18 @@ fun setTemperatureString(
 @BindingAdapter(value = ["app:degreesUnit", "app:temperature"], requireAll = true)
 fun setTemperatureDrawable(
     imageView: ImageView,
-    degreesUnit: ForecastViewModel.Units,
+    degreesUnit: Units,
     temperature: Short
 ) {
     when (degreesUnit) {
-        ForecastViewModel.Units.CELSIUS -> {
+        Units.CELSIUS -> {
             if (temperature > 0) {
                 imageView.setImageResource(R.drawable.ic_over_zero_temp)
             } else {
                 imageView.setImageResource(R.drawable.ic_under_zero_temp)
             }
         }
-        ForecastViewModel.Units.FAHRENHEIT -> {
+        Units.FAHRENHEIT -> {
             if (temperature > 32) {
                 imageView.setImageResource(R.drawable.ic_over_zero_temp)
             } else {
@@ -98,8 +97,8 @@ fun setDayOffsetText(textView: TextView, dayOffset: Int) {
 }
 
 @BindingAdapter(value = ["app:degreesUnit", "app:speed"], requireAll = true)
-fun setSpeedText(textView: TextView, degreesUnit: ForecastViewModel.Units, speed: Int) {
-    if (degreesUnit == ForecastViewModel.Units.FAHRENHEIT) {
+fun setSpeedText(textView: TextView, degreesUnit: Units, speed: Int) {
+    if (degreesUnit == Units.FAHRENHEIT) {
         textView.text =
             textView.context.resources.getString(R.string.speed_placeholder, mphToMps(speed))
     } else {
