@@ -12,9 +12,7 @@ import mente.vali.dailyweather.data.models.DayWeather
 import mente.vali.dailyweather.databinding.ListItemBinding
 import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
 
-/**
- * Адаптер для отображения списка и binding данных всего прогноза погоды.
- */
+/** Адаптер для отображения списка и binding данных всего прогноза погоды. */
 class DaysWeatherAdapter(private val viewModel: ForecastViewModel) :
     RecyclerView.Adapter<DaysWeatherAdapter.ViewHolder>() {
     private var items: List<Pair<Int, DayWeather>> = viewModel.daysWeatherList.value ?: listOf()

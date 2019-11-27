@@ -19,27 +19,21 @@ fun Date.isSameDay(date: Date): Boolean {
     return day1 == day2
 }
 
-/**
- * Предаставление даты в формате DateTime.
- */
+/** Представление даты в формате DateTime. */
 fun Date.presentationDateTimeFormat(): String {
     val pattern = "d MMMM HH:mm"
     val dateFormat = SimpleDateFormat(pattern, Locale("ru"))
     return dateFormat.format(this)
 }
 
-/**
- * Представление даты в формате Date.
- */
+/** Представление даты в формате Date. */
 private fun Date.presentationDateFormat(): String {
     val pattern = "d MMMM"
     val dateFormat = SimpleDateFormat(pattern, Locale("ru"))
     return dateFormat.format(this)
 }
 
-/**
- * Получение даты в формате Date со сдвигом в [dayOffset].
- */
+/** Получение даты в формате Date со сдвигом в [dayOffset]. */
 fun presentationDateWithDayOffsetFormat(dayOffset: Int = 0): String {
     return Date(Date().time + DAY * dayOffset).presentationDateFormat()
 }

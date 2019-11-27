@@ -11,22 +11,16 @@ import mente.vali.dailyweather.domain.viewmodels.ForecastViewModel
  * Репозиторий для хранения данных о текущей погоде.
  */
 class SharedRepository constructor(appRepository: Context) {
-    /**
-     * Стандартный [SharedPreferences].
-     */
+    /** Стандартный [SharedPreferences]. */
     private val prefs: SharedPreferences by lazy {
         val ctx = appRepository.applicationContext
         PreferenceManager.getDefaultSharedPreferences(ctx)
     }
 
-    /**
-     * Метод для получения текущей выбранной единицы измерения.
-     */
+    /** Метод для получения текущей выбранной единицы измерения. */
     fun getSelectedUnit() = prefs.getString(UNITS, "metric")!!
 
-    /**
-     * Метод для сохранения текущего выбранного города.
-     */
+    /** Метод для сохранения текущего выбранного города. */
     fun saveCity(city: String) {
         putValue(CITY to city)
     }
@@ -82,16 +76,12 @@ class SharedRepository constructor(appRepository: Context) {
         }
     }
 
-    /**
-     * Метод для регистрация слушателя изменений единиц измерения.
-     */
+    /** Метод для регистрация слушателя изменений единиц измерения. */
     fun registerListener(preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener) {
         prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
     }
 
-    /**
-     * Универсальный метод для сохранения данных в [SharedPreferences].
-     */
+    /** Универсальный метод для сохранения данных в [SharedPreferences]. */
     private fun putValue(pair: Pair<String, Any>) = with(prefs.edit()) {
         val key = pair.first
         val value = pair.second
@@ -120,15 +110,11 @@ class SharedRepository constructor(appRepository: Context) {
         private const val WIND_DIRECTION = "WIND_DIRECTION"
         private const val WIND_SPEED = "WIND_SPEED"
 
-        /**
-         * Объект класса.
-         */
+        /** Объект класса. */
         @Volatile
         private var INSTANCE: SharedRepository? = null
 
-        /**
-         * Статический метод, возвращающий объект класса.
-         */
+        /** Статический метод, возвращающий объект класса. */
         fun getInstance(context: Context) =
             INSTANCE ?: synchronized(this) {
                 INSTANCE
